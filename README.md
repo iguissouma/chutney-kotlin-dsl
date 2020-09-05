@@ -38,7 +38,7 @@ A chutney json scenario:
         "inputs": {
           "document": "${#body}",
           "expected": {
-            "${'$'}.name": "Luke Skywalker"
+            "$.name": "Luke Skywalker"
           }
         }
       }
