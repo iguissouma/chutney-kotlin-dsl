@@ -1,6 +1,12 @@
 # Chutney Testing Kotlin DSL
+##DO IT IN CODE {"NOT": "JSON"}
 
 This repository aims to add a kotlin flavor for writing chutney scenarios.
+
+##why?
+- Avoid text copy pasting
+- Provide better code assistance using IDE 
+- Allow customization for teams
 
 A chutney json scenario:
 ```json
