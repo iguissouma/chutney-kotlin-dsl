@@ -281,6 +281,24 @@ class ChutneyStepBuilder(var description: String = "") {
         )
     }
 
+    fun SqlTask(target: String, statements: List<String>, outputs: Map<String, Any> = mapOf()) {
+        implementation = ChutneyStepImpl(
+            type = "sql",
+            target = target,
+            inputs = mapOf("statements" to statements),
+            outputs = outputs
+        )
+    }
+
+    fun SleepTask(duration: String) {
+        implementation = ChutneyStepImpl(
+            type = "sleep",
+            target = null,
+            inputs = mapOf("duration" to String),
+            outputs = mapOf()
+        )
+    }
+
     fun build(): ChutneyStep = ChutneyStep(description, implementation, strategy, subSteps)
 
 }
