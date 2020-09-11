@@ -245,6 +245,15 @@ class ChutneyStepBuilder(var description: String = "") {
         )
     }
 
+    fun StringAssertTask(document: String, expected: String) {
+        implementation = ChutneyStepImpl(
+            type = "string-assert",
+            target = null,
+            inputs = mapOf("document" to document, "expected" to expected),
+            outputs = mapOf()
+        )
+    }
+
     fun AssertTrueTask(asserts: List<String>) {
         implementation = ChutneyStepImpl(
             type = "assert",

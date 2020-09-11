@@ -50,6 +50,7 @@ private fun ChutneyStep.toDsl(): String {
             "amqp-clean-queues" -> mapAmqpCleanQueuesTask(implementation)
             "amqp-basic-consume" -> mapAmqpBasicConsumeTask(implementation)
             "json-assert" -> mapJsonAssertTask(implementation)
+            "string-assert" -> mapStringAssertTask(implementation)
             "debug" -> mapDebugTask(implementation)
             else -> mapTODO()
         }
@@ -106,6 +107,17 @@ fun mapJsonAssertTask(implementation: ChutneyStepImpl): String {
     val args = mapArgs(listOfArgs)
     return """{
         JsonAssertTask($args)
+    }"""
+}
+
+fun mapStringAssertTask(implementation: ChutneyStepImpl): String {
+    val inputs = implementation.inputs
+    val document = inputAsString(inputs, "document")
+    val expected = inputAsString(inputs, "expected")
+    val listOfArgs = listOf("document" to document, "expected" to expected)
+    val args = mapArgs(listOfArgs)
+    return """{
+        StringAssertTask($args)
     }"""
 }
 
