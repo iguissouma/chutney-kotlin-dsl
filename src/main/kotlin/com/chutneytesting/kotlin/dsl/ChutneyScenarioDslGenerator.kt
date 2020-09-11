@@ -248,7 +248,7 @@ private fun listOfConstructor(
     if (list == null) {
         return "listOf()"
     }
-    return "mapOf(${list.joinToString(",\n")})"
+    return "listOf(${list.joinToString(",\n") { escapeKotlin(it).wrapWithQuotes() }})"
 }
 
 private fun mapOfConstructor(
