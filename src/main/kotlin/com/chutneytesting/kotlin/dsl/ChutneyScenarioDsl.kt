@@ -2,6 +2,9 @@ package com.chutneytesting.kotlin.dsl
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.core.util.DefaultIndenter
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
+import com.fasterxml.jackson.core.util.Separators
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -44,7 +47,9 @@ class ChutneyScenarioBuilder(val id: Int? = null, val title: String = "") {
 
 }
 
-data class Strategy(val type: String, val parameters: Map<String, String>)
+sealed class Strategy(val type: String, val parameters: Map<String, String>)
+class RetryTimeOutStrategy(timeout: String, retryDelay: String) :
+    Strategy(type = "retry-with-timeout", parameters = mapOf("timeOut" to timeout, "retryDelay" to retryDelay))
 
 @ChutneyScenarioDsl
 class ChutneyStepBuilder(var description: String = "") {
@@ -284,11 +289,28 @@ class ChutneyStepImplBuilder {
 }
 
 object Mapper {
+
+    val pp = object : DefaultPrettyPrinter() {
+        init {
+            val indenter: Indenter = DefaultIndenter()
+            indentObjectsWith(indenter) // Indent JSON objects
+            indentArraysWith(indenter) // Indent JSON arrays
+        }
+
+        override fun withSeparators(separators: Separators?): DefaultPrettyPrinter {
+            _separators = separators
+            _objectFieldValueSeparatorWithSpaces = "" + separators!!.objectFieldValueSeparator + " "
+            return this
+        }
+    }
+
     val mapper = ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+        .setDefaultPrettyPrinter(pp)
         .enable(SerializationFeature.INDENT_OUTPUT)
+
 }
 
 class ChutneyStep(
@@ -302,7 +324,7 @@ class ChutneyStepImpl(
     val type: String,
     val target: String?,
     val inputs: Map<String, Any>,
-    val outputs: Map<String, Any>
+    val outputs: Map<String, Any>?
 )
 
 class ChutneyScenario(
@@ -315,6 +337,6 @@ class ChutneyScenario(
 ) {
 
     override fun toString(): String {
-        return Mapper.mapper.writeValueAsString(this)
+        return Mapper.mapper.writeValueAsString(this) + System.getProperty("line.separator")
     }
 }
