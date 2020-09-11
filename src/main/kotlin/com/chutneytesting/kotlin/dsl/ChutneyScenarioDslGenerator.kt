@@ -24,16 +24,16 @@ class ChutneyScenarioDslGenerator {
 
     private fun mapGivens(chutneyScenario: ChutneyScenario): String {
         return chutneyScenario.givens.mapIndexed { index: Int, step: ChutneyStep ->
-            gwta(index, "Given") + "(\"${step.description}\")${step.toDsl()}"
+            gwta(index, "Given") + "(\"${step.description}\") ${step.toDsl()}"
         }.joinToString(separator = "\n")
     }
 
     private fun mapWhen(chutneyScenario: ChutneyScenario) =
-        """When("${chutneyScenario.`when`?.description}")${chutneyScenario.`when`?.toDsl()}"""
+        """When("${chutneyScenario.`when`?.description}") ${chutneyScenario.`when`?.toDsl()}"""
 
     private fun mapThens(chutneyScenario: ChutneyScenario): String {
         return chutneyScenario.thens.mapIndexed { index: Int, step: ChutneyStep ->
-            gwta(index, "Then") + "(\"${step.description}\")${step.toDsl()}"
+            gwta(index, "Then") + "(\"${step.description}\") ${step.toDsl()}"
         }.joinToString(separator = "\n")
     }
 
@@ -57,7 +57,7 @@ private fun ChutneyStep.toDsl(): String {
         return this.subSteps
             .joinToString(
                 separator = "\n",
-                prefix = "{\n",
+                prefix = " {\n",
                 postfix = "}\n"
             ) { "Step(\"${it.description}\") ${it.toDsl()}" }
 
@@ -126,11 +126,12 @@ fun mapHttpGetTask(implementation: ChutneyStepImpl): String {
     val outputs = outputsAsMap(implementation)
     val target = target(implementation)
     val uri = uri(implementation)
+    val timeout = inputAsString(inputs, "timeout")
     val listOfArgs = listOf(
         "target" to target,
         "uri" to uri,
         "headers" to headers,
-        "timeout" to "2 sec",
+        "timeout" to timeout,
         "outputs" to outputs,
         "strategy" to null
     )
@@ -160,7 +161,7 @@ private fun inputAsString(inputs: Map<String, Any>, key: String) =
 
 private fun mapArgs(listOfArgs: List<Pair<String, Any?>>): String {
     return listOfArgs
-        .filterNot { it.second == null }
+        .filterNot { it.second == null || it.second == "".wrapWithQuotes() || it.second == "mapOf()"}
         .joinToString(", ") { it.first + " = " + it.second }
 }
 
