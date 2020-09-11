@@ -50,6 +50,7 @@ private fun ChutneyStep.toDsl(): String {
             "amqp-clean-queues" -> mapAmqpCleanQueuesTask(implementation)
             "amqp-basic-consume" -> mapAmqpBasicConsumeTask(implementation)
             "json-assert" -> mapJsonAssertTask(implementation)
+            "debug" -> mapDebugTask(implementation)
             else -> mapTODO()
         }
     } else {
@@ -69,6 +70,11 @@ private fun mapTODO(): String {
     }"""
 }
 
+private fun mapDebugTask(implementation: ChutneyStepImpl): String {
+    return """{
+       DebugTask()
+    }"""
+}
 
 fun mapAmqpBasicConsumeTask(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
@@ -162,9 +168,9 @@ private fun inputAsMap(inputs: Map<String, Any>, key: String) =
     mapOfConstructor(inputs?.get(key) as Map<String, Any>?)
 
 fun mapHttpPostTask(implementation: ChutneyStepImpl): String {
-    val inputs = implementation.inputs as Map<String, Any>?
-    val headers = inputs?.get("headers") as Map<String, Any>?
-    val body = inputs?.get("body") as Map<String, Any>?
+    val inputs = implementation.inputs
+    val headers = inputAsMap(inputs, "headers")
+    val body = if (inputs?.get("body") is Map<*,*>) inputAsMap(inputs, "body") else inputAsString(inputs, "body")
     val outputs = outputsAsMap(implementation)
     val target = target(implementation)
     val uri = uri(implementation)

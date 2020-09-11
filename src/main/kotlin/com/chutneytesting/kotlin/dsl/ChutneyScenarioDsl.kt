@@ -47,7 +47,7 @@ class ChutneyScenarioBuilder(val id: Int? = null, val title: String = "") {
 
 }
 
-sealed class Strategy(val type: String, val parameters: Map<String, String>)
+open class Strategy(val type: String, val parameters: Map<String, String>)
 class RetryTimeOutStrategy(timeout: String, retryDelay: String) :
     Strategy(type = "retry-with-timeout", parameters = mapOf("timeOut" to timeout, "retryDelay" to retryDelay))
 
