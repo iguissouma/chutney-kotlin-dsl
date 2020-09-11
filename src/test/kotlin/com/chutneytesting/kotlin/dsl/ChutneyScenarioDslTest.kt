@@ -8,7 +8,7 @@ class ChutneyScenarioDslTest {
     @Test
     fun `abe to create chutney scenario using kotlin dsl`() {
 
-        val scenario = Scenario(title = "SWAPI GET people record") {
+        val `swapi GET people record` = Scenario(title = "swapi GET people record") {
             Given("I set get people service api endpoint") {
                 ContextPutTask(entries = mapOf("uri" to "api/people/1"))
             }
@@ -20,10 +20,10 @@ class ChutneyScenarioDslTest {
             }
         }
 
-        "$scenario" `should equal json` """
+        "$`swapi GET people record`" `should equal json` """
             {
-              "title": "SWAPI GET people record",
-              "description": "SWAPI GET people record",
+              "title": "swapi GET people record",
+              "description": "swapi GET people record",
               "givens": [
                 {
                   "description": "I set get people service api endpoint",
@@ -69,7 +69,7 @@ class ChutneyScenarioDslTest {
     @Test
     fun `able to create chutney scenario with substeps using kotlin dsl`() {
 
-        val scenario = Scenario(title = "SWAPI GET people record") {
+        val `swapi GET people record` = Scenario(title = "swapi GET people record") {
             Given("I set get people service api endpoint") {
                 Step("set id") {
                     ContextPutTask(entries = mapOf("id" to "1"))
@@ -86,10 +86,10 @@ class ChutneyScenarioDslTest {
             }
         }
 
-        "$scenario" `should equal json` """
+        "$`swapi GET people record`" `should equal json` """
             {
-              "title" : "SWAPI GET people record",
-              "description" : "SWAPI GET people record",
+              "title" : "swapi GET people record",
+              "description" : "swapi GET people record",
               "givens" : [ {
                 "description" : "I set get people service api endpoint",
                 "subSteps" : [ {
