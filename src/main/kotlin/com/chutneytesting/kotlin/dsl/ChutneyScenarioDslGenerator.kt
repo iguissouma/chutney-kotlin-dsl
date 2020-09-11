@@ -52,6 +52,7 @@ private fun ChutneyStep.toDsl(): String {
             "json-assert" -> mapJsonAssertTask(implementation)
             "string-assert" -> mapStringAssertTask(implementation)
             "sql" -> mapSqlTask(implementation)
+            "sleep" -> mapSleepTask(implementation)
             "debug" -> mapDebugTask(implementation)
             else -> mapTODO()
         }
@@ -197,7 +198,7 @@ private fun inputAsString(inputs: Map<String, Any>, key: String) =
 
 private fun mapArgs(listOfArgs: List<Pair<String, Any?>>): String {
     return listOfArgs
-        .filterNot { it.second == null || it.second == "".wrapWithQuotes() || it.second == "mapOf()" }
+        .filterNot { it.second == null || it.second == "".wrapWithQuotes() || it.second == "mapOf()" || it.second == "listOf()" }
         .joinToString(", ") { it.first + " = " + it.second }
 }
 
@@ -248,7 +249,11 @@ private fun listOfConstructor(
     if (list == null) {
         return "listOf()"
     }
-    return "listOf(${list.joinToString(",\n") { escapeKotlin(it).wrapWithQuotes() }})"
+    return "listOf(${
+        list.joinToString(",\n") {
+            it.split("\n").map { (escapeKotlin(it) + "\n").wrapWithQuotes() }.joinToString(" +\n")
+        }
+    })"
 }
 
 private fun mapOfConstructor(
