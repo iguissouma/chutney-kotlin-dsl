@@ -251,7 +251,7 @@ private fun listOfConstructor(
     }
     return "listOf(${
         list.joinToString(",\n") {
-            it.split("\n").map { (escapeKotlin(it) + "\n").wrapWithQuotes() }.joinToString(" +\n")
+            it.split("\n").map { (escapeKotlin(it)).wrapWithQuotes() }.joinToString(" +\n")
         }
     })"
 }
