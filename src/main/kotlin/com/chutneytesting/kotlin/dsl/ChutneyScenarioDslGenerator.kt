@@ -187,11 +187,13 @@ fun mapHttpPostTask(implementation: ChutneyStepImpl): String {
     val outputs = outputsAsMap(implementation)
     val target = target(implementation)
     val uri = uri(implementation)
+    val timeout = inputAsString(inputs, "timeout")
     val listOfArgs = listOf(
         "target" to target,
         "uri" to uri,
         "headers" to headers,
-        "timeout" to "2 sec",
+        "body" to body,
+        "timeout" to timeout,
         "outputs" to outputs,
         "strategy" to null
     )
