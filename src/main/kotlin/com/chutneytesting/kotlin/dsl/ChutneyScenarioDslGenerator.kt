@@ -96,7 +96,7 @@ fun mapAmqpBasicConsumeTask(implementation: ChutneyStepImpl): String {
     val selector = inputAsString(inputs, "selector")
     val queueName = inputAsString(inputs, "queue-name")
     val timeout = inputAsString(inputs, "queue-name")
-    val nbMessages = inputs?.get("nb-messages") as Int? ?: 1
+    val nbMessages = inputs.get("nb-messages") as Int? ?: 1
     val outputs = outputsAsMap(implementation)
     val target = target(implementation)
     val listOfArgs = listOf(
@@ -147,7 +147,7 @@ fun mapStringAssertTask(implementation: ChutneyStepImpl): String {
 }
 
 fun mapAmqpCleanQueuesTask(implementation: ChutneyStepImpl): String {
-    val inputs = implementation.inputs as Map<String, Any>
+    val inputs = implementation.inputs
     val queueNames = inputAsString(inputs, "queueNames")
     val target = target(implementation)
     val listOfArgs = listOf("target" to target, "queueNames" to queueNames)
@@ -158,7 +158,7 @@ fun mapAmqpCleanQueuesTask(implementation: ChutneyStepImpl): String {
 }
 
 fun mapHttpGetTask(implementation: ChutneyStepImpl): String {
-    val inputs = implementation.inputs as Map<String, Any>
+    val inputs = implementation.inputs
     val headers = inputAsMap(inputs, "headers")
     val outputs = outputsAsMap(implementation)
     val target = target(implementation)
@@ -179,7 +179,7 @@ fun mapHttpGetTask(implementation: ChutneyStepImpl): String {
 }
 
 private fun mapContexPutTask(implementation: ChutneyStepImpl): String {
-    val input = implementation.inputs as Map<String, Any>
+    val input = implementation.inputs
     val entries = inputAsMap(input, "entries")
     val listOfArgs = listOf(
         "entries" to entries
@@ -194,7 +194,7 @@ private fun outputsAsMap(implementation: ChutneyStepImpl) =
     mapOfConstructor(implementation.outputs)
 
 private fun inputAsString(inputs: Map<String, Any>, key: String) =
-    escapeKotlin((inputs?.get(key) as String? ?: "")).wrapWithQuotes()
+    escapeKotlin((inputs.get(key) as String? ?: "")).wrapWithQuotes()
 
 private fun mapArgs(listOfArgs: List<Pair<String, Any?>>): String {
     return listOfArgs
@@ -203,15 +203,15 @@ private fun mapArgs(listOfArgs: List<Pair<String, Any?>>): String {
 }
 
 private fun inputAsList(inputs: Map<String, Any>, key: String) =
-    listOfConstructor(inputs?.get(key) as List<String>?)
+    listOfConstructor(inputs.get(key) as List<String>?)
 
 private fun inputAsMap(inputs: Map<String, Any>, key: String) =
-    mapOfConstructor(inputs?.get(key) as Map<String, Any>?)
+    mapOfConstructor(inputs.get(key) as Map<String, Any>?)
 
 fun mapHttpPostTask(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val headers = inputAsMap(inputs, "headers")
-    val body = if (inputs?.get("body") is Map<*, *>) inputAsMap(inputs, "body") else inputAsString(inputs, "body")
+    val body = if (inputs.get("body") is Map<*, *>) inputAsMap(inputs, "body") else inputAsString(inputs, "body")
     val outputs = outputsAsMap(implementation)
     val target = target(implementation)
     val uri = uri(implementation)
@@ -233,8 +233,8 @@ fun mapHttpPostTask(implementation: ChutneyStepImpl): String {
 }
 
 fun uri(implementation: ChutneyStepImpl): String {
-    val inputs = implementation.inputs as Map<String, Any>
-    return escapeKotlin((inputs?.get("uri") as String? ?: "")).wrapWithQuotes()
+    val inputs = implementation.inputs
+    return escapeKotlin((inputs.get("uri") as String? ?: "")).wrapWithQuotes()
 }
 
 private fun target(implementation: ChutneyStepImpl): String = (implementation.target as String).wrapWithQuotes()

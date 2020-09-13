@@ -19,6 +19,6 @@ dependencies {
     testImplementation("com.gregwoodfill.assert:kotlin-json-assert:0.1.0")
     testImplementation("de.swirtz:ktsRunner:0.0.8")
 }
-tasks.withType<KotlinCompile>() {
+tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
