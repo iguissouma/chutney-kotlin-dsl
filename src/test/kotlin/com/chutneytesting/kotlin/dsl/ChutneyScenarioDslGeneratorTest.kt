@@ -1,5 +1,8 @@
 package com.chutneytesting.kotlin.dsl
 
+import com.gregwoodfill.assert.`should equal json`
+import de.swirtz.ktsrunner.objectloader.KtsObjectLoader
+import loadResource
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -7,51 +10,7 @@ class ChutneyScenarioDslGeneratorTest {
     @Test
     fun `abe to create kotlin chutney scenario from json`() {
 
-        val generateDsl = ChutneyScenarioDslGenerator().generateDsl(
-            """
-            {
-              "title": "swapi GET people record",
-              "description": "swapi GET people record",
-              "givens": [
-                {
-                  "description": "I set get people service api endpoint",
-                  "implementation": {
-                    "type": "context-put",
-                    "inputs": {
-                      "entries": {
-                        "uri": "api/people/1"
-                      }
-                    }
-                  }
-                }
-              ],
-              "when": {
-                "description": "I send GET HTTP request",
-                "implementation": {
-                  "type": "http-get",
-                  "target": "swapi.dev",
-                  "inputs": {
-                    "uri": "${'$'}{#uri}"
-                  }
-                }
-              },
-              "thens": [
-                {
-                  "description": "I receive valid HTTP response",
-                  "implementation": {
-                    "type": "json-assert",
-                    "inputs": {
-                      "document": "${'$'}{#body}",
-                      "expected": {
-                        "${'$'}.name": "Luke Skywalker"
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-        """.trimIndent()
-        )
+        val generateDsl = ChutneyScenarioDslGenerator().generateDsl(loadResource("/get-people.chutney.json"))
 
         assertEquals(generateDsl,
             """
@@ -69,5 +28,12 @@ class ChutneyScenarioDslGeneratorTest {
             """.trimMargin('>'.toString())
         )
 
+    }
+
+    @Test
+    fun `abe to compile kotlin dsl chutney scenario to json`() {
+        val scriptContent = loadResource("/get-people.chutney.kts")
+        val fromScript: ChutneyScenario = KtsObjectLoader().load(scriptContent)
+        "$fromScript" `should equal json` loadResource("/get-people.chutney.json")
     }
 }
