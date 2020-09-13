@@ -1,7 +1,6 @@
 package com.chutneytesting.kotlin.dsl
 
 import com.gregwoodfill.assert.`should equal json`
-import loadResource
 import org.junit.Test
 
 class ChutneyScenarioDslTest {
@@ -21,7 +20,7 @@ class ChutneyScenarioDslTest {
             }
         }
 
-        "$`swapi GET people record`" `should equal json` loadResource("/get-people.chutney.json")
+        "$`swapi GET people record`" `should equal json` "/get-people.chutney.json".asResource()
 
     }
 
@@ -45,59 +44,7 @@ class ChutneyScenarioDslTest {
             }
         }
 
-        "$`swapi GET people record`" `should equal json` """
-            {
-              "title" : "swapi GET people record",
-              "description" : "swapi GET people record",
-              "givens" : [ {
-                "description" : "I set get people service api endpoint",
-                "subSteps" : [ {
-                  "description" : "set id",
-                  "implementation" : {
-                    "type" : "context-put",
-                    "inputs" : {
-                      "entries" : {
-                        "id" : "1"
-                      }
-                    }
-                  }
-                }, {
-                  "description" : "set uri",
-                  "implementation" : {
-                    "type" : "context-put",
-                    "inputs" : {
-                      "entries" : {
-                        "uri" : "api/people/${'$'}{#id}"
-                      }
-                    }
-                  }
-                } ]
-              } ],
-              "when" : {
-                "description" : "I send GET HTTP request",
-                "implementation" : {
-                  "type" : "http-get",
-                  "target" : "swapi.dev",
-                  "inputs" : {
-                    "uri" : "${'$'}{#uri}",
-                    "timeout" : "2 sec"
-                  }
-                }
-              },
-              "thens" : [ {
-                "description" : "I receive valid HTTP response",
-                "implementation" : {
-                  "type" : "json-assert",
-                  "inputs" : {
-                    "document" : "${'$'}{#body}",
-                    "expected" : {
-                      "${'$'}.name" : "Luke Skywalker"
-                    }
-                  }
-                }
-              } ]
-            }
-        """.trimIndent()
+        "$`swapi GET people record`" `should equal json` "/get-people-with-substeps.chutney.json".asResource()
 
     }
 
