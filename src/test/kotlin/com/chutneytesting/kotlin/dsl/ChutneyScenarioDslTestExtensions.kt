@@ -1,3 +1,3 @@
 package com.chutneytesting.kotlin.dsl
 
-fun String.asResource(): String = this.javaClass::class.java.getResource(this).readText()
+fun String.asResource(): String = ChutneyScenarioDslTest::class.java.getResource(this).readText()
