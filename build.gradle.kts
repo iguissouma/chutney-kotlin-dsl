@@ -57,39 +57,25 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-tasks.register<Copy>("bintrayfilter") {
-    from("bintray-deploy-descriptor.json")
-    into("$buildDir")
-    expand("url" to gitHubUrl, "version" to version, "name" to project.name, "timestamp" to timestamp)
-}
-
 tasks {
-    val sourcesJar by creating(Jar::class) {
-        archiveClassifier.set("sources")
-        from(sourceSets.main.get().allSource)
-    }
-
-    artifacts {
-        archives(sourcesJar)
-        archives(jar)
-    }
-
     test {
         testLogging {
             events("passed", "failed", "skipped")
             showStandardStreams = true
         }
     }
+}
 
-    build {
-        dependsOn("bintrayfilter", "generatePomFileForDefaultPublication")
-    }
+val sourcesJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
 }
 
 publishing {
     publications {
         create<MavenPublication>(publicationName) {
             from(components["java"])
+            artifact(sourcesJar.get())
             groupId = group
             artifactId = project.name
             version = project.version.toString()
