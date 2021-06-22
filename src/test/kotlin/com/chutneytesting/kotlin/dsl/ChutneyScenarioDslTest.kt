@@ -1,6 +1,5 @@
 package com.chutneytesting.kotlin.dsl
 
-import com.gregwoodfill.assert.`should equal json`
 import com.gregwoodfill.assert.`should strictly equal json`
 import org.junit.Test
 
@@ -21,7 +20,7 @@ class ChutneyScenarioDslTest {
             }
         }
 
-        "$`swapi GET people record`" `should equal json` "/get-people.chutney.json".asResource()
+        "$`swapi GET people record`" `should strictly equal json` "/get-people.chutney.json".asResource()
 
     }
 
@@ -130,7 +129,7 @@ class ChutneyScenarioDslTest {
         }
 
         // create this file get-people-multiple-assertions-soft-strategy.chutney.json
-        "$`swapi GET people record`" `should equal json` "/get-people-multiple-assertions-soft-strategy.chutney.json".asResource()
+        "$`swapi GET people record`" `should strictly equal json` "/get-people-multiple-assertions-soft-strategy.chutney.json".asResource()
 
     }
 

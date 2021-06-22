@@ -1,4 +1,4 @@
-import com.chutneytesting.kotlin.dsl.Scenario
+import com.chutneytesting.kotlin.dsl.*
 
 Scenario(title = "swapi GET people record") {
     Given("I set get people service api endpoint") {
