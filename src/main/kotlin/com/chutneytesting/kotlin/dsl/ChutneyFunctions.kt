@@ -2,7 +2,7 @@ package com.chutneytesting.kotlin.dsl
 
 fun json(variable: String, path: String = JSON_PATH_ROOT): String {
     require(variable.isNotBlank()) { "variable cannot be empty" }
-    return "json(${variable.spELVar}, ${path.elString()})".spEL();
+    return "json(${variable.spELVar}, ${path.elString()})".spEL()
 }
 
 private fun chutneyFunction(
@@ -10,7 +10,7 @@ private fun chutneyFunction(
     elEval: Boolean = true,
     vararg expressionParameters: String
 ): String {
-    val expr = "$name".spELVar
+    val expr = name.spELVar
         .plus(expressionParameters.joinToString(prefix = "(", postfix = ")"))
 
     if (elEval) {

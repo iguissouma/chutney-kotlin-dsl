@@ -1,5 +1,7 @@
-package com.chutneytesting.kotlin.dsl
+package com.chutneytesting.kotlin.transformation.from_json_to_kotlin
 
+import com.chutneytesting.kotlin.dsl.ChutneyScenario
+import com.chutneytesting.kotlin.dsl.asResource
 import com.gregwoodfill.assert.`should equal json`
 import org.junit.Test
 import javax.script.ScriptEngine

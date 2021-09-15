@@ -72,7 +72,7 @@ open class Strategy(val type: String, val parameters: Map<String, String> = empt
 open class RetryTimeOutStrategy(timeout: String, retryDelay: String) :
     Strategy(type = "retry-with-timeout", parameters = mapOf("timeOut" to timeout, "retryDelay" to retryDelay))
 
-open class SoftAssertStrategy() :
+open class SoftAssertStrategy :
     Strategy(type = "soft-assert")
 
 @ChutneyScenarioDsl
@@ -128,7 +128,7 @@ object Mapper {
         }
     }
 
-    val mapper = ObjectMapper()
+    val mapper: ObjectMapper = ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .registerModule(KotlinModule())
         .setDefaultPrettyPrinter(pp)

@@ -28,13 +28,17 @@ repositories {
 dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.5")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.5")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.0")
     implementation("org.jetbrains.kotlin:kotlin-script-runtime:1.4.0")
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("ch.qos.logback:logback-classic:1.2.3")
 
     testImplementation(kotlin("test-junit"))
     testImplementation("com.gregwoodfill.assert:kotlin-json-assert:0.1.0")
     testImplementation("org.springframework:spring-expression:5.1.5.RELEASE")
     testImplementation(kotlin("scripting-jsr223"))
+    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
 }
 
 tasks.withType<KotlinCompile> {

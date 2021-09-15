@@ -399,7 +399,7 @@ fun ChutneyStepBuilder.HttpSoapTask(
             "body" to body,
             "username" to username,
             "password" to password,
-            ("timeout" to timeout).takeIf { timeout.isNullOrBlank().not() }
+            ("timeout" to timeout).takeIf { timeout.isBlank().not() }
         ).toMap(),
         outputs = outputs
     )
@@ -497,7 +497,7 @@ fun ChutneyStepBuilder.JmsCleanQueuesTask(
     target: String,
     queueName: String
 ) {
-    JmsCleanQueueTask(target, queueName);
+    JmsCleanQueueTask(target, queueName)
 }
 
 fun ChutneyStepBuilder.JmsCleanQueueTask(
@@ -581,12 +581,16 @@ fun ChutneyStepBuilder.JmsBrokerStartTask(
 fun ChutneyStepBuilder.SqlTask(
     target: String,
     statements: List<String>,
-    outputs: Map<String, Any> = mapOf()
+    outputs: Map<String, Any> = mapOf(),
+    nbLoggedRow: Int = 0
 ) {
     implementation = ChutneyStepImpl(
         type = "sql",
         target = target,
-        inputs = mapOf("statements" to statements),
+        inputs = listOfNotNull(
+            "statements" to statements,
+            ("nbLoggedRow" to nbLoggedRow).takeIf { nbLoggedRow != 0 }
+        ).toMap(),
         outputs = outputs
     )
 }

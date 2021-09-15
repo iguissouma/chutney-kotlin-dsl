@@ -1,5 +1,9 @@
-package com.chutneytesting.kotlin.dsl
+package com.chutneytesting.kotlin.transformation.from_json_to_kotlin
 
+import com.chutneytesting.kotlin.dsl.ChutneyScenario
+import com.chutneytesting.kotlin.dsl.ChutneyStep
+import com.chutneytesting.kotlin.dsl.ChutneyStepImpl
+import com.chutneytesting.kotlin.dsl.Strategy
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import java.io.File
@@ -9,15 +13,14 @@ class ChutneyScenarioDslGenerator {
 
     fun generateDsl(content: String): String {
         val chutneyScenario = jacksonObjectMapper().readValue<ChutneyScenario>(content)
-        val dsl = """
+
+        return """
                 >val `${chutneyScenario.title}` = Scenario(title = "${chutneyScenario.title}") {
                 >    ${mapGivens(chutneyScenario)}
                 >    ${mapWhen(chutneyScenario)}
                 >    ${mapThens(chutneyScenario)}
                 >}
             """.trimMargin(">")
-
-        return dsl
 
     }
 
@@ -79,7 +82,6 @@ private fun ChutneyStep.toDsl(): String {
             "sleep" -> mapSleepTask(implementation)
             "assert" -> mapAssertsTask(implementation)
             "debug" -> mapDebugTask(implementation)
-            //"jms-sender" -> mapJmsSenderTask(implementation)
             else -> mapTODO()
         }
     } else {
@@ -142,7 +144,7 @@ fun mapAmqpBasicConsumeTask(implementation: ChutneyStepImpl): String {
     val selector = inputAsString(inputs, "selector")
     val queueName = inputAsString(inputs, "queue-name")
     val timeout = inputAsString(inputs, "timeout")
-    val nbMessages = inputs.get("nb-messages") as Int? ?: 1
+    val nbMessages = inputs["nb-messages"] as Int? ?: 1
     val outputs = outputsAsMap(implementation)
     val target = target(implementation)
     val listOfArgs = listOf(
@@ -280,7 +282,7 @@ fun mapHttpPutTask(implementation: ChutneyStepImpl): String {
     }"""
 }
 
-private fun mapContexPutTask(implementation: ChutneyStepImpl): String {
+fun mapContexPutTask(implementation: ChutneyStepImpl): String {
     val input = implementation.inputs
     val entries = inputAsMap(input, "entries")
     val listOfArgs = listOf(
@@ -296,7 +298,7 @@ private fun outputsAsMap(implementation: ChutneyStepImpl) =
     mapOfConstructor(implementation.outputs)
 
 private fun inputAsString(inputs: Map<String, Any?>, key: String) =
-    escapeKotlin((inputs.get(key) as String? ?: "")).wrapWithQuotes()
+    escapeKotlin((inputs[key] as String? ?: "")).wrapWithQuotes()
 
 private fun mapArgs(listOfArgs: List<Pair<String, Any?>>): String {
     return listOfArgs
@@ -305,18 +307,18 @@ private fun mapArgs(listOfArgs: List<Pair<String, Any?>>): String {
 }
 
 private fun inputAsMapList(inputs: Map<String, Any?>, key: String) =
-    listOfMapConstructor(inputs.get(key) as List<Map<String, Any>>?)
+    listOfMapConstructor(inputs[key] as List<Map<String, Any>>?)
 
 private fun inputAsList(inputs: Map<String, Any?>, key: String) =
-    listOfConstructor(inputs.get(key) as List<String>?)
+    listOfConstructor(inputs[key] as List<String>?)
 
 private fun inputAsMap(inputs: Map<String, Any?>, key: String) =
-    mapOfConstructor(inputs.get(key) as Map<String, Any>?)
+    mapOfConstructor(inputs[key] as Map<String, Any>?)
 
 fun mapHttpPostTask(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val headers = inputAsMap(inputs, "headers")
-    val body = if (inputs.get("body") is Map<*, *>) inputAsMap(inputs, "body") else inputAsString(inputs, "body")
+    val body = if (inputs["body"] is Map<*, *>) inputAsMap(inputs, "body") else inputAsString(inputs, "body")
     val outputs = outputsAsMap(implementation)
     val target = target(implementation)
     val uri = uri(implementation)
@@ -339,7 +341,7 @@ fun mapHttpPostTask(implementation: ChutneyStepImpl): String {
 
 fun uri(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
-    return escapeKotlin((inputs.get("uri") as String? ?: "")).wrapWithQuotes()
+    return escapeKotlin((inputs["uri"] as String? ?: "")).wrapWithQuotes()
 }
 
 private fun target(implementation: ChutneyStepImpl): String = (implementation.target as String).wrapWithQuotes()
@@ -356,7 +358,7 @@ private fun listOfConstructor(
     }
     return "listOf(${
         list.joinToString(",\n") {
-            it.split("\n").map { (escapeKotlin(it)).wrapWithQuotes() }.joinToString(" +\n")
+            it.split("\n").joinToString(" +\n") { (escapeKotlin(it)).wrapWithQuotes() }
         }
     })"
 }
@@ -400,7 +402,7 @@ fun escapeKotlin(s: String): String {
     //.replace("'£", "'$")
 }
 
-val spelPattern = Pattern.compile("\\$\\{#(.*?)}")
+val spelPattern: Pattern = Pattern.compile("\\$\\{#(.*?)}")
 
 fun toKotlinSpelString(s: String): String {
     val sb = StringBuffer()
