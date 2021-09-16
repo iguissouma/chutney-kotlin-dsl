@@ -1259,3 +1259,28 @@ fun ChutneyStepBuilder.MicrometerSummaryTask(
         outputs = outputs
     )
 }
+
+fun ChutneyStepBuilder.FinalTask(
+    name: String,
+    type: String,
+    inputs: Map<String, Any> = emptyMap(),
+    strategyType: String? = null,
+    strategyProperties: Map<String, Any> = emptyMap(),
+    validations: Map<String, Any> = emptyMap(),
+    outputs: Map<String, Any> = mapOf()
+) {
+    implementation = ChutneyStepImpl(
+        type = "final",
+        target = null,
+        inputs = mapOf(
+            "name" to name,
+            "type" to type,
+            "inputs" to inputs,
+            "strategy-type" to strategyType,
+            "strategy-properties" to strategyProperties,
+            "validations" to validations
+        ),
+        outputs = outputs
+    )
+}
+
