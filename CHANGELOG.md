@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.9](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.9) (2021-09-16)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.8...HEAD)
+
+**Merged pull requests:**
+
+- feat: Add FinalTask [\#23](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/23) ([nbrouand](https://github.com/nbrouand))
+- feat: Add component to kotlin feature [\#22](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/22) ([nbrouand](https://github.com/nbrouand))
+
 ## [0.1.8](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.8) (2021-06-24)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.7...0.1.8)
