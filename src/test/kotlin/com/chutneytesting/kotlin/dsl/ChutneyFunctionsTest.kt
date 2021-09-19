@@ -1,9 +1,9 @@
 package com.chutneytesting.kotlin.dsl
 
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.expression.spel.standard.SpelExpressionParser
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.assertNotNull
 
 class ChutneyFunctionsTest {
 
@@ -11,7 +11,7 @@ class ChutneyFunctionsTest {
     fun `use json function`() {
         assertELWrap(json("ctxVar"))
 
-        assertFailsWith<IllegalArgumentException> { jsonPath("") }
+        assertThrows<IllegalArgumentException> { jsonPath("") }
 
         val unWrappedELExpr = json("ctxVar", "$.key[?(@.name='nn')]")
             .removePrefix("\${").removeSuffix("}")
@@ -81,7 +81,7 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use jsonPath function`() {
-        assertFailsWith<IllegalArgumentException> { jsonPath("") }
+        assertThrows<IllegalArgumentException> { jsonPath("") }
 
         assertExpressionNotNullWhenParsed(
             jsonPath("{\"key\":\"val\"}".elString(), elEval = false)
@@ -94,7 +94,7 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use jsonSerialize function`() {
-        assertFailsWith<IllegalArgumentException> { jsonSerialize("") }
+        assertThrows<IllegalArgumentException> { jsonSerialize("") }
 
         assertExpressionNotNullWhenParsed(
             jsonSerialize("new Object()", elEval = false)
@@ -107,7 +107,7 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use xpath function`() {
-        assertFailsWith<IllegalArgumentException> { xpath("") }
+        assertThrows<IllegalArgumentException> { xpath("") }
 
         assertExpressionNotNullWhenParsed(
             xpath("<a><b attr=\"val\">inner text</b></a>".elString(), elEval = false)
@@ -121,8 +121,8 @@ class ChutneyFunctionsTest {
     @Test
     fun `use xpathNs function`() {
         val prefixes = mapOf("prefix" to "ns")
-        assertFailsWith<IllegalArgumentException> { xpathNs("", prefixes = prefixes) }
-        assertFailsWith<IllegalArgumentException> { xpathNs("xml", prefixes = mapOf()) }
+        assertThrows<IllegalArgumentException> { xpathNs("", prefixes = prefixes) }
+        assertThrows<IllegalArgumentException> { xpathNs("xml", prefixes = mapOf()) }
 
         assertExpressionNotNullWhenParsed(
             xpathNs("<a><b attr=\"val\">inner text</b></a>".elString(), prefixes = prefixes, elEval = false)
@@ -135,9 +135,9 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use getSoapBody function`() {
-        assertFailsWith<IllegalArgumentException> { getSoapBody("", "pass", "body") }
-        assertFailsWith<IllegalArgumentException> { getSoapBody("user", "", "body") }
-        assertFailsWith<IllegalArgumentException> { getSoapBody("user", "pass", "") }
+        assertThrows<IllegalArgumentException> { getSoapBody("", "pass", "body") }
+        assertThrows<IllegalArgumentException> { getSoapBody("user", "", "body") }
+        assertThrows<IllegalArgumentException> { getSoapBody("user", "pass", "") }
 
         assertExpressionNotNullWhenParsed(
             getSoapBody("user", "login", "<a>body</a>".elString(), elEval = false)
@@ -150,7 +150,7 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use date function`() {
-        assertFailsWith<IllegalArgumentException> { date("") }
+        assertThrows<IllegalArgumentException> { date("") }
 
         assertExpressionNotNullWhenParsed(
             date("2011-12-03T10:15:30Z".elString(), elEval = false)
@@ -163,8 +163,8 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use str_replace function`() {
-        assertFailsWith<IllegalArgumentException> { str_replace("", "regexp") }
-        assertFailsWith<IllegalArgumentException> { str_replace("text", "") }
+        assertThrows<IllegalArgumentException> { str_replace("", "regexp") }
+        assertThrows<IllegalArgumentException> { str_replace("text", "") }
 
         assertExpressionNotNullWhenParsed(
             str_replace("text".elString(), ".*", elEval = false)
@@ -177,7 +177,7 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use generate functions`() {
-        assertFailsWith<IllegalArgumentException> { generate_randomInt(0) }
+        assertThrows<IllegalArgumentException> { generate_randomInt(0) }
 
         assertExpressionNotNullWhenParsed(
             generate(elEval = false)
@@ -198,8 +198,8 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use wiremock functions`() {
-        assertFailsWith<IllegalArgumentException> { wiremock_extractHeadersAsMap("") }
-        assertFailsWith<IllegalArgumentException> { wiremock_extractParameters("") }
+        assertThrows<IllegalArgumentException> { wiremock_extractHeadersAsMap("") }
+        assertThrows<IllegalArgumentException> { wiremock_extractParameters("") }
 
         assertExpressionNotNullWhenParsed(
             wiremock_extractHeadersAsMap("ctxVar", elEval = false)
@@ -212,7 +212,7 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use nullable function`() {
-        assertFailsWith<IllegalArgumentException> { nullable("") }
+        assertThrows<IllegalArgumentException> { nullable("") }
 
         assertExpressionNotNullWhenParsed(
             nullable("ctxVar", elEval = false)
@@ -221,7 +221,7 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use micrometerRegistry function`() {
-        assertFailsWith<IllegalArgumentException> { micrometerRegistry("") }
+        assertThrows<IllegalArgumentException> { micrometerRegistry("") }
 
         assertExpressionNotNullWhenParsed(
             micrometerRegistry("org.registry", elEval = false)
@@ -230,30 +230,30 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use tcpPort and udpPort functions`() {
-        assertFailsWith<IllegalArgumentException> { tcpPorts(0) }
-        assertFailsWith<IllegalArgumentException> { tcpPortMin(0) }
-        assertFailsWith<IllegalArgumentException> { tcpPortMinMax(0, 1) }
-        assertFailsWith<IllegalArgumentException> { tcpPortMinMax(1, 0) }
-        assertFailsWith<IllegalArgumentException> { tcpPortMinMax(2, 1) }
-        assertFailsWith<IllegalArgumentException> { tcpPortsMinMax(0, 1, 3) }
-        assertFailsWith<IllegalArgumentException> { tcpPortsMinMax(5, 0, 1) }
-        assertFailsWith<IllegalArgumentException> { tcpPortsMinMax(5, 1, 0) }
-        assertFailsWith<IllegalArgumentException> { tcpPortsMinMax(5, 2, 1) }
-        assertFailsWith<IllegalArgumentException> { tcpPortRandomRange(0) }
-        assertFailsWith<IllegalArgumentException> { tcpPortsRandomRange(0, 100) }
-        assertFailsWith<IllegalArgumentException> { tcpPortsRandomRange(5, 0) }
-        assertFailsWith<IllegalArgumentException> { udpPorts(0) }
-        assertFailsWith<IllegalArgumentException> { udpPortMin(0) }
-        assertFailsWith<IllegalArgumentException> { udpPortMinMax(0, 1) }
-        assertFailsWith<IllegalArgumentException> { udpPortMinMax(1, 0) }
-        assertFailsWith<IllegalArgumentException> { udpPortMinMax(2, 1) }
-        assertFailsWith<IllegalArgumentException> { udpPortsMinMax(0, 1, 3) }
-        assertFailsWith<IllegalArgumentException> { udpPortsMinMax(5, 0, 1) }
-        assertFailsWith<IllegalArgumentException> { udpPortsMinMax(5, 1, 0) }
-        assertFailsWith<IllegalArgumentException> { udpPortsMinMax(5, 2, 1) }
-        assertFailsWith<IllegalArgumentException> { udpPortRandomRange(0) }
-        assertFailsWith<IllegalArgumentException> { udpPortsRandomRange(0, 100) }
-        assertFailsWith<IllegalArgumentException> { udpPortsRandomRange(5, 0) }
+        assertThrows<IllegalArgumentException> { tcpPorts(0) }
+        assertThrows<IllegalArgumentException> { tcpPortMin(0) }
+        assertThrows<IllegalArgumentException> { tcpPortMinMax(0, 1) }
+        assertThrows<IllegalArgumentException> { tcpPortMinMax(1, 0) }
+        assertThrows<IllegalArgumentException> { tcpPortMinMax(2, 1) }
+        assertThrows<IllegalArgumentException> { tcpPortsMinMax(0, 1, 3) }
+        assertThrows<IllegalArgumentException> { tcpPortsMinMax(5, 0, 1) }
+        assertThrows<IllegalArgumentException> { tcpPortsMinMax(5, 1, 0) }
+        assertThrows<IllegalArgumentException> { tcpPortsMinMax(5, 2, 1) }
+        assertThrows<IllegalArgumentException> { tcpPortRandomRange(0) }
+        assertThrows<IllegalArgumentException> { tcpPortsRandomRange(0, 100) }
+        assertThrows<IllegalArgumentException> { tcpPortsRandomRange(5, 0) }
+        assertThrows<IllegalArgumentException> { udpPorts(0) }
+        assertThrows<IllegalArgumentException> { udpPortMin(0) }
+        assertThrows<IllegalArgumentException> { udpPortMinMax(0, 1) }
+        assertThrows<IllegalArgumentException> { udpPortMinMax(1, 0) }
+        assertThrows<IllegalArgumentException> { udpPortMinMax(2, 1) }
+        assertThrows<IllegalArgumentException> { udpPortsMinMax(0, 1, 3) }
+        assertThrows<IllegalArgumentException> { udpPortsMinMax(5, 0, 1) }
+        assertThrows<IllegalArgumentException> { udpPortsMinMax(5, 1, 0) }
+        assertThrows<IllegalArgumentException> { udpPortsMinMax(5, 2, 1) }
+        assertThrows<IllegalArgumentException> { udpPortRandomRange(0) }
+        assertThrows<IllegalArgumentException> { udpPortsRandomRange(0, 100) }
+        assertThrows<IllegalArgumentException> { udpPortsRandomRange(5, 0) }
 
         assertExpressionNotNullWhenParsed(
             tcpPort(elEval = false)
@@ -314,10 +314,10 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use resource functions`() {
-        assertFailsWith<IllegalArgumentException> { resourcePath("") }
-        assertFailsWith<IllegalArgumentException> { resourcesPath("") }
-        assertFailsWith<IllegalArgumentException> { resourceContent("") }
-        assertFailsWith<IllegalArgumentException> { resourceContent("path", "") }
+        assertThrows<IllegalArgumentException> { resourcePath("") }
+        assertThrows<IllegalArgumentException> { resourcesPath("") }
+        assertThrows<IllegalArgumentException> { resourceContent("") }
+        assertThrows<IllegalArgumentException> { resourceContent("path", "") }
 
         assertExpressionNotNullWhenParsed(
             resourcePath("org.package.resource", elEval = false)
@@ -338,15 +338,15 @@ class ChutneyFunctionsTest {
 
     @Test
     fun `use escape and unescape functions`() {
-        assertFailsWith<IllegalArgumentException> { escapeJson("") }
-        assertFailsWith<IllegalArgumentException> { unescapeJson("") }
-        assertFailsWith<IllegalArgumentException> { escapeXml10("") }
-        assertFailsWith<IllegalArgumentException> { escapeXml11("") }
-        assertFailsWith<IllegalArgumentException> { unescapeXml("") }
-        assertFailsWith<IllegalArgumentException> { escapeHtml3("") }
-        assertFailsWith<IllegalArgumentException> { unescapeHtml3("") }
-        assertFailsWith<IllegalArgumentException> { escapeHtml4("") }
-        assertFailsWith<IllegalArgumentException> { unescapeHtml4("") }
+        assertThrows<IllegalArgumentException> { escapeJson("") }
+        assertThrows<IllegalArgumentException> { unescapeJson("") }
+        assertThrows<IllegalArgumentException> { escapeXml10("") }
+        assertThrows<IllegalArgumentException> { escapeXml11("") }
+        assertThrows<IllegalArgumentException> { unescapeXml("") }
+        assertThrows<IllegalArgumentException> { escapeHtml3("") }
+        assertThrows<IllegalArgumentException> { unescapeHtml3("") }
+        assertThrows<IllegalArgumentException> { escapeHtml4("") }
+        assertThrows<IllegalArgumentException> { unescapeHtml4("") }
 
         assertExpressionNotNullWhenParsed(
             escapeJson("json".elString(), elEval = false)

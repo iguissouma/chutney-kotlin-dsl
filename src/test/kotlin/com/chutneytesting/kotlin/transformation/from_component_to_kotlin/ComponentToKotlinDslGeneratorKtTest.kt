@@ -1,13 +1,13 @@
 package com.chutneytesting.kotlin.transformation.from_component_to_kotlin
 
-import com.chutneytesting.kotlin.transformation.ChutneyServerService
+import com.chutneytesting.kotlin.synchronize.ChutneyServerService
 import com.chutneytesting.kotlin.util.ChutneyServerInfo
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import java.time.Instant
-import kotlin.test.assertEquals
 
 
 class ComponentToKotlinDslGeneratorKtTest {
@@ -22,8 +22,8 @@ class ComponentToKotlinDslGeneratorKtTest {
         usage = "",
         tags = listOf("TAG1"),
         task = StepImplementation(
-            type="http-get",
-            target="A_TARGET",
+            type = "http-get",
+            target = "A_TARGET",
             inputs = mapOf(
                 "uri" to "/my/uri/",
                 "timeout" to "5s",
@@ -73,7 +73,8 @@ public fun ChutneyStepBuilder.`First action`() {
         HttpGetTask(target = "A_TARGET", uri = "/my/uri/", headers = mapOf("myHeader" to "myHeaderValue"), timeout = "5s", outputs = mapOf("myOutput" to "outputValue"))
     }
 }
-            """.trim())
+            """.trim()
+        )
     }
 
     @Test
@@ -106,7 +107,8 @@ public fun ChutneyStepBuilder.`Parent step`() {
 **/
 `First action`()
 }
-            """.trim())
+            """.trim()
+        )
     }
 
     @Test
@@ -114,25 +116,25 @@ public fun ChutneyStepBuilder.`Parent step`() {
         val mockServerInfo = ChutneyServerInfo("", "", "")
         val sut = ComponentToKotlinDslGenerator()
 
-        val scenario = LinkedHashMap<String,Any>()
-        val metadata = LinkedHashMap<String,Any>()
-        metadata.put("id","123-456")
-        scenario.put("metadata", metadata)
+        val scenario = LinkedHashMap<String, Any>()
+        val metadata = LinkedHashMap<String, Any>()
+        metadata["id"] = "123-456"
+        scenario["metadata"] = metadata
         val scenarios: List<LinkedHashMap<String, Any>> = listOf(scenario)
         val composableScenario = ComposableScenarioDto(
             parameters = listOf(KeyValue("parameter1", "parameter1")),
-            componentSteps = listOf(parentStep,parentStep)
+            componentSteps = listOf(parentStep, parentStep)
         )
         val testCase = ComposableTestCaseDto(
-            id="123-456",
-            title="scenario title",
-            description="scenario description",
+            id = "123-456",
+            title = "scenario title",
+            description = "scenario description",
             creationDate = Instant.ofEpochMilli(10000000000),
             tags = listOf("TAG1"),
             datasetId = "12",
             author = "Bob",
             updateDate = Instant.ofEpochMilli(20000000000),
-            version = Integer(42),
+            version = 42,
             computedParameters = listOf(KeyValue("computedParameter1", "valuecomputedParameter1")),
             scenario = composableScenario
         )
@@ -176,7 +178,8 @@ val `scenario title` = Scenario(title = "scenario title") {
     When("TODO Déclencheur"){}
     Then("TODO Assert"){}
 }
-            """.trim())
+            """.trim()
+        )
     }
 }
 

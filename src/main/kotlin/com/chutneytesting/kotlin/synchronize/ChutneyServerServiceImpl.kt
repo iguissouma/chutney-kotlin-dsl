@@ -1,4 +1,4 @@
-package com.chutneytesting.kotlin.transformation
+package com.chutneytesting.kotlin.synchronize
 
 import com.chutneytesting.kotlin.transformation.from_component_to_kotlin.ComposableStepDto
 import com.chutneytesting.kotlin.transformation.from_component_to_kotlin.ComposableTestCaseDto

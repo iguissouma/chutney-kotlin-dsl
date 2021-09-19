@@ -1,12 +1,12 @@
 package com.chutneytesting.kotlin.dsl
 
 import com.gregwoodfill.assert.`should strictly equal json`
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class ChutneyScenarioDslTest {
 
     @Test
-    fun `able to create chutney scenario using kotlin dsl`() {
+    fun `is able to create chutney scenario using kotlin dsl`() {
 
         val `swapi GET people record` = Scenario(title = "swapi GET people record") {
             Given("I set get people service api endpoint") {
@@ -25,7 +25,7 @@ class ChutneyScenarioDslTest {
     }
 
     @Test
-    fun `able to create chutney scenario with substeps using kotlin dsl`() {
+    fun `is able to create chutney scenario with substeps using kotlin dsl`() {
 
         val `swapi GET people record` = Scenario(title = "swapi GET people record") {
             Given("I set get people service api endpoint") {
@@ -49,7 +49,7 @@ class ChutneyScenarioDslTest {
     }
 
     @Test
-    fun `able to create chutney scenario using kotlin dsl with functions`() {
+    fun `is able to create chutney scenario using kotlin dsl with functions`() {
 
         fun declareUri(): ChutneyStepBuilder.() -> Unit = { ContextPutTask(entries = mapOf("uri" to "api/people/1")) }
 
@@ -68,7 +68,7 @@ class ChutneyScenarioDslTest {
     }
 
     @Test
-    fun `able to create chutney scenario using kotlin dsl with functions and multiple assertions`() {
+    fun `is able to create chutney scenario using kotlin dsl with functions and multiple assertions`() {
 
         fun declareUri(): ChutneyStepBuilder.() -> Unit = { ContextPutTask(entries = mapOf("uri" to "api/people/1")) }
 
@@ -90,7 +90,7 @@ class ChutneyScenarioDslTest {
     }
 
     @Test
-    fun `able to create chutney scenario using kotlin dsl with extension functions`() {
+    fun `is able to create chutney scenario using kotlin dsl with extension functions`() {
 
         fun ChutneyStepBuilder.declareUri() = ContextPutTask(entries = mapOf("uri" to "api/people/1"))
 
@@ -111,7 +111,7 @@ class ChutneyScenarioDslTest {
     }
 
     @Test
-    fun `able to create chutney scenario using kotlin dsl with softAssertions`() {
+    fun `is able to create chutney scenario using kotlin dsl with softAssertions`() {
 
         fun declareUri(): ChutneyStepBuilder.() -> Unit = { ContextPutTask(entries = mapOf("uri" to "api/people/1")) }
 

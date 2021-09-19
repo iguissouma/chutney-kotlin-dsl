@@ -33,8 +33,14 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-script-runtime:1.4.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation("com.chutneytesting:engine:1.3.12")
+    implementation("com.chutneytesting:environment:1.3.12")
+    implementation("org.junit.jupiter:junit-jupiter-api:5.6.3")
+    implementation("org.springframework:spring-core:5.3.10")
 
-    testImplementation(kotlin("test-junit"))
+    runtimeOnly("com.chutneytesting:task-impl:1.3.12")
+
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.3")
     testImplementation("com.gregwoodfill.assert:kotlin-json-assert:0.1.0")
     testImplementation("org.springframework:spring-expression:5.1.5.RELEASE")
     testImplementation(kotlin("scripting-jsr223"))
@@ -47,6 +53,7 @@ tasks.withType<KotlinCompile> {
 
 tasks {
     test {
+        useJUnitPlatform()
         testLogging {
             events("passed", "failed", "skipped")
             showStandardStreams = true
@@ -126,7 +133,8 @@ publishing {
             val releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
             val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots"
 
-            val ossrhUsername = System.getenv("OSSRH_USERNAME") // Use token ; https://s01.oss.sonatype.org/#profile;User%20Token
+            val ossrhUsername =
+                System.getenv("OSSRH_USERNAME") // Use token ; https://s01.oss.sonatype.org/#profile;User%20Token
             val ossrhPassword = System.getenv("OSSRH_PASSWORD") // Use token
 
             url = uri(releasesRepoUrl)
