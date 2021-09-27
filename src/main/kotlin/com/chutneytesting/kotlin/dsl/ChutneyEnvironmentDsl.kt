@@ -12,6 +12,11 @@ data class ChutneyEnvironment(
             null
         }
     }
+
+    override fun toString(): String {
+        return "ChutneyEnvironment(name='$name', description='$description')"
+    }
+
 }
 
 data class ChutneyTarget(

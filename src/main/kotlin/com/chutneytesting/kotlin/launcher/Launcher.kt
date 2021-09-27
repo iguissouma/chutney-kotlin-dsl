@@ -17,7 +17,6 @@ class Launcher(private val reportRootPath: String = CHUTNEY_REPORT_ROOT_PATH) {
     private val executionConfiguration = ExecutionConfiguration()
     private val om = ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
 
-
     fun run(scenario: ChutneyScenario, environment: ChutneyEnvironment, expected: StatusDto = StatusDto.SUCCESS) {
         val executable = execute(scenario, environment, expected)
         executable.execute()
@@ -35,75 +34,12 @@ class Launcher(private val reportRootPath: String = CHUTNEY_REPORT_ROOT_PATH) {
 
     private fun execute(scenario: ChutneyScenario, environment: ChutneyEnvironment, expected: StatusDto): Executable {
         val executionRequestDto = ExecutionRequestDto(mapScenarioToExecutionRequest(scenario, environment))
-        consolePrint(executionRequestDto)
         val report = executionConfiguration.embeddedTestEngine().execute(executionRequestDto)
         println("\n")
-        consolePrint(report, environment)
+        ConsolePrinter().consolePrint(report, environment)
         writeReports(scenario, environment, report)
         return Executable {
             assertEquals(expected, report.status)
-        }
-    }
-
-    private fun consolePrint(report: StepExecutionReportDto, environment: ChutneyEnvironment) {
-        println(
-            color(
-                "[" + report.status + "] " + "scenario: \"" + report.name + "\"" + " on environment " + environment.name + "\n",
-                report.status
-            )
-        )
-
-        report.steps?.forEach {
-            consolePrint(it, "  ")
-        }
-    }
-
-    //val success =  "\u001b[32m"
-    private val success = "\u001b[34m"
-    private val warning = "\u001b[33m"
-    private val failure = "\u001b[31m"
-    private val stopped = "\u001b[35m"
-    private val reset = "\u001b[0m"
-
-    private fun color(s: String, status: StatusDto): String {
-        when (status) {
-            StatusDto.SUCCESS -> return success + s + reset
-            StatusDto.WARN -> return warning + s + reset
-            StatusDto.FAILURE -> return failure + s + reset
-            StatusDto.STOPPED -> return stopped + s + reset
-            StatusDto.NOT_EXECUTED -> return stopped + s + reset
-            else -> return s + reset
-        }
-    }
-
-    private fun consolePrint(step: StepExecutionReportDto, indent: String) {
-        println(indent + color("[" + step.status + "] " + step.name + " [" + step.strategy.ifBlank { "default" } + "]",
-            step.status))
-
-        errors(step, indent)
-        information(step, indent)
-
-        if (!step.steps.isEmpty() && step.type.isBlank()) {
-            step.steps.forEach { consolePrint(it, "$indent  ") }
-        }
-
-        if (step.type.isNotBlank()) {
-            println("$indent  " + step.type + " { " + consolePrint(step.context.evaluatedInputs) + "}")
-            if (step.targetName.isNotBlank()) {
-                println("$indent  on { " + step.targetName + ": " + step.targetUrl + " }")
-            }
-        }
-    }
-
-    private fun errors(step: StepExecutionReportDto, indent: String) {
-        step.errors.forEach {
-            println(color("$indent  >> $it", step.status))
-        }
-    }
-
-    private fun information(step: StepExecutionReportDto, indent: String) {
-        step.information.forEach {
-            println("$success$indent  >> $it$reset")
         }
     }
 
@@ -120,36 +56,6 @@ class Launcher(private val reportRootPath: String = CHUTNEY_REPORT_ROOT_PATH) {
                 .joinToString("", postfix = ".json") { it.capitalize() })
             .bufferedWriter()
             .use { out -> out.write(om.writerWithDefaultPrettyPrinter().writeValueAsString(report)) }
-    }
-
-    private fun consolePrint(executionRequestDto: ExecutionRequestDto) {
-        println("scenario: \"" + executionRequestDto.scenario.name + "\" on environment " + executionRequestDto.scenario.environment + "\n")
-
-        executionRequestDto.scenario.definition.steps.forEach {
-            consolePrint(it, "  ")
-        }
-    }
-
-    private fun consolePrint(step: StepDefinitionDto, indent: String) {
-        println(indent + step.name + " [" + step.strategy.type.ifBlank { "default" } + "]")
-
-        if (step.steps.isNotEmpty() && step.type.isBlank()) {
-            step.steps.forEach { consolePrint(it, "$indent  ") }
-        }
-
-        if (step.type.isNotBlank()) {
-            println("$indent  " + step.type + " { " + consolePrint(step.inputs) + "}")
-            step.target.ifPresent { println("$indent  on { " + it.name + ": " + it.url + " }") }
-        }
-
-    }
-
-    private fun consolePrint(map: Map<String, Any>): String {
-        var properties = " "
-        map.entries.forEach {
-            properties += it.key + ": " + "\"" + it.value + "\", "
-        }
-        return properties
     }
 
     private fun mapScenarioToExecutionRequest(
