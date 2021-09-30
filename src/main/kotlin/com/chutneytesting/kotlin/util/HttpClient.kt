@@ -35,7 +35,12 @@ object HttpClient {
         return execute(serverInfo, query, "GET", "")
     }
 
-    inline fun <reified T> execute(serverInfo: ChutneyServerInfo, query: String, requestMethod: String, body: String): T {
+    inline fun <reified T> execute(
+        serverInfo: ChutneyServerInfo,
+        query: String,
+        requestMethod: String,
+        body: String
+    ): T {
         val connection = createConnection(serverInfo, query, requestMethod)
 
         if (connection is HttpsURLConnection) {
@@ -99,7 +104,7 @@ object HttpClient {
             val factory = sc.socketFactory
 
             connection.sslSocketFactory = factory
-            connection.setHostnameVerifier { hostname, sslSession -> true }
+            connection.setHostnameVerifier { _, _ -> true }
         } catch (e: Throwable) {
             LOGGER.error("Problems configuring SSL connection to $url", e)
         }

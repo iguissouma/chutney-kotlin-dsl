@@ -114,11 +114,15 @@ class ChutneyStepImplBuilder {
 
 object Mapper {
 
-    val pp = object : DefaultPrettyPrinter() {
+    private val pp = object : DefaultPrettyPrinter() {
         init {
             val indenter: Indenter = DefaultIndenter()
             indentObjectsWith(indenter) // Indent JSON objects
             indentArraysWith(indenter) // Indent JSON arrays
+        }
+
+        override fun createInstance(): DefaultPrettyPrinter {
+            return DefaultPrettyPrinter(this);
         }
 
         override fun withSeparators(separators: Separators?): DefaultPrettyPrinter {
@@ -128,7 +132,7 @@ object Mapper {
         }
     }
 
-    val mapper: ObjectMapper = ObjectMapper()
+    private val mapper: ObjectMapper = ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .registerModule(KotlinModule())
         .setDefaultPrettyPrinter(pp)
@@ -167,6 +171,10 @@ class ChutneyScenario(
 ) {
 
     override fun toString(): String {
-        return Mapper.toJson(this)
+        return try {
+            Mapper.toJson(this)
+        } catch (e: Throwable) {
+            title
+        }
     }
 }

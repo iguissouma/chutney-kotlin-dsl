@@ -66,7 +66,7 @@ private fun Strategy.toDsl(): String? {
 }
 
 private fun ChutneyStep.toDsl(): String {
-    if (this.subSteps == null || this.subSteps.isEmpty()) {
+    if (this.subSteps.isEmpty()) {
         val implementation = this.implementation ?: return mapTODO()
         return when (implementation.type) {
             "context-put" -> mapContexPutTask(implementation)
@@ -81,7 +81,7 @@ private fun ChutneyStep.toDsl(): String {
             "sql" -> mapSqlTask(implementation)
             "sleep" -> mapSleepTask(implementation)
             "assert" -> mapAssertsTask(implementation)
-            "debug" -> mapDebugTask(implementation)
+            "debug" -> mapDebugTask()
             else -> mapTODO()
         }
     } else {
@@ -108,7 +108,7 @@ private fun mapRetryTimeoutTask(strategy: Strategy): String {
     return "RetryTimeOutStrategy($timeout, $retryDelay)"
 }
 
-private fun mapDebugTask(implementation: ChutneyStepImpl): String {
+private fun mapDebugTask(): String {
     return """{
        DebugTask()
     }"""
@@ -306,12 +306,15 @@ private fun mapArgs(listOfArgs: List<Pair<String, Any?>>): String {
         .joinToString(", ") { it.first + " = " + it.second }
 }
 
+@Suppress("UNCHECKED_CAST")
 private fun inputAsMapList(inputs: Map<String, Any?>, key: String) =
     listOfMapConstructor(inputs[key] as List<Map<String, Any>>?)
 
+@Suppress("UNCHECKED_CAST")
 private fun inputAsList(inputs: Map<String, Any?>, key: String) =
     listOfConstructor(inputs[key] as List<String>?)
 
+@Suppress("UNCHECKED_CAST")
 private fun inputAsMap(inputs: Map<String, Any?>, key: String) =
     mapOfConstructor(inputs[key] as Map<String, Any>?)
 

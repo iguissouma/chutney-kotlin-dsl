@@ -11,7 +11,7 @@ data class ComposableTestCaseDto(
     val datasetId: String?,
     val author: String?,
     val updateDate: Instant?,
-    val version: Integer?,
+    val version: Int?,
     val computedParameters: List<KeyValue>?,
     val scenario: ComposableScenarioDto?
 )

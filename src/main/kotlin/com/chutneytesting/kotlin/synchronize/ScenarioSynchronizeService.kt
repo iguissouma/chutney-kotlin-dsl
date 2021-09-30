@@ -1,8 +1,7 @@
 package com.chutneytesting.kotlin.synchronize
 
-import com.chutneytesting.kotlin.util.ChutneyServerInfo
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
-import com.chutneytesting.kotlin.transformation.ChutneyServerServiceImpl
+import com.chutneytesting.kotlin.util.ChutneyServerInfo
 import java.io.File
 
 /**

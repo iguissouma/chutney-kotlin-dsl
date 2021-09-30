@@ -3,10 +3,10 @@ package com.chutneytesting.kotlin.transformation.from_json_to_kotlin
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
 import com.chutneytesting.kotlin.dsl.asResource
 import com.gregwoodfill.assert.`should equal json`
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
-import kotlin.test.assertEquals
 
 class ChutneyScenarioDslGeneratorTest {
 
@@ -42,7 +42,7 @@ class ChutneyScenarioDslGeneratorTest {
         "$fromScript" `should equal json` "/get-people.chutney.json".asResource()
     }
 
-    inline fun <reified T> load(script: String) : T {
+    inline fun <reified T> load(script: String): T {
         val engine: ScriptEngine = ScriptEngineManager().getEngineByExtension("kts")
         return engine.eval(script) as T
     }

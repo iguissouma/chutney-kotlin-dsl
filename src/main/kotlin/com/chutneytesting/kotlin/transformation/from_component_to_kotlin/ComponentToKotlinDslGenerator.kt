@@ -1,28 +1,31 @@
 package com.chutneytesting.kotlin.transformation.from_component_to_kotlin
 
 import com.chutneytesting.kotlin.dsl.SSH_CLIENT_CHANNEL
-import com.chutneytesting.kotlin.transformation.ChutneyServerService
-import com.chutneytesting.kotlin.transformation.ChutneyServerServiceImpl
+import com.chutneytesting.kotlin.synchronize.ChutneyServerService
+import com.chutneytesting.kotlin.synchronize.ChutneyServerServiceImpl
 import com.chutneytesting.kotlin.util.ChutneyServerInfo
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 class ComponentToKotlinDslGenerator {
-    fun generateDsl(serverInfo: ChutneyServerInfo, chutneyServerService: ChutneyServerService = ChutneyServerServiceImpl): String {
+    fun generateDsl(
+        serverInfo: ChutneyServerInfo,
+        chutneyServerService: ChutneyServerService = ChutneyServerServiceImpl
+    ): String {
         val allComponents: List<ComposableStepDto> = chutneyServerService.getAllComponent(serverInfo)
         var result = ""
         allComponents.forEach { component ->
-            if (component.steps?.size!! == 0) {
+            result += if (component.steps?.size!! == 0) {
                 // Leaf component
-                result += (generateComponent(component) + "\n")
+                (generateComponent(component) + "\n")
             } else {
                 // Parent component
-                result += (generateParentComponent(component) + "\n")
+                (generateParentComponent(component) + "\n")
             }
         }
 
         val allScenarios: List<LinkedHashMap<String, Any>> = chutneyServerService.getAllScenarios(serverInfo)
         allScenarios.forEach { s ->
-            val id = (s["metadata"] as LinkedHashMap<String, Any>).get("id") as String
+            val id = (s["metadata"] as LinkedHashMap<*, *>)["id"] as String
             if (id.contains("-")) {
                 val scenario: ComposableTestCaseDto = chutneyServerService.getComposedScenario(serverInfo, id)
                 result += (scenariokotlinHeader(scenario))
@@ -46,6 +49,7 @@ val `${scenario.title}` = Scenario(title = "${scenario.title}") {
         return result
     }
 }
+
 private fun scenariokotlin(testCase: ComposableTestCaseDto): String {
     var result = ""
     testCase.scenario?.componentSteps?.forEach { c ->
@@ -85,12 +89,12 @@ private fun generateParentComponent(component: ComposableStepDto): String {
 ${kotlinHeader(component)}
 ${kotlinFunctionName(component)}
 """
-    result += component.steps?.map { step ->
+    result += component.steps?.joinToString(separator = "\n") { step ->
 """
 ${kotlinHeaderLight(step)}
 ${kotlinCallFunction(step)}
 """
-    }?.joinToString(separator = "\n") ?: run {
+    } ?: run {
         ""
     }
     result += "}"
@@ -102,16 +106,17 @@ private fun createStep(
     implementation: ComposableStepDto,
     args: String,
     stepName: String
-) = """
+) =
+"""
 ${kotlinHeader(implementation)}
 ${kotlinFunctionName(implementation)}
     Step("${implementation.name}") {
         $stepName($args)
     }
 }
-     """
+"""
 
-private fun kotlinFunctionName(implementation: ComposableStepDto) : String {
+private fun kotlinFunctionName(implementation: ComposableStepDto): String {
     val functionName = formatFunctionName(implementation.name)
     return "public fun ChutneyStepBuilder.`${functionName}`() {"
 }
@@ -121,21 +126,29 @@ private fun kotlinCallFunction(implementation: ComposableStepDto): String {
     return "`${functionName}`()"
 }
 
-private fun kotlinHeader(implementation: ComposableStepDto):String {
+private fun kotlinHeader(implementation: ComposableStepDto): String {
     var result = "/**\n"
     result += "* id : ${implementation.id}\n"
-    if(implementation.strategy?.type != "Default") result += "* strategy: ${implementation.strategy}\n"
-    if(implementation.computedParameters?.size!! > 0)result += "* computed parameters ${implementation.computedParameters.joinToString(",") { it.key + " = " + it.value }}\n"
-    if(implementation.parameters?.size!! > 0)result += "* parameters ${implementation.parameters.joinToString(",") { it.key + " = " + it.value }}\n"
-    if(implementation.tags?.size!! > 0)result += "* tags: ${implementation.tags}\n"
+    if (implementation.strategy?.type != "Default") result += "* strategy: ${implementation.strategy}\n"
+    if (implementation.computedParameters?.size!! > 0) result += "* computed parameters ${
+        implementation.computedParameters.joinToString(
+            ","
+        ) { it.key + " = " + it.value }
+    }\n"
+    if (implementation.parameters?.size!! > 0) result += "* parameters ${implementation.parameters.joinToString(",") { it.key + " = " + it.value }}\n"
+    if (implementation.tags?.size!! > 0) result += "* tags: ${implementation.tags}\n"
     result += "**/"
     return result
 }
 
-private fun kotlinHeaderLight(implementation: ComposableStepDto):String {
+private fun kotlinHeaderLight(implementation: ComposableStepDto): String {
     var result = "/**\n"
-    if(implementation.computedParameters?.size!! > 0)result += "* computed parameters ${implementation.computedParameters.joinToString(",") { it.key + " = " + it.value }}\n"
-    if(implementation.parameters?.size!! > 0)result += "* parameters ${implementation.parameters.joinToString(",") { it.key + " = " + it.value }}\n"
+    if (implementation.computedParameters?.size!! > 0) result += "* computed parameters ${
+        implementation.computedParameters.joinToString(
+            ","
+        ) { it.key + " = " + it.value }
+    }\n"
+    if (implementation.parameters?.size!! > 0) result += "* parameters ${implementation.parameters.joinToString(",") { it.key + " = " + it.value }}\n"
     result += "**/"
     return result
 }
@@ -410,9 +423,11 @@ fun mapArgs(listOfArgs: List<Pair<String, Any?>>): String {
         .joinToString(", ") { it.first + " = " + it.second }
 }
 
+@Suppress("UNCHECKED_CAST")
 fun inputAsList(inputs: Map<String, Any?>, key: String) =
     listOfConstructor(inputs[key] as List<String>?)
 
+@Suppress("UNCHECKED_CAST")
 fun inputAsMap(inputs: Map<String, Any?>?, key: String) =
     mapOfConstructor(inputs?.get(key) as Map<String, Any>?)
 
@@ -431,7 +446,7 @@ fun listOfConstructor(
         return "listOf()"
     }
     return "listOf(${
-        list.joinToString(",\n") {
+        list.joinToString(",\n") { it ->
             it.split("\n").joinToString(" +\n") { (escapeKotlin(it)).wrapWithQuotes() }
         }
     })"
@@ -464,12 +479,12 @@ fun escapeKotlin(s: String): String {
 
 fun uri(implementation: StepImplementation?): String {
     val inputs = implementation?.inputs
-    if (inputs != null) {
-        return escapeKotlin(
+    return if (inputs != null) {
+        escapeKotlin(
             (inputs["uri"] as String? ?: "")
         ).wrapWithQuotes()
     } else {
-        return ""
+        ""
     }
 }
 
