@@ -1,6 +1,7 @@
 package com.chutneytesting.kotlin.engine
 
 import com.chutneytesting.engine.api.execution.StatusDto
+import com.chutneytesting.engine.api.execution.StepExecutionReportDto
 import com.chutneytesting.kotlin.dsl.ChutneyEnvironment
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
 import com.chutneytesting.kotlin.launcher.Launcher
@@ -27,15 +28,17 @@ class ScenarioExecutor : Executor {
         request.engineExecutionListener.executionStarted(rootTestDescriptor)
         log.info("Execution started: ${rootTestDescriptor.uniqueId}")
         request.rootTestDescriptor.children.forEach { testDescriptor ->
-            if (testDescriptor is ChutneyTestDescriptor) {
+            if (testDescriptor is ChutneyScenarioTestDescriptor) {
                 var result: TestExecutionResult = TestExecutionResult.successful()
                 try {
                     request.engineExecutionListener.executionStarted(testDescriptor)
-                    result = executeTest(testDescriptor)
-                    /*testDescriptor.children.forEach { c ->
-                        request.engineExecutionListener.executionStarted(c)
-                        request.engineExecutionListener.executionFinished(c, TestExecutionResult.successful())
-                    }*/
+                    val report = executeTest(testDescriptor)
+                    result = if (report?.status == StatusDto.SUCCESS) TestExecutionResult.successful() else TestExecutionResult.failed(Throwable(report?.errors?.joinToString(separator = System.lineSeparator())))
+                    testDescriptor.children.forEachIndexed { index, stepTestDescriptor ->
+                        val stepExecutionReportDto = report?.steps?.get(index)
+                        request.engineExecutionListener.executionStarted(stepTestDescriptor)
+                        request.engineExecutionListener.executionFinished(stepTestDescriptor, if(stepExecutionReportDto?.status == StatusDto.SUCCESS) TestExecutionResult.successful() else TestExecutionResult.failed(Throwable()))
+                    }
                 } catch (ex: Throwable) {
                     log.error("Failure: $ex")
                     result = TestExecutionResult.failed(ex)
@@ -68,7 +71,7 @@ class ScenarioExecutor : Executor {
         }
     }
 
-    private fun executeTest(testDescriptor: ChutneyTestDescriptor): TestExecutionResult {
+    private fun executeTest(testDescriptor: ChutneyScenarioTestDescriptor): StepExecutionReportDto? {
 
         val testClassInstance =
             testDescriptor.classInfo.loadClass().getDeclaredConstructor().newInstance()
@@ -78,16 +81,16 @@ class ScenarioExecutor : Executor {
             throw IllegalStateException("Method ${getScenario.declaringClass.name}#${getScenario.name} has invalid return type, should return Scenario.")
         }
 
-        val scenario = getScenario.invoke(testClassInstance) as ChutneyScenario
+        // val scenario = getScenario.invoke(testClassInstance) as ChutneyScenario
 
-        println(scenario.toString())
+        // println(scenario.toString())
 
-        val statusDto = Launcher().run(scenario, envA)
 
-        scenario.title?.let {
+        testDescriptor.scenario.title.let {
             log.info("Loaded scenario $it.")
-        } ?: log.info("Loaded scenario.")
+        }
+        return Launcher().runAndGetReport(testDescriptor.scenario, envA)
 
-        return if (statusDto == StatusDto.SUCCESS) TestExecutionResult.successful() else TestExecutionResult.failed(Throwable("Failed..."))
+        // return if (statusDto == StatusDto.SUCCESS) TestExecutionResult.successful() else TestExecutionResult.failed(Throwable("Failed..."))
     }
 }

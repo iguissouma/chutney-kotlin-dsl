@@ -1,12 +1,9 @@
 package com.chutneytesting.kotlin.engine
 
-import com.chutneytesting.kotlin.ChutneyTestClass
 import io.github.classgraph.ClassGraph
-import org.junit.platform.commons.support.AnnotationSupport
 import org.junit.platform.engine.*
 import org.junit.platform.engine.discovery.PackageSelector
 import org.junit.platform.engine.support.descriptor.EngineDescriptor
-import java.util.function.Predicate
 
 class ChutneyEngine() : TestEngine {
     companion object {
@@ -37,7 +34,7 @@ class ChutneyEngine() : TestEngine {
             testClass.methodInfo.forEach { testMethod ->
                 if (testMethod.annotationInfo.containsName(testScenarioAnnotationName)) {
                     engineDescriptor.addChild(
-                        ChutneyTestDescriptor(
+                        ChutneyScenarioTestDescriptor(
                             testClass,
                             testMethod,
                             UniqueId.forEngine(id),

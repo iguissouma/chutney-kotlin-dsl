@@ -87,6 +87,15 @@ class Launcher(
         return report.status
     }
 
+    fun runAndGetReport(
+        scenario: ChutneyScenario,
+        environment: ChutneyEnvironment
+    ): StepExecutionReportDto? {
+        val executionRequestDto = ExecutionRequestDto(mapScenarioToExecutionRequest(scenario, environment))
+        val report = executionConfiguration.embeddedTestEngine().execute(executionRequestDto)
+        return report
+    }
+
     private fun writeReports(
         scenario: ChutneyScenario,
         environmentName: String,
