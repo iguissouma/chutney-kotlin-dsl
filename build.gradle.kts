@@ -36,6 +36,10 @@ dependencies {
     implementation("com.chutneytesting:engine:1.3.12")
     implementation("com.chutneytesting:environment:1.3.12")
     implementation("org.junit.jupiter:junit-jupiter-api:5.6.3")
+    implementation("org.junit.platform:junit-platform-launcher:1.8.1")
+    implementation("org.junit.platform:junit-platform-engine:1.8.1")
+    implementation("org.junit.platform:junit-platform-commons:1.8.1")
+    implementation("io.github.classgraph:classgraph:4.8.104")
     implementation("org.assertj:assertj-core:3.21.0")
     implementation("org.springframework:spring-core:5.3.10")
 
@@ -46,6 +50,9 @@ dependencies {
     testImplementation("org.springframework:spring-expression:5.1.5.RELEASE")
     testImplementation(kotlin("scripting-jsr223"))
     testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    // Test
+    testImplementation(kotlin("test-junit5"))
+    testImplementation("org.junit.platform:junit-platform-testkit:1.8.1")
 }
 
 tasks.withType<KotlinCompile> {
@@ -60,6 +67,26 @@ tasks {
             showStandardStreams = true
         }
     }
+}
+
+tasks.register<Copy>("spi-deploy") {
+    from("src/main/resources/spi-template-deploy")
+    into("$buildDir/resources/main/META-INF/services")
+    rename("spi-template-deploy", "org.junit.platform.engine.TestEngine")
+}
+
+tasks.register<Copy>("spi-test") {
+    from("src/main/resources/spi-template-test")
+    into("$buildDir/resources/main/META-INF/services")
+    rename("spi-template-test", "org.junit.platform.engine.TestEngine")
+}
+
+
+tasks.named("test") {
+    dependsOn("spi-test")
+}
+tasks.named("jar") {
+    dependsOn("spi-deploy")
 }
 
 java {

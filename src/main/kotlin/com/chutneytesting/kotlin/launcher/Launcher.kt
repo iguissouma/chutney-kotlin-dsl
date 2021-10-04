@@ -27,7 +27,9 @@ class Launcher(
             JsonFilesEnvironmentRepository(environmentJsonRootPath)
         )
     )
-    private val om = ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+    private val om = ObjectMapper()
+        .findAndRegisterModules()
+        .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
 
 
     fun run(
@@ -74,7 +76,7 @@ class Launcher(
         softly.assertThat(expected).isEqualTo(status)
     }
 
-    private fun run(
+    fun run(
         scenario: ChutneyScenario,
         environment: ChutneyEnvironment
     ): StatusDto? {
