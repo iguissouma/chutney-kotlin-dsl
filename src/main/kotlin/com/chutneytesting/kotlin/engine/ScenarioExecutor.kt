@@ -6,9 +6,11 @@ import com.chutneytesting.kotlin.dsl.ChutneyEnvironment
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
 import com.chutneytesting.kotlin.launcher.Launcher
 import org.junit.platform.engine.ExecutionRequest
+import org.junit.platform.engine.TestDescriptor
 import org.junit.platform.engine.TestExecutionResult
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.lang.AssertionError
 import java.lang.IllegalStateException
 
 val envA = ChutneyEnvironment(
@@ -36,8 +38,7 @@ class ScenarioExecutor : Executor {
                     result = if (report?.status == StatusDto.SUCCESS) TestExecutionResult.successful() else TestExecutionResult.failed(Throwable(report?.errors?.joinToString(separator = System.lineSeparator())))
                     testDescriptor.children.forEachIndexed { index, stepTestDescriptor ->
                         val stepExecutionReportDto = report?.steps?.get(index)
-                        request.engineExecutionListener.executionStarted(stepTestDescriptor)
-                        request.engineExecutionListener.executionFinished(stepTestDescriptor, if(stepExecutionReportDto?.status == StatusDto.SUCCESS) TestExecutionResult.successful() else TestExecutionResult.failed(Throwable()))
+                        recordStepExecution(request, stepTestDescriptor, stepExecutionReportDto)
                     }
                 } catch (ex: Throwable) {
                     log.error("Failure: $ex")
@@ -54,6 +55,24 @@ class ScenarioExecutor : Executor {
         )
         log.info("Execution finished: ${rootTestDescriptor.uniqueId}")
     }
+
+    private fun recordStepExecution(
+        request: ExecutionRequest,
+        stepTestDescriptor: TestDescriptor?,
+        stepExecutionReportDto: StepExecutionReportDto?
+    ) {
+        stepTestDescriptor?.children?.forEachIndexed {index, sub ->
+            recordStepExecution(request, sub, stepExecutionReportDto?.steps?.get(index))
+        }
+        request.engineExecutionListener.executionStarted(stepTestDescriptor)
+        request.engineExecutionListener.executionFinished(
+            stepTestDescriptor,
+            if (stepExecutionReportDto?.status == StatusDto.SUCCESS) TestExecutionResult.successful() else TestExecutionResult.failed(
+                AssertionError(stepExecutionReportDto?.errors?.joinToString(separator = System.lineSeparator()))
+            )
+        )
+    }
+
 
     private fun aggregateResult(
         current: TestExecutionResult?,

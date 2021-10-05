@@ -2,6 +2,7 @@ package com.chutneytesting.kotlin.engine
 
 import io.github.classgraph.ClassGraph
 import org.junit.platform.engine.*
+import org.junit.platform.engine.discovery.ClassSelector
 import org.junit.platform.engine.discovery.PackageSelector
 import org.junit.platform.engine.support.descriptor.EngineDescriptor
 
@@ -17,12 +18,17 @@ class ChutneyEngine() : TestEngine {
 
     override fun discover(discoveryRequest: EngineDiscoveryRequest, uniqueId: UniqueId): TestDescriptor {
         val packageSelector = discoveryRequest.getSelectorsByType(PackageSelector::class.java)
+        val classSelector = discoveryRequest.getSelectorsByType(ClassSelector::class.java)
 
         val classGraphScan = ClassGraph().run {
             enableAllInfo()
             packageSelector.forEach {
                 acceptPackages(it.packageName)
             }
+            classSelector.forEach {
+                acceptClasses(it.className)
+            }
+
             scan()
         }
 
