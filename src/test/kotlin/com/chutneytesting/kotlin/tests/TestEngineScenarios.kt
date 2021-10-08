@@ -40,4 +40,33 @@ class TestEngineScenarios {
             }
         }
     }
+
+    @ChutneyTest
+    fun `it should work with nested substeps`() = Scenario(title = "scenario success") {
+        Given("Create variable") {
+            ContextPutTask(entries = mapOf("name" to "Chutney"))
+        }
+        When("Hello world") {
+            SuccessTask()
+        }
+        Then("Stupid assert") {
+            Step("Stupid assert sub1") {
+                Step("Stupid assert nested sub1") {
+                    StringAssertTask(document = "name".spEL, expected = "Chutney")
+                }
+                Step("Stupid assert nested sub2") {
+                    StringAssertTask(document = "name".spEL, expected = "Chutney3")
+                }
+                Step("Stupid assert nested sub3") {
+                    StringAssertTask(document = "name".spEL, expected = "Chutney")
+                }
+            }
+            Step("Stupid assert sub2") {
+                StringAssertTask(document = "name".spEL, expected = "Chutney")
+            }
+            Step("Stupid assert sub3") {
+                StringAssertTask(document = "name".spEL, expected = "Chutney")
+            }
+        }
+    }
 }

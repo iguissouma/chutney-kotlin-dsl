@@ -44,7 +44,7 @@ class ConsolePrinter {
         )
     }
 
-    private fun step(step: StepExecutionReportDto, indent: String = "  ") {
+    public fun step(step: StepExecutionReportDto, indent: String = "  ") {
         stepHeader(step, indent)
 
         errors(step, indent)

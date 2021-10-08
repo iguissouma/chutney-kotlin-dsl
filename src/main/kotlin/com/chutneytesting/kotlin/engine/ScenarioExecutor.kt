@@ -1,17 +1,18 @@
 package com.chutneytesting.kotlin.engine
 
-import com.chutneytesting.engine.api.execution.StatusDto
+import com.chutneytesting.engine.api.execution.StatusDto.*
 import com.chutneytesting.engine.api.execution.StepExecutionReportDto
 import com.chutneytesting.kotlin.dsl.ChutneyEnvironment
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
+import com.chutneytesting.kotlin.launcher.ConsolePrinter
 import com.chutneytesting.kotlin.launcher.Launcher
 import org.junit.platform.engine.ExecutionRequest
 import org.junit.platform.engine.TestDescriptor
 import org.junit.platform.engine.TestExecutionResult
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.lang.AssertionError
 import java.lang.IllegalStateException
+import kotlin.AssertionError
 
 val envA = ChutneyEnvironment(
     name = "envA",
@@ -22,6 +23,7 @@ class ScenarioExecutor : Executor {
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(ScenarioExecutor::class.java)
+        private val printer = ConsolePrinter()
     }
 
     override fun execute(request: ExecutionRequest) {
@@ -34,12 +36,12 @@ class ScenarioExecutor : Executor {
                 var result: TestExecutionResult = TestExecutionResult.successful()
                 try {
                     request.engineExecutionListener.executionStarted(testDescriptor)
-                    val report = executeTest(testDescriptor)
-                    result = if (report?.status == StatusDto.SUCCESS) TestExecutionResult.successful() else TestExecutionResult.failed(Throwable(report?.errors?.joinToString(separator = System.lineSeparator())))
+                    val report = executeTest(testDescriptor) ?: error("should have report")
                     testDescriptor.children.forEachIndexed { index, stepTestDescriptor ->
-                        val stepExecutionReportDto = report?.steps?.get(index)
+                        val stepExecutionReportDto = report.steps?.get(index) ?: error("should have report")
                         recordStepExecution(request, stepTestDescriptor, stepExecutionReportDto)
                     }
+                    result = report.testExecutionResult() //if (report?.status == SUCCESS) TestExecutionResult.successful() else TestExecutionResult.failed(AssertionError(report?.errors?.joinToString(separator = System.lineSeparator())))
                 } catch (ex: Throwable) {
                     log.error("Failure: $ex")
                     result = TestExecutionResult.failed(ex)
@@ -58,19 +60,31 @@ class ScenarioExecutor : Executor {
 
     private fun recordStepExecution(
         request: ExecutionRequest,
-        stepTestDescriptor: TestDescriptor?,
-        stepExecutionReportDto: StepExecutionReportDto?
+        stepTestDescriptor: TestDescriptor,
+        stepExecutionReportDto: StepExecutionReportDto
     ) {
-        stepTestDescriptor?.children?.forEachIndexed {index, sub ->
-            recordStepExecution(request, sub, stepExecutionReportDto?.steps?.get(index))
-        }
         request.engineExecutionListener.executionStarted(stepTestDescriptor)
+        stepTestDescriptor.children?.forEachIndexed { index, sub ->
+            recordStepExecution(request, sub, stepExecutionReportDto.steps[index])
+        }
+        printer.step(step = stepExecutionReportDto)
         request.engineExecutionListener.executionFinished(
             stepTestDescriptor,
-            if (stepExecutionReportDto?.status == StatusDto.SUCCESS) TestExecutionResult.successful() else TestExecutionResult.failed(
-                AssertionError(stepExecutionReportDto?.errors?.joinToString(separator = System.lineSeparator()))
-            )
+            stepExecutionReportDto.testExecutionResult()
         )
+    }
+
+    fun StepExecutionReportDto.testExecutionResult(): TestExecutionResult {
+        return when (status) {
+            SUCCESS -> TestExecutionResult.successful()
+            WARN -> TestExecutionResult.failed(AssertionError())
+            FAILURE -> TestExecutionResult.failed(AssertionError())
+            NOT_EXECUTED -> TestExecutionResult.aborted(null)
+            STOPPED -> error("A stooped test cannot reach this state")
+            PAUSED -> error("A paused test cannot reach this state")
+            RUNNING -> error("A running test cannot reach this state")
+            EXECUTED -> error("An executed test cannot reach this state")
+        }
     }
 
 
