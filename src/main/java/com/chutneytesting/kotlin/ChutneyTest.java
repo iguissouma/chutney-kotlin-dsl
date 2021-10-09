@@ -10,4 +10,5 @@ import java.lang.annotation.*;
 @Testable // for IDE support
 public @interface ChutneyTest {
     String value() default "";
+    String environment() default "";
 }

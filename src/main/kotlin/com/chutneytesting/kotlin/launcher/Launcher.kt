@@ -4,6 +4,7 @@ import com.chutneytesting.ExecutionConfiguration
 import com.chutneytesting.engine.api.execution.*
 import com.chutneytesting.engine.api.execution.StatusDto.SUCCESS
 import com.chutneytesting.environment.api.EmbeddedEnvironmentApi
+import com.chutneytesting.environment.api.dto.EnvironmentDto
 import com.chutneytesting.environment.domain.EnvironmentService
 import com.chutneytesting.environment.infra.JsonFilesEnvironmentRepository
 import com.chutneytesting.kotlin.dsl.*
@@ -30,6 +31,10 @@ class Launcher(
     private val om = ObjectMapper()
         .findAndRegisterModules()
         .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+
+    fun environment(name: String): ChutneyEnvironment {
+        return mapEnvironmentNameToChutneyEnvironment(name)
+    }
 
 
     fun run(

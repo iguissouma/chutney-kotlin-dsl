@@ -3,7 +3,6 @@ package com.chutneytesting.kotlin.engine
 import com.chutneytesting.engine.api.execution.StatusDto.*
 import com.chutneytesting.engine.api.execution.StepExecutionReportDto
 import com.chutneytesting.kotlin.dsl.ChutneyEnvironment
-import com.chutneytesting.kotlin.dsl.ChutneyScenario
 import com.chutneytesting.kotlin.launcher.ConsolePrinter
 import com.chutneytesting.kotlin.launcher.Launcher
 import org.junit.platform.engine.ExecutionRequest
@@ -11,7 +10,6 @@ import org.junit.platform.engine.TestDescriptor
 import org.junit.platform.engine.TestExecutionResult
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.lang.IllegalStateException
 import kotlin.AssertionError
 
 val envA = ChutneyEnvironment(
@@ -84,6 +82,7 @@ class ScenarioExecutor : Executor {
             PAUSED -> error("A paused test cannot reach this state")
             RUNNING -> error("A running test cannot reach this state")
             EXECUTED -> error("An executed test cannot reach this state")
+            null -> error("An executed test cannot reach this state")
         }
     }
 
@@ -109,7 +108,7 @@ class ScenarioExecutor : Executor {
         testDescriptor.scenario.title.let {
             log.info("Loaded scenario $it.")
         }
-        return Launcher().runAndGetReport(testDescriptor.scenario, envA)
+        return Launcher().runAndGetReport(testDescriptor.scenario, testDescriptor.environment)
 
     }
 }
