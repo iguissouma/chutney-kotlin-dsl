@@ -3,6 +3,7 @@ package com.chutneytesting.kotlin.engine
 import io.github.classgraph.ClassGraph
 import org.junit.platform.engine.*
 import org.junit.platform.engine.discovery.ClassSelector
+import org.junit.platform.engine.discovery.MethodSelector
 import org.junit.platform.engine.discovery.PackageSelector
 import org.junit.platform.engine.support.descriptor.EngineDescriptor
 
@@ -19,13 +20,19 @@ class ChutneyEngine() : TestEngine {
     override fun discover(discoveryRequest: EngineDiscoveryRequest, uniqueId: UniqueId): TestDescriptor {
         val packageSelector = discoveryRequest.getSelectorsByType(PackageSelector::class.java)
         val classSelector = discoveryRequest.getSelectorsByType(ClassSelector::class.java)
+        val methodSelector = discoveryRequest.getSelectorsByType(MethodSelector::class.java)
 
         val classGraphScan = ClassGraph().run {
             enableAllInfo()
             packageSelector.forEach {
                 acceptPackages(it.packageName)
             }
+
             classSelector.forEach {
+                acceptClasses(it.className)
+            }
+
+            methodSelector.forEach {
                 acceptClasses(it.className)
             }
 
@@ -36,8 +43,11 @@ class ChutneyEngine() : TestEngine {
 
         val testClasses =
             classGraphScan.getClassesWithMethodAnnotation(testScenarioAnnotationName)
+
+        val methods = methodSelector.map { selector -> selector.className + ">>" + selector.methodName }
+
         testClasses.forEach { testClass ->
-            testClass.methodInfo.forEach { testMethod ->
+            testClass.methodInfo.filter { methodSelector.isEmpty() or  ((it.className + ">>" + it.name) in methods) }.forEach { testMethod ->
                 if (testMethod.annotationInfo.containsName(testScenarioAnnotationName)) {
                     engineDescriptor.addChild(
                         ChutneyScenarioTestDescriptor(

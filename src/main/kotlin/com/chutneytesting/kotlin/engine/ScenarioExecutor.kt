@@ -41,7 +41,7 @@ class ScenarioExecutor : Executor {
                         val stepExecutionReportDto = report.steps?.get(index) ?: error("should have report")
                         recordStepExecution(request, stepTestDescriptor, stepExecutionReportDto)
                     }
-                    result = report.testExecutionResult() //if (report?.status == SUCCESS) TestExecutionResult.successful() else TestExecutionResult.failed(AssertionError(report?.errors?.joinToString(separator = System.lineSeparator())))
+                    result = report.testExecutionResult()
                 } catch (ex: Throwable) {
                     log.error("Failure: $ex")
                     result = TestExecutionResult.failed(ex)
