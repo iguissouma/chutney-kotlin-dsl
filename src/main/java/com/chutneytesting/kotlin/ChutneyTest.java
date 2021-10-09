@@ -9,4 +9,5 @@ import java.lang.annotation.*;
 @Documented
 @Testable // for IDE support
 public @interface ChutneyTest {
+    String value() default "";
 }

@@ -106,24 +106,10 @@ class ScenarioExecutor : Executor {
 
     private fun executeTest(testDescriptor: ChutneyScenarioTestDescriptor): StepExecutionReportDto? {
 
-        val testClassInstance =
-            testDescriptor.classInfo.loadClass().getDeclaredConstructor().newInstance()
-        val getScenario = testDescriptor.methodInfo.loadClassAndGetMethod()
-
-        if (getScenario.returnType != ChutneyScenario::class.java) {
-            throw IllegalStateException("Method ${getScenario.declaringClass.name}#${getScenario.name} has invalid return type, should return Scenario.")
-        }
-
-        // val scenario = getScenario.invoke(testClassInstance) as ChutneyScenario
-
-        // println(scenario.toString())
-
-
         testDescriptor.scenario.title.let {
             log.info("Loaded scenario $it.")
         }
         return Launcher().runAndGetReport(testDescriptor.scenario, envA)
 
-        // return if (statusDto == StatusDto.SUCCESS) TestExecutionResult.successful() else TestExecutionResult.failed(Throwable("Failed..."))
     }
 }
