@@ -10,4 +10,8 @@ class TestEngineJsonFileScenarios {
     fun `it should work`() {
     }
 
+    @ChutneyTest(value = "get-people.chutney.json", environment = "DEV")
+    fun `it should work on another environment`() {
+    }
+
 }

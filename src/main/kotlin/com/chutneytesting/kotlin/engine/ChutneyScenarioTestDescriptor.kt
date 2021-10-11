@@ -48,9 +48,14 @@ class ChutneyScenarioTestDescriptor(
         }
 
         val envName =
-            (classInfo.annotationInfo.firstOrNull { it.name == "com.chutneytesting.kotlin.ChutneyTestClass" }?.parameterValues?.get(
+            (methodInfo.annotationInfo.firstOrNull { it.name == "com.chutneytesting.kotlin.ChutneyTest" }?.parameterValues?.get(
                 "environment"
-            )?.value as String).takeIf { it.isNotBlank() } ?: "GLOBAL"
+            )?.value as String).takeIf { it.isNotBlank() }
+                ?:
+            ((classInfo.annotationInfo.firstOrNull { it.name == "com.chutneytesting.kotlin.ChutneyTestClass" }?.parameterValues?.get(
+                "environment"
+            )?.value as String).takeIf { it.isNotBlank() } ?: "GLOBAL")
+
         environment = Launcher().environment(envName)
 
         (scenario.givens + scenario.`when` + scenario.thens).forEach {

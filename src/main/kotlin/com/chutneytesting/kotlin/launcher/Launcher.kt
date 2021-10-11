@@ -207,10 +207,10 @@ class Launcher(
 
     private fun toSecurityDto(securityProperties: ChutneySecurityProperties): SecurityInfoExecutionDto? {
         return SecurityInfoExecutionDto(
-            securityProperties.credential?.username.let {
+            securityProperties.credential?.username?.let {
                 CredentialExecutionDto(
                     it,
-                    securityProperties.credential?.password
+                    securityProperties.credential.password
                 )
             },
             securityProperties.trustStore?.ifEmpty { null },
