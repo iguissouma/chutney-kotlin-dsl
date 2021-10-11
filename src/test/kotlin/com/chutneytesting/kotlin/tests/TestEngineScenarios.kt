@@ -55,7 +55,7 @@ class TestEngineScenarios {
                     StringAssertTask(document = "name".spEL, expected = "Chutney")
                 }
                 Step("Stupid assert nested sub2") {
-                    StringAssertTask(document = "name".spEL, expected = "Chutney3")
+                    StringAssertTask(document = "name".spEL, expected = "Chutney")
                 }
                 Step("Stupid assert nested sub3") {
                     StringAssertTask(document = "name".spEL, expected = "Chutney")
