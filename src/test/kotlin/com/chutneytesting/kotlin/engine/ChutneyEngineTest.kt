@@ -20,9 +20,9 @@ internal class ChutneyEngineTest {
             .execute()
             .testEvents().debug()
             .assertStatistics { stats ->
-                stats.started(1)
-                    .finished(1)
-                    .succeeded(1)
+                stats.started(3)
+                    .finished(3)
+                    .succeeded(3)
             }
     }
 }
