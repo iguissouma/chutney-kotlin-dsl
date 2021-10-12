@@ -15,7 +15,7 @@ jobs:
 
       # https://github.com/ajoberstar/reckon/issues/157
       - name: Fetch Tags
-        run: git fetch --unshallow --tags
+        run: git fetch --unshallow --tags --force
 
       - name: Set release version environment variable
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
