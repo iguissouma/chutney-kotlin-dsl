@@ -77,16 +77,20 @@ How (k)ool is Kotlin? super (k)ool!
 
 # How to run Kotlin scenarios
 
+> Some examples are available in [example module](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/master/src)
+
 You want to run Chutney scenarios from your local environment or on your CI/CD ?
 
 You want to use the DSL in your tests without the hassle of installing a Chutney server ?
 
 Here we go !
 
-## 1. Define your targets
+## 1. Define your Environments
+
+#### Define targets
 
 Here, you can see that ```systemA``` and ```systemB``` share the same name ```mySystem```.
-This is usefull for writing scenarios without coupling them to specific URLs or configuration. 
+This is usefull for writing scenarios without coupling them to specific URLs or configuration.
 
 By using the same name and overriding only specific properties, you can run the same scenario on different environment (see next snippet).
 
@@ -108,9 +112,7 @@ val systemB = systemA.copy(url = "tcp://another.url.com:1313")
 val systemBprime = systemB.copy(name = "prime", url = "http://yet.another.url")
 ```
 
-
-
-## 2. Define your environments
+#### Define environments
 
 Take care while adding your targets to an environment. In the previous snippet, ```systemA``` and ```systemB``` share the same name ```mySystem```.
 Since the target name is used as an identifier, you should not put targets with the same name in the same environment !
@@ -132,8 +134,16 @@ val envB = ChutneyEnvironment(
         systemBprime
     )
 )
-
 ```
+
+#### Define environments as JSON
+
+Alternatively, you can describe your environments with JSON files.
+
+They follow the model from Chutney [Environment module](https://github.com/chutney-testing/chutney/blob/master/environment/src/main/java/com/chutneytesting/environment/api/dto/EnvironmentDto.java).
+
+In order to use environments from JSON files, you should store them in a folder named **environment** under some directory whose default path is ```./chutney```, but you can override it with a constructor parameter : ```Launcher(environmentJsonRootPath = "./chutney_env")```
+
 
 ## 3. Define your scenarios
 

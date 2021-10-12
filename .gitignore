@@ -3,7 +3,9 @@
 *.iml
 out
 gen
+
 ### Gradle template
+###############################################################################
 .gradle
 **/build/
 !src/**/build/
@@ -20,3 +22,13 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 
+# Maven
+###############################################################################
+/log/
+**/target/
+.mvn/maven.config
+
+
+# Chutney reports
+###############################################################################
+**/.chutney/reports/
