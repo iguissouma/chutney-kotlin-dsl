@@ -28,7 +28,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Verify the project build
-        run: ./gradlew build
+        run: ./gradlew clean build
 
       - name: Publish to OSSRH
         run: ./gradlew publish

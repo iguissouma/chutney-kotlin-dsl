@@ -32,7 +32,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew clean build
 
       - name: Publish to local maven repo
         run: ./gradlew publishToMavenLocal -x :chutney-kotlin-dsl:signChutneyKotlinDSLPublication
