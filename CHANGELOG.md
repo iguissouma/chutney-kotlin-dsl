@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.10](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.10) (2021-10-12)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.9...HEAD)
+
+**Closed issues:**
+
+- Upgrade to jdk 11 [\#21](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/21)
+- Upgrade jackson-module-kotlin which have vulnabilirity [\#20](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/20)
+- When releasing add github release [\#19](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/19)
+- Add non existing DSL Chutney tasks [\#15](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/15)
+- Add all changelog since 0.1.0 in changelog [\#14](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/14)
+- Add github release push to release github action [\#13](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/13)
+
+**Merged pull requests:**
+
+- Add an example project / Clean and update project [\#25](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/25) ([boddissattva](https://github.com/boddissattva))
+- feat\(\): Run kotlin style scenarios without chutney server [\#24](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/24) ([bessonm](https://github.com/bessonm))
+
 ## [0.1.9](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.9) (2021-09-16)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.8...HEAD)
