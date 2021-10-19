@@ -41,6 +41,7 @@ fun ChutneyStepBuilder.ContextPutTask(entries: Map<String, Any>, outs: Map<Strin
 fun ChutneyStepBuilder.FinalTask(
     name: String,
     type: String,
+    target: String? = null,
     inputs: Map<String, Any> = emptyMap(),
     strategyType: String? = null,
     strategyProperties: Map<String, Any> = emptyMap(),
@@ -52,6 +53,7 @@ fun ChutneyStepBuilder.FinalTask(
         inputs = mapOf(
             "name" to name,
             "type" to type,
+            "target" to target,
             "inputs" to inputs,
             "strategy-type" to strategyType,
             "strategy-properties" to strategyProperties,
