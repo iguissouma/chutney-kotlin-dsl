@@ -73,7 +73,7 @@ class Launcher(
         softly: SoftAssertions
     ) {
         val status = run(scenario, environment)
-        softly.assertThat(expected).isEqualTo(status)
+        softly.assertThat(status).isEqualTo(expected)
     }
 
     private fun run(
