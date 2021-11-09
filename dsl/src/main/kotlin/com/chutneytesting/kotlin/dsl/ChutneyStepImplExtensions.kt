@@ -1,5 +1,7 @@
 package com.chutneytesting.kotlin.dsl
 
+import com.chutneytesting.kotlin.transformation.from_component_to_kotlin.target
+
 // Based on chutney.tasks file
 
 fun ChutneyStepBuilder.SuccessTask() {
@@ -1411,6 +1413,54 @@ fun ChutneyStepBuilder.MicrometerSummaryTask(
             "distributionSummary" to distributionSummary,
             "registry" to registry,
             "record" to record
+        ),
+        outputs = outputs,
+        validations = validations
+    )
+    this.strategy = strategy
+}
+
+fun ChutneyStepBuilder.RadiusAuthenticateTask(
+    target: String,
+    userName: String,
+    userPassword: String,
+    protocol: String? = "chap",
+    attributes: Map<String, String>? = mapOf(),
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
+    strategy: Strategy? = null
+) {
+    implementation = ChutneyStepImpl(
+        type = "radius-authenticate",
+        target = target,
+        inputs = mapOf(
+            "userName" to userName,
+            "userPassword" to userPassword,
+            "protocol" to protocol,
+            "attributes" to attributes
+        ),
+        outputs = outputs,
+        validations = validations
+    )
+    this.strategy = strategy
+}
+
+fun ChutneyStepBuilder.RadiusAccountingTask(
+    target: String,
+    userName: String,
+    accountingType: Int,
+    attributes: Map<String, String>? = mapOf(),
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
+    strategy: Strategy? = null
+) {
+    implementation = ChutneyStepImpl(
+        type = "radius-accounting",
+        target = target,
+        inputs = mapOf(
+            "userName" to userName,
+            "accountingType" to accountingType,
+            "attributes" to attributes
         ),
         outputs = outputs,
         validations = validations
