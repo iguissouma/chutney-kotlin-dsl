@@ -40,5 +40,12 @@ subprojects {
             events("passed", "failed", "skipped")
             showStandardStreams = true
         }
+        // Pass the proxy configuration to the gradle test executor
+        systemProperty("http.proxyHost", System.getProperty("http.proxyHost"))
+        systemProperty("http.proxyPort", System.getProperty("http.proxyPort"))
+        systemProperty("http.nonProxyHosts", System.getProperty("http.nonProxyHosts"))
+        systemProperty("https.proxyHost", System.getProperty("https.proxyHost"))
+        systemProperty("https.proxyPort", System.getProperty("https.proxyPort"))
+        systemProperty("https.nonProxyHosts", System.getProperty("https.nonProxyHosts"))
     }
 }
