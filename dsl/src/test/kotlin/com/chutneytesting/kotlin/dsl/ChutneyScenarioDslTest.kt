@@ -12,7 +12,7 @@ class ChutneyScenarioDslTest {
             Given("I set get people service api endpoint") {
                 ContextPutTask(entries = mapOf("uri" to "api/people/1"))
             }
-            When("I send GET HTTP request") {
+            When("I send GET HTTP request", RetryTimeOutStrategy("5 s", "1 s")) {
                 HttpGetTask(
                     target = "swapi.dev",
                     uri = "uri".spEL(),
@@ -66,7 +66,7 @@ class ChutneyScenarioDslTest {
 
         val `swapi GET people record` = Scenario(title = "swapi GET people record") {
             Given("I set get people service api endpoint", declareUri())
-            When("I send GET HTTP request") {
+            When("I send GET HTTP request", RetryTimeOutStrategy("5 s", "1 s")) {
                 HttpGetTask(
                     target = "swapi.dev",
                     uri = "uri".spEL(),
@@ -123,7 +123,8 @@ class ChutneyScenarioDslTest {
                 HttpGetTask(
                     target = "swapi.dev",
                     uri = "uri".spEL(),
-                    validations = mapOf("always true" to "true".elEval())
+                    validations = mapOf("always true" to "true".elEval()),
+                    strategy = RetryTimeOutStrategy("5 s", "1 s")
                 )
             }
             Then("I receive valid HTTP response") {

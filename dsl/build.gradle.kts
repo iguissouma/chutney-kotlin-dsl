@@ -15,7 +15,11 @@ dependencies {
 
     api("com.chutneytesting:engine:${project.extra["chutneyTestingVersion"]}")
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin") {
+        version {
+            strictly("2.12.1")
+        }
+    }
     implementation("org.slf4j:slf4j-api:1.7.32")
     implementation("com.chutneytesting:environment:${project.extra["chutneyTestingVersion"]}")
     implementation("org.assertj:assertj-core:3.21.0")

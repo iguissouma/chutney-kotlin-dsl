@@ -85,14 +85,18 @@ class ConsolePrinter {
     }
 
     private fun errors(step: StepExecutionReportDto, indent: String) {
-        step.errors.forEach {
-            println(color("$indent  >> $it", step.status))
-        }
+        step.errors
+            .filter { !it.isNullOrBlank() }
+            .forEach {
+                println(color("$indent  >> $it", step.status))
+            }
     }
 
     private fun information(step: StepExecutionReportDto, indent: String) {
-        step.information.forEach {
-            println(BLUE.bright() + "$indent  >> $it" + RESET.color)
-        }
+        step.information
+            .filter { !it.isNullOrBlank() }
+            .forEach {
+                println(BLUE.bright() + "$indent  >> $it" + RESET.color)
+            }
     }
 }

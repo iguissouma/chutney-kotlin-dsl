@@ -35,6 +35,7 @@ data class ChutneySecurityProperties(
     val trustStorePassword: String? = null,
     val keyStore: String? = null,
     val keyStorePassword: String? = null,
+    val keyPassword: String? = null,
     val privateKey: String? = null
 ) {
 

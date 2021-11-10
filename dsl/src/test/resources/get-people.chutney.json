@@ -26,6 +26,13 @@
             "validations": {
                 "always true": "${true}"
             }
+        },
+        "strategy": {
+            "type": "retry-with-timeout",
+            "parameters": {
+                "timeOut" : "5 s",
+                "retryDelay": "1 s"
+            }
         }
     },
     "thens": [

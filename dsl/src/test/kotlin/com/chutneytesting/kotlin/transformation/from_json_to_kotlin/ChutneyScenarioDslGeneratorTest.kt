@@ -22,7 +22,7 @@ class ChutneyScenarioDslGeneratorTest {
             >    Given("I set get people service api endpoint") {
             >        ContextPutTask(entries = mapOf("uri" to "api/people/1"))
             >    }
-            >    When("I send GET HTTP request") {
+            >    When("I send GET HTTP request", RetryTimeOutStrategy("5 s", "1 s")) {
             >        HttpGetTask(target = "swapi.dev", uri = "\${'$'}{#uri}", timeout = "2 sec")
             >    }
             >    Then("I receive valid HTTP response") {

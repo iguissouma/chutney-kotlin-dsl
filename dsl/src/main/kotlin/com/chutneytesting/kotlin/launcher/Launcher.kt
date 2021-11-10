@@ -203,6 +203,7 @@ class Launcher(
             securityProperties.trustStorePassword?.ifEmpty { null },
             securityProperties.keyStore?.ifEmpty { null },
             securityProperties.keyStorePassword?.ifEmpty { null },
+            securityProperties.keyPassword?.ifEmpty { null },
             securityProperties.privateKey?.ifEmpty { null }
         )
     }

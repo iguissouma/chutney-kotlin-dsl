@@ -1,5 +1,7 @@
 package com.chutneytesting.kotlin.dsl
 
+import com.chutneytesting.kotlin.transformation.from_component_to_kotlin.target
+
 // Based on chutney.tasks file
 
 fun ChutneyStepBuilder.SuccessTask() {
@@ -77,7 +79,7 @@ fun ChutneyStepBuilder.GroovyTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 
@@ -101,7 +103,7 @@ fun ChutneyStepBuilder.AmqpCreateBoundTemporaryQueueTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.AmqpDeleteQueueTask(
@@ -116,7 +118,7 @@ fun ChutneyStepBuilder.AmqpDeleteQueueTask(
             "queue-name" to queueName
         )
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.AmqpUnbindQueueTask(
@@ -135,7 +137,7 @@ fun ChutneyStepBuilder.AmqpUnbindQueueTask(
             "queue-name" to queueName
         )
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.AmqpBasicPublishTask(
@@ -162,7 +164,7 @@ fun ChutneyStepBuilder.AmqpBasicPublishTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.AmqpBasicConsumeTask(
@@ -189,7 +191,7 @@ fun ChutneyStepBuilder.AmqpBasicConsumeTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.AmqpBasicGetTask(
@@ -208,7 +210,7 @@ fun ChutneyStepBuilder.AmqpBasicGetTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.AmqpCleanQueuesTask(
@@ -221,7 +223,7 @@ fun ChutneyStepBuilder.AmqpCleanQueuesTask(
         target = target,
         inputs = mapOf("queue-names" to queueNames)
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.QpidServerStartTask(
@@ -257,7 +259,7 @@ fun ChutneyStepBuilder.MongoCountTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.MongoDeleteTask(
@@ -278,7 +280,7 @@ fun ChutneyStepBuilder.MongoDeleteTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.MongoFindTask(
@@ -301,7 +303,7 @@ fun ChutneyStepBuilder.MongoFindTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.MongoInsertTask(
@@ -318,7 +320,7 @@ fun ChutneyStepBuilder.MongoInsertTask(
             "document" to document
         )
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.MongoUpdateTask(
@@ -343,7 +345,7 @@ fun ChutneyStepBuilder.MongoUpdateTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.MongoListTask(
@@ -358,7 +360,7 @@ fun ChutneyStepBuilder.MongoListTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 
@@ -382,7 +384,7 @@ fun ChutneyStepBuilder.HttpGetTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.HttpPostTask(
@@ -413,7 +415,7 @@ fun ChutneyStepBuilder.HttpPostTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.HttpPutTask(
@@ -438,7 +440,7 @@ fun ChutneyStepBuilder.HttpPutTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.HttpDeleteTask(
@@ -461,7 +463,7 @@ fun ChutneyStepBuilder.HttpDeleteTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.HttpSoapTask(
@@ -490,7 +492,7 @@ fun ChutneyStepBuilder.HttpSoapTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.HttpPatchTask(
@@ -521,7 +523,7 @@ fun ChutneyStepBuilder.HttpPatchTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.HttpsServerStartTask(
@@ -565,7 +567,7 @@ fun ChutneyStepBuilder.HttpsListenerTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 // fun ChutneyStepBuilder.HttpsServerStopTask auto registered by start task
 
@@ -590,7 +592,7 @@ fun ChutneyStepBuilder.SshClientTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.SshServerStartTask(
@@ -649,7 +651,7 @@ fun ChutneyStepBuilder.JmsCleanQueueTask(
             ("timeOut" to selector).takeIf { timeOut.isNotBlank() }
         ).toMap()
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.JmsListenerTask(
@@ -676,7 +678,7 @@ fun ChutneyStepBuilder.JmsListenerTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.JmsSenderTask(
@@ -695,7 +697,7 @@ fun ChutneyStepBuilder.JmsSenderTask(
             ("headers" to headers).takeIf { headers.isNotEmpty() },
         ).toMap()
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.JmsBrokerStartTask(
@@ -733,7 +735,7 @@ fun ChutneyStepBuilder.SqlTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 
@@ -755,7 +757,7 @@ fun ChutneyStepBuilder.SeleniumDriverInitTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 val defaultWebDriverSpel = "webDriver".spEL()
@@ -787,7 +789,7 @@ fun ChutneyStepBuilder.SeleniumClickTask(
             ("wait" to wait).takeIf { wait > 0 }
         ).toMap()
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.SeleniumCloseTask(
@@ -800,7 +802,7 @@ fun ChutneyStepBuilder.SeleniumCloseTask(
             "web-driver" to webDriver
         )
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.SeleniumGetTask(
@@ -821,7 +823,7 @@ fun ChutneyStepBuilder.SeleniumGetTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.SeleniumGetAttributeTask(
@@ -846,7 +848,7 @@ fun ChutneyStepBuilder.SeleniumGetAttributeTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.SeleniumGetTextTask(
@@ -869,7 +871,7 @@ fun ChutneyStepBuilder.SeleniumGetTextTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 // fun ChutneyStepBuilder.SeleniumQuitTask auto registered by init taskS
@@ -884,7 +886,7 @@ fun ChutneyStepBuilder.SeleniumScreenShotTask(
             "web-driver" to webDriver
         )
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.SeleniumSendKeysTask(
@@ -905,7 +907,7 @@ fun ChutneyStepBuilder.SeleniumSendKeysTask(
             "value" to value
         ).toMap()
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 enum class SELENIUM_SWITCH { Frame, Window, Popup, AlertOk, AlertCancel }
@@ -932,7 +934,7 @@ fun ChutneyStepBuilder.SeleniumSwitchToTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.SeleniumWaitTask(
@@ -953,7 +955,7 @@ fun ChutneyStepBuilder.SeleniumWaitTask(
             "value" to value
         ).toMap()
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.SeleniumHoverThenClickTask(
@@ -972,7 +974,7 @@ fun ChutneyStepBuilder.SeleniumHoverThenClickTask(
             ("wait" to wait).takeIf { wait > 0 }
         ).toMap()
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.SeleniumScrollToTask(
@@ -991,7 +993,7 @@ fun ChutneyStepBuilder.SeleniumScrollToTask(
             ("wait" to wait).takeIf { wait > 0 }
         ).toMap()
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.SeleniumRemoteDriverInitTask(
@@ -1010,7 +1012,7 @@ fun ChutneyStepBuilder.SeleniumRemoteDriverInitTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.SeleniumSetBrowserSizeTask(
@@ -1027,7 +1029,7 @@ fun ChutneyStepBuilder.SeleniumSetBrowserSizeTask(
             "height" to height
         ).toMap()
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 
@@ -1179,7 +1181,7 @@ fun ChutneyStepBuilder.KafkaBasicPublishTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.KafkaBasicConsumeTask(
@@ -1206,7 +1208,7 @@ fun ChutneyStepBuilder.KafkaBasicConsumeTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.KafkaBrokerStartTask(
@@ -1256,7 +1258,7 @@ fun ChutneyStepBuilder.MicrometerCounterTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.MicrometerGaugeTask(
@@ -1289,7 +1291,7 @@ fun ChutneyStepBuilder.MicrometerGaugeTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.MicrometerTimerTask(
@@ -1334,7 +1336,7 @@ fun ChutneyStepBuilder.MicrometerTimerTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.MicrometerTimerStartTask(
@@ -1351,7 +1353,7 @@ fun ChutneyStepBuilder.MicrometerTimerStartTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.MicrometerTimerStopTask(
@@ -1368,7 +1370,7 @@ fun ChutneyStepBuilder.MicrometerTimerStopTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
 }
 
 fun ChutneyStepBuilder.MicrometerSummaryTask(
@@ -1415,5 +1417,53 @@ fun ChutneyStepBuilder.MicrometerSummaryTask(
         outputs = outputs,
         validations = validations
     )
-    this.strategy = strategy
+    if (strategy != null) this.strategy = strategy
+}
+
+fun ChutneyStepBuilder.RadiusAuthenticateTask(
+    target: String,
+    userName: String,
+    userPassword: String,
+    protocol: String? = "chap",
+    attributes: Map<String, String>? = mapOf(),
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
+    strategy: Strategy? = null
+) {
+    implementation = ChutneyStepImpl(
+        type = "radius-authenticate",
+        target = target,
+        inputs = mapOf(
+            "userName" to userName,
+            "userPassword" to userPassword,
+            "protocol" to protocol,
+            "attributes" to attributes
+        ),
+        outputs = outputs,
+        validations = validations
+    )
+    if (strategy != null) this.strategy = strategy
+}
+
+fun ChutneyStepBuilder.RadiusAccountingTask(
+    target: String,
+    userName: String,
+    accountingType: Int,
+    attributes: Map<String, String>? = mapOf(),
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
+    strategy: Strategy? = null
+) {
+    implementation = ChutneyStepImpl(
+        type = "radius-accounting",
+        target = target,
+        inputs = mapOf(
+            "userName" to userName,
+            "accountingType" to accountingType,
+            "attributes" to attributes
+        ),
+        outputs = outputs,
+        validations = validations
+    )
+    if (strategy != null) this.strategy = strategy
 }

@@ -12,11 +12,12 @@ reckon {
 }
 
 subprojects {
-    extra["chutneyTestingVersion"] = "1.3.12"
-    extra["junitJupiterVersion"] = "5.6.3"
+    extra["chutneyTestingVersion"] = "1.4.2"
+    extra["junitJupiterVersion"] = "5.8.1"
 
     repositories {
         mavenCentral()
+        jcenter()
     }
 
     apply(plugin = "org.jetbrains.kotlin.jvm")
@@ -40,5 +41,12 @@ subprojects {
             events("passed", "failed", "skipped")
             showStandardStreams = true
         }
+        // Pass the proxy configuration to the gradle test executor
+        systemProperty("http.proxyHost", System.getProperty("http.proxyHost"))
+        systemProperty("http.proxyPort", System.getProperty("http.proxyPort"))
+        systemProperty("http.nonProxyHosts", System.getProperty("http.nonProxyHosts"))
+        systemProperty("https.proxyHost", System.getProperty("https.proxyHost"))
+        systemProperty("https.proxyPort", System.getProperty("https.proxyPort"))
+        systemProperty("https.nonProxyHosts", System.getProperty("https.nonProxyHosts"))
     }
 }
