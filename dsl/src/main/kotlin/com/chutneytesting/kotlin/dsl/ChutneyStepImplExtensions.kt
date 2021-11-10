@@ -393,7 +393,7 @@ fun ChutneyStepBuilder.HttpPostTask(
     headers: Map<String, Any> = mapOf(),
     body: Any?,
     timeout: String = "2 sec",
-    outputs: Map<String, Any> = mapOf("body".toSpelPair()),
+    outputs: Map<String, Any> = mapOf(),
     strategy: Strategy? = null,
     validations: Map<String, Any> = mapOf()
 ) {
@@ -424,7 +424,7 @@ fun ChutneyStepBuilder.HttpPutTask(
     headers: Map<String, Any> = mapOf(),
     body: Map<String, Any> = mapOf(),
     timeout: String = "2 sec",
-    outputs: Map<String, Any> = mapOf("body".toSpelPair()),
+    outputs: Map<String, Any> = mapOf(),
     strategy: Strategy? = null,
     validations: Map<String, Any> = mapOf()
 ) {
@@ -501,7 +501,7 @@ fun ChutneyStepBuilder.HttpPatchTask(
     headers: Map<String, Any> = mapOf(),
     body: Any?,
     timeout: String = "2 sec",
-    outputs: Map<String, Any> = mapOf("body".toSpelPair()),
+    outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
