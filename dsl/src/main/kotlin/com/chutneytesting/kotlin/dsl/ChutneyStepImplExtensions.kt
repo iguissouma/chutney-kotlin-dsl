@@ -532,6 +532,7 @@ fun ChutneyStepBuilder.HttpsServerStartTask(
     trustStorePassword: String?,
     keyStorePath: String?,
     keyStorePassword: String?,
+    keyPassword: String?,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf()
 ) {
@@ -542,7 +543,8 @@ fun ChutneyStepBuilder.HttpsServerStartTask(
             ("truststore-path" to trustStorePath).takeIf { trustStorePath.isNullOrBlank().not() },
             ("truststore-password" to trustStorePassword).takeIf { trustStorePassword.isNullOrBlank().not() },
             ("keystore-path" to keyStorePath).takeIf { keyStorePath.isNullOrBlank().not() },
-            ("keystore-password" to keyStorePassword).takeIf { keyStorePassword.isNullOrBlank().not() }
+            ("keystore-password" to keyStorePassword).takeIf { keyStorePassword.isNullOrBlank().not() },
+            ("key-password" to keyPassword).takeIf { keyPassword.isNullOrBlank().not() }
         ).toMap(),
         outputs = outputs,
         validations = validations
