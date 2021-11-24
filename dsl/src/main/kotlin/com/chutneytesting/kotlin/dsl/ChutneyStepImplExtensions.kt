@@ -526,6 +526,7 @@ fun ChutneyStepBuilder.HttpPatchTask(
     if (strategy != null) this.strategy = strategy
 }
 
+// fun ChutneyStepBuilder.HttpsServerStopTask auto registered by start task
 fun ChutneyStepBuilder.HttpsServerStartTask(
     port: String?,
     trustStorePath: String?,
@@ -555,6 +556,7 @@ fun ChutneyStepBuilder.HttpsListenerTask(
     httpServerVarName: String = "httpsServer",
     uri: String,
     verb: String,
+    expectedMessageCount: Int = 1,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -564,14 +566,14 @@ fun ChutneyStepBuilder.HttpsListenerTask(
         inputs = mapOf(
             "https-server" to httpServerVarName.spEL(),
             "uri" to uri,
-            "verb" to verb
+            "verb" to verb,
+            "expectedMessageCount" to expectedMessageCount
         ),
         outputs = outputs,
         validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
-// fun ChutneyStepBuilder.HttpsServerStopTask auto registered by start task
 
 
 enum class SSH_CLIENT_CHANNEL { COMMAND, SHELL }
