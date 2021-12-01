@@ -1,8 +1,24 @@
 # Changelog
 
+## [Unreleased](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/HEAD)
+
+## [0.1.11](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.11) (2021-12-01)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.10...HEAD)
+
+**Merged pull requests:**
+
+- fix/null json inputs [\#34](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/34) ([boddissattva](https://github.com/boddissattva))
+- feat: HTTP server keypassword & Missing param on HttpsListenerTask [\#33](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/33) ([bessonm](https://github.>
+- chore\(\): Update JUnit5 version to 5.8.1 [\#32](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/32) ([boddissattva](https://github.com/boddissattva))
+- fix: Remove default HTTP output [\#31](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/31) ([bessonm](https://github.com/bessonm))
+- feat/radius [\#30](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/30) ([boddissattva](https://github.com/boddissattva))
+- fix: Reverse actual & expected assertion values [\#29](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/29) ([bessonm](https://github.com/bessonm))
+- bugfix: FinalTask DSL is missing 'target' argument [\#26](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/26) ([bessonm](https://github.com/bessonm))
+
 ## [0.1.10](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.10) (2021-10-12)
 
-[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.9...HEAD)
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.9...0.1.10)
 
 **Closed issues:**
 
@@ -20,7 +36,7 @@
 
 ## [0.1.9](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.9) (2021-09-16)
 
-[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.8...HEAD)
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.8...0.1.9)
 
 **Merged pull requests:**
 
