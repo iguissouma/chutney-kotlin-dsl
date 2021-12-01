@@ -7,7 +7,12 @@ import java.io.File
 /**
  * Synchronise scenario locally and/or remotely and returns elapsed time in milliseconds.
  */
-fun ChutneyScenario.synchronise(serverInfo: ChutneyServerInfo? = null, updateRemote: Boolean = false, path: String = "src/main/resources/chutney/") {
+fun ChutneyScenario.synchronise(
+    serverInfo: ChutneyServerInfo? = null,
+    updateRemote: Boolean = false,
+    path: String = "src/main/resources/chutney/",
+    pathCreated: String = "$path/in_progress"
+) {
     val json = this.toString()
     val fileName = (this.id?.let { this.id.toString() + "-" } ?: "") + title + ".chutney.json"
     File(path).walkTopDown().filter { it.isFile }.firstOrNull {
@@ -17,7 +22,7 @@ fun ChutneyScenario.synchronise(serverInfo: ChutneyServerInfo? = null, updateRem
         this.writeText(json)
     }?.also {
         println("| AT json synchronized:: ${it.absolutePath}")
-    } ?: File("src/main/resources/chutney/in_progress/$fileName").apply { writeText(json) }
+    } ?: File("$pathCreated/$fileName").apply { writeText(json) }
         .also { println("| AT json created:: ${it.absolutePath}") }
 
     if (updateRemote && this.id != null && serverInfo != null) {

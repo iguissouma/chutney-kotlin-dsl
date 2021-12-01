@@ -2,8 +2,7 @@ package com.chutneytesting.kotlin.dsl
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY
-import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
+import com.fasterxml.jackson.annotation.JsonInclude.Include.*
 import com.fasterxml.jackson.core.util.DefaultIndenter
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.core.util.Separators
@@ -134,8 +133,8 @@ object Mapper {
     }
 
     private val mapper: ObjectMapper = jacksonObjectMapper()
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .setDefaultPrettyPrinter(pp)
+        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
         .enable(SerializationFeature.INDENT_OUTPUT)
 
     fun toJson(value: Any): String {
@@ -157,9 +156,9 @@ class ChutneyStep(
 class ChutneyStepImpl(
     val type: String,
     @JsonInclude(NON_EMPTY) val target: String? = null,
-    @JsonInclude(NON_EMPTY) val inputs: Map<String, Any?> = mapOf(),
-    @JsonInclude(NON_EMPTY) val outputs: Map<String, Any>? = mapOf(),
-    @JsonInclude(NON_EMPTY) val validations: Map<String, Any>? = mapOf()
+    @JsonInclude(NON_EMPTY) val inputs: Map<String, Any> = mapOf(),
+    @JsonInclude(NON_EMPTY) val outputs: Map<String, Any> = mapOf(),
+    @JsonInclude(NON_EMPTY) val validations: Map<String, Any> = mapOf()
 )
 
 class ChutneyScenario(

@@ -1,7 +1,5 @@
 package com.chutneytesting.kotlin.dsl
 
-import com.chutneytesting.kotlin.transformation.from_component_to_kotlin.target
-
 // Based on chutney.tasks file
 
 fun ChutneyStepBuilder.SuccessTask() {
@@ -19,9 +17,9 @@ fun ChutneyStepBuilder.FailTask() {
 fun ChutneyStepBuilder.DebugTask(filters: List<String> = listOf()) {
     Implementation {
         type = "debug"
-        inputs = listOfNotNull(
-            ("filters" to filters).takeIf { filters.isNotEmpty() }
-        ).toMap()
+        inputs = listOf(
+            "filters" to filters
+        ).notEmptyToMap()
     }
 }
 
@@ -52,7 +50,7 @@ fun ChutneyStepBuilder.FinalTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "final",
-        inputs = mapOf(
+        inputs = listOf(
             "name" to name,
             "type" to type,
             "target" to target,
@@ -60,7 +58,7 @@ fun ChutneyStepBuilder.FinalTask(
             "strategy-type" to strategyType,
             "strategy-properties" to strategyProperties,
             "validations" to validations
-        ),
+        ).notEmptyToMap(),
         outputs = outputs
     )
 }
@@ -75,7 +73,10 @@ fun ChutneyStepBuilder.GroovyTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "groovy",
-        inputs = mapOf("script" to script, "parameters" to parameters),
+        inputs = listOf(
+            "script" to script,
+            "parameters" to parameters
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -95,11 +96,11 @@ fun ChutneyStepBuilder.AmqpCreateBoundTemporaryQueueTask(
     implementation = ChutneyStepImpl(
         type = "amqp-create-bound-temporary-queue",
         target = target,
-        inputs = mapOf(
+        inputs = listOf(
             "exchange-name" to exchangeName,
             "routing-key" to routingKey,
             "queue-name" to queueName
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -114,9 +115,9 @@ fun ChutneyStepBuilder.AmqpDeleteQueueTask(
     implementation = ChutneyStepImpl(
         type = "amqp-delete-queue",
         target = target,
-        inputs = mapOf(
+        inputs = listOf(
             "queue-name" to queueName
-        )
+        ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -131,11 +132,11 @@ fun ChutneyStepBuilder.AmqpUnbindQueueTask(
     implementation = ChutneyStepImpl(
         type = "amqp-unbind-queue",
         target = target,
-        inputs = mapOf(
+        inputs = listOf(
             "exchange-name" to exchangeName,
             "routing-key" to routingKey,
             "queue-name" to queueName
-        )
+        ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -154,13 +155,13 @@ fun ChutneyStepBuilder.AmqpBasicPublishTask(
     implementation = ChutneyStepImpl(
         type = "amqp-basic-publish",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "exchange-name" to exchangeName,
             "routing-key" to routingKey,
-            ("headers" to headers).takeIf { headers.isNotEmpty() },
-            ("properties" to properties).takeIf { properties.isNotEmpty() },
+            "headers" to headers,
+            "properties" to properties,
             "payload" to payload
-        ).toMap(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -181,13 +182,13 @@ fun ChutneyStepBuilder.AmqpBasicConsumeTask(
     implementation = ChutneyStepImpl(
         type = "amqp-basic-consume",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "queue-name" to queueName,
             "nb-messages" to nbMessages,
             "timeout" to timeout,
             "selector" to selector,
-            ("ack" to ack).takeIf { ack != null }
-        ).toMap(),
+            "ack" to ack
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -204,9 +205,9 @@ fun ChutneyStepBuilder.AmqpBasicGetTask(
     implementation = ChutneyStepImpl(
         type = "amqp-basic-consume",
         target = target,
-        inputs = mapOf(
+        inputs = listOf(
             "queue-name" to queueName
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -221,7 +222,7 @@ fun ChutneyStepBuilder.AmqpCleanQueuesTask(
     implementation = ChutneyStepImpl(
         type = "amqp-clean-queues",
         target = target,
-        inputs = mapOf("queue-names" to queueNames)
+        inputs = listOf("queue-names" to queueNames).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -233,7 +234,7 @@ fun ChutneyStepBuilder.QpidServerStartTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "qpid-server-start",
-        inputs = mapOf("init-config" to initConfig),
+        inputs = listOf("init-config" to initConfig).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -252,10 +253,10 @@ fun ChutneyStepBuilder.MongoCountTask(
     implementation = ChutneyStepImpl(
         type = "mongo-count",
         target = target,
-        inputs = mapOf(
+        inputs = listOf(
             "collection" to collection,
             "query" to query
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -273,10 +274,10 @@ fun ChutneyStepBuilder.MongoDeleteTask(
     implementation = ChutneyStepImpl(
         type = "mongo-delete",
         target = target,
-        inputs = mapOf(
+        inputs = listOf(
             "collection" to collection,
             "query" to query
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -287,7 +288,7 @@ fun ChutneyStepBuilder.MongoFindTask(
     target: String,
     collection: String,
     query: String,
-    limit: Int?,
+    limit: Int = 0,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -295,11 +296,11 @@ fun ChutneyStepBuilder.MongoFindTask(
     implementation = ChutneyStepImpl(
         type = "mongo-find",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "collection" to collection,
             "query" to query,
-            ("limit" to limit).takeIf { limit != null && limit <= 0 }
-        ).toMap(),
+            ("limit" to limit).takeIfPositive()
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -315,10 +316,10 @@ fun ChutneyStepBuilder.MongoInsertTask(
     implementation = ChutneyStepImpl(
         type = "mongo-insert",
         target = target,
-        inputs = mapOf(
+        inputs = listOf(
             "collection" to collection,
             "document" to document
-        )
+        ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -336,12 +337,12 @@ fun ChutneyStepBuilder.MongoUpdateTask(
     implementation = ChutneyStepImpl(
         type = "mongo-update",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "collection" to collection,
             "filter" to filter,
             "update" to update,
-            ("arraysFilter" to arraysFilter).takeIf { arraysFilter.isNotEmpty() }
-        ).toMap(),
+            "arraysFilter" to arraysFilter
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -376,11 +377,11 @@ fun ChutneyStepBuilder.HttpGetTask(
     implementation = ChutneyStepImpl(
         type = "http-get",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "uri" to uri,
-            ("headers" to headers).takeIf { headers.isNotEmpty() },
+            "headers" to headers,
             "timeout" to timeout
-        ).toMap(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -400,9 +401,9 @@ fun ChutneyStepBuilder.HttpPostTask(
     implementation = ChutneyStepImpl(
         type = "http-post",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "uri" to uri,
-            ("headers" to headers).takeIf { headers.isNotEmpty() },
+            "headers" to headers,
             ("body" to body).takeIf {
                 when (body) {
                     is String? -> body.isNullOrBlank().not()
@@ -411,7 +412,7 @@ fun ChutneyStepBuilder.HttpPostTask(
                 }
             },
             "timeout" to timeout
-        ).toMap(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -431,12 +432,12 @@ fun ChutneyStepBuilder.HttpPutTask(
     implementation = ChutneyStepImpl(
         type = "http-put",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "uri" to uri,
-            ("headers" to headers).takeIf { headers.isNotEmpty() },
+            "headers" to headers,
             "body" to body,
             "timeout" to timeout
-        ).toMap(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -455,11 +456,11 @@ fun ChutneyStepBuilder.HttpDeleteTask(
     implementation = ChutneyStepImpl(
         type = "http-delete",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "uri" to uri,
-            ("headers" to headers).takeIf { headers.isNotEmpty() },
+            "headers" to headers,
             "timeout" to timeout
-        ).toMap(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -481,14 +482,14 @@ fun ChutneyStepBuilder.HttpSoapTask(
     implementation = ChutneyStepImpl(
         type = "http-soap",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "uri" to uri,
-            ("headers" to headers).takeIf { headers.isNotEmpty() },
+            "headers" to headers,
             "body" to body,
             "username" to username,
             "password" to password,
-            ("timeout" to timeout).takeIf { timeout.isBlank().not() }
-        ).toMap(),
+            "timeout" to timeout
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -508,9 +509,9 @@ fun ChutneyStepBuilder.HttpPatchTask(
     implementation = ChutneyStepImpl(
         type = "http-post",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "uri" to uri,
-            ("headers" to headers).takeIf { headers.isNotEmpty() },
+            "headers" to headers,
             ("body" to body).takeIf {
                 when (body) {
                     is String? -> body.isNullOrBlank().not()
@@ -519,7 +520,7 @@ fun ChutneyStepBuilder.HttpPatchTask(
                 }
             },
             "timeout" to timeout
-        ).toMap(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -537,13 +538,13 @@ fun ChutneyStepBuilder.HttpsServerStartTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "https-server-start",
-        inputs = listOfNotNull(
-            ("port" to port).takeIf { port.isNullOrBlank().not() },
-            ("truststore-path" to trustStorePath).takeIf { trustStorePath.isNullOrBlank().not() },
-            ("truststore-password" to trustStorePassword).takeIf { trustStorePassword.isNullOrBlank().not() },
-            ("keystore-path" to keyStorePath).takeIf { keyStorePath.isNullOrBlank().not() },
-            ("keystore-password" to keyStorePassword).takeIf { keyStorePassword.isNullOrBlank().not() }
-        ).toMap(),
+        inputs = listOf(
+            "port" to port,
+            "truststore-path" to trustStorePath,
+            "truststore-password" to trustStorePassword,
+            "keystore-path" to keyStorePath,
+            "keystore-password" to keyStorePassword
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -559,11 +560,11 @@ fun ChutneyStepBuilder.HttpsListenerTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "https-listener",
-        inputs = mapOf(
+        inputs = listOf(
             "https-server" to httpServerVarName.spEL(),
             "uri" to uri,
             "verb" to verb
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -585,10 +586,10 @@ fun ChutneyStepBuilder.SshClientTask(
     implementation = ChutneyStepImpl(
         type = "ssh-client",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "commands" to commands,
             "channel" to channel?.name
-        ).toMap(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -608,15 +609,15 @@ fun ChutneyStepBuilder.SshServerStartTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "ssh-server-start",
-        inputs = listOfNotNull(
-            ("port" to port).takeIf { port.isNotBlank() },
-            ("bind-address" to host).takeIf { host.isNotBlank() },
-            ("private-key" to keyPair).takeIf { keyPair.isNotBlank() },
-            ("usernames" to usernames).takeIf { usernames.isNotEmpty() },
-            ("passwords" to passwords).takeIf { passwords.isNotEmpty() },
-            ("authorized-keys" to authorizedKeys).takeIf { authorizedKeys.isNotBlank() },
-            ("responses" to stubs).takeIf { stubs.isNotEmpty() }
-        ).toMap(),
+        inputs = listOf(
+            "port" to port,
+            "bind-address" to host,
+            "private-key" to keyPair,
+            "usernames" to usernames,
+            "passwords" to passwords,
+            "authorized-keys" to authorizedKeys,
+            "responses" to stubs
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -643,13 +644,13 @@ fun ChutneyStepBuilder.JmsCleanQueueTask(
     implementation = ChutneyStepImpl(
         type = "jms-clean-queue",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "destination" to destination,
-            ("selector" to selector).takeIf { selector.isNotBlank() },
-            ("bodySelector" to selector).takeIf { bodySelector.isNotBlank() },
-            ("browserMaxDepth" to selector).takeIf { browserMaxDepth > 0 },
-            ("timeOut" to selector).takeIf { timeOut.isNotBlank() }
-        ).toMap()
+            "selector" to selector,
+            "bodySelector" to bodySelector,
+            "browserMaxDepth" to browserMaxDepth,
+            "timeOut" to timeOut
+        ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -668,13 +669,13 @@ fun ChutneyStepBuilder.JmsListenerTask(
     implementation = ChutneyStepImpl(
         type = "jms-listener",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "destination" to destination,
-            ("selector" to selector).takeIf { selector.isNotBlank() },
-            ("bodySelector" to selector).takeIf { bodySelector.isNotBlank() },
-            ("browserMaxDepth" to selector).takeIf { browserMaxDepth > 0 },
-            ("timeOut" to selector).takeIf { timeOut.isNotBlank() }
-        ).toMap(),
+            "selector" to selector,
+            "bodySelector" to bodySelector,
+            ("browserMaxDepth" to browserMaxDepth).takeIfPositive(),
+            "timeOut" to timeOut
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -691,11 +692,11 @@ fun ChutneyStepBuilder.JmsSenderTask(
     implementation = ChutneyStepImpl(
         type = "jms-sender",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "destination" to queueName,
             "body" to payload,
-            ("headers" to headers).takeIf { headers.isNotEmpty() },
-        ).toMap()
+            "headers" to headers
+        ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -707,9 +708,9 @@ fun ChutneyStepBuilder.JmsBrokerStartTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "jms-broker-start",
-        inputs = listOfNotNull(
-            ("config-uri" to configUri).takeIf { configUri.isNotEmpty() },
-        ).toMap(),
+        inputs = listOf(
+            "config-uri" to configUri,
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -728,10 +729,10 @@ fun ChutneyStepBuilder.SqlTask(
     implementation = ChutneyStepImpl(
         type = "sql",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "statements" to statements,
-            ("nbLoggedRow" to nbLoggedRow).takeIf { nbLoggedRow != 0 }
-        ).toMap(),
+            ("nbLoggedRow" to nbLoggedRow).takeIfPositive()
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -749,11 +750,11 @@ fun ChutneyStepBuilder.SeleniumDriverInitTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-driver-init",
-        inputs = listOfNotNull(
-            ("browser" to browser).takeIf { browser.isNotBlank() },
+        inputs = listOf(
+            "browser" to browser,
             "driverPath" to driverPath,
             "browserPath" to browserPath
-        ).toMap(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -782,12 +783,12 @@ fun ChutneyStepBuilder.SeleniumClickTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-click",
-        inputs = listOfNotNull(
+        inputs = listOf(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIf { wait > 0 }
-        ).toMap()
+            ("wait" to wait).takeIfPositive()
+        ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -815,11 +816,11 @@ fun ChutneyStepBuilder.SeleniumGetTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-get",
-        inputs = listOfNotNull(
+        inputs = listOf(
             "web-driver" to webDriver,
             ("selector" to "tab").takeIf { newTab },
             "value" to url
-        ).toMap(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -838,13 +839,13 @@ fun ChutneyStepBuilder.SeleniumGetAttributeTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-get-attribute",
-        inputs = listOfNotNull(
+        inputs = listOf(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIf { wait > 0 },
-            ("attribute" to attribute).takeIf { attribute.isNotBlank() }
-        ).toMap(),
+            ("wait" to wait).takeIfPositive(),
+            "attribute" to attribute
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -862,12 +863,12 @@ fun ChutneyStepBuilder.SeleniumGetTextTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-get-text",
-        inputs = listOfNotNull(
+        inputs = listOf(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIf { wait > 0 }
-        ).toMap(),
+            ("wait" to wait).takeIfPositive(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -899,13 +900,13 @@ fun ChutneyStepBuilder.SeleniumSendKeysTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-send-keys",
-        inputs = listOfNotNull(
+        inputs = listOf(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIf { wait > 0 },
+            ("wait" to wait).takeIfPositive(),
             "value" to value
-        ).toMap()
+        ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -924,13 +925,13 @@ fun ChutneyStepBuilder.SeleniumSwitchToTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-switch-to",
-        inputs = listOfNotNull(
+        inputs = listOf(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIf { wait > 0 },
+            ("wait" to wait).takeIfPositive(),
             "switchType" to switchType?.name
-        ).toMap(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -947,13 +948,13 @@ fun ChutneyStepBuilder.SeleniumWaitTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-wait",
-        inputs = listOfNotNull(
+        inputs = listOf(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIf { wait > 0 },
+            ("wait" to wait).takeIfPositive(),
             "value" to value
-        ).toMap()
+        ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -967,12 +968,12 @@ fun ChutneyStepBuilder.SeleniumHoverThenClickTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-hover-then-click",
-        inputs = listOfNotNull(
+        inputs = listOf(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIf { wait > 0 }
-        ).toMap()
+            ("wait" to wait).takeIfPositive()
+        ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -986,12 +987,12 @@ fun ChutneyStepBuilder.SeleniumScrollToTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-scroll-to",
-        inputs = listOfNotNull(
+        inputs = listOf(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIf { wait > 0 }
-        ).toMap()
+            ("wait" to wait).takeIfPositive()
+        ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -1005,10 +1006,10 @@ fun ChutneyStepBuilder.SeleniumRemoteDriverInitTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-remote-driver-init",
-        inputs = listOfNotNull(
+        inputs = listOf(
             "hub" to hub,
-            ("browser" to browser).takeIf { browser.isNotBlank() }
-        ).toMap(),
+            "browser" to browser
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -1023,11 +1024,11 @@ fun ChutneyStepBuilder.SeleniumSetBrowserSizeTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-set-browser-size",
-        inputs = listOfNotNull(
+        inputs = listOf(
             "web-driver" to webDriver,
             "width" to width,
             "height" to height
-        ).toMap()
+        ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -1039,10 +1040,10 @@ fun ChutneyStepBuilder.JsonAssertTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "json-assert",
-        inputs = mapOf(
+        inputs = listOf(
             "document" to document,
             "expected" to expected
-        )
+        ).notEmptyToMap()
     )
 }
 
@@ -1052,10 +1053,10 @@ fun ChutneyStepBuilder.JsonAssertTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "json-assert",
-        inputs = mapOf(
+        inputs = listOf(
             "document" to documentVariable.spEL,
             "expected" to expectationsVariable.spEL
-        )
+        ).notEmptyToMap()
     )
 }
 
@@ -1066,11 +1067,11 @@ fun ChutneyStepBuilder.JsonCompareTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "json-compare",
-        inputs = mapOf(
+        inputs = listOf(
             "document1" to document1,
             "document2" to document2,
             "comparingPaths" to comparingPaths
-        )
+        ).notEmptyToMap()
     )
 }
 
@@ -1080,10 +1081,10 @@ fun ChutneyStepBuilder.JsonValidationTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "json-validation",
-        inputs = mapOf(
+        inputs = listOf(
             "schema" to schema,
             "json" to json
-        )
+        ).notEmptyToMap()
     )
 }
 
@@ -1093,10 +1094,10 @@ fun ChutneyStepBuilder.XmlAssertTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "xml-assert",
-        inputs = mapOf(
+        inputs = listOf(
             "document" to document,
             "expected" to expected
-        )
+        ).notEmptyToMap()
     )
 }
 
@@ -1106,10 +1107,10 @@ fun ChutneyStepBuilder.StringAssertTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "string-assert",
-        inputs = mapOf(
+        inputs = listOf(
             "document" to document,
             "expected" to expected
-        )
+        ).notEmptyToMap()
     )
 }
 
@@ -1117,7 +1118,7 @@ fun ChutneyStepBuilder.StringAssertTask(
 fun ChutneyStepBuilder.AssertTrueTask(asserts: List<Map<String, Any>>) {
     implementation = ChutneyStepImpl(
         type = "assert",
-        inputs = mapOf("asserts" to asserts)
+        inputs = listOf("asserts" to asserts).notEmptyToMap()
     )
 }
 
@@ -1126,9 +1127,9 @@ fun ChutneyStepBuilder.AssertTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "assert",
-        inputs = mapOf(
+        inputs = listOf(
             "asserts" to asserts.map { s -> mapOf("assert-true" to s) }
-        )
+        ).notEmptyToMap()
     )
 }
 
@@ -1138,10 +1139,10 @@ fun ChutneyStepBuilder.XsdValidationTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "xsd-validation",
-        inputs = mapOf(
+        inputs = listOf(
             "xml" to xml,
             "xsd" to xsdPath
-        )
+        ).notEmptyToMap()
     )
 }
 
@@ -1152,11 +1153,11 @@ fun ChutneyStepBuilder.CompareTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "compare",
-        inputs = mapOf(
+        inputs = listOf(
             "mode" to mode,
             "actual" to actual,
             "expected" to expected
-        )
+        ).notEmptyToMap()
     )
 }
 
@@ -1173,11 +1174,11 @@ fun ChutneyStepBuilder.KafkaBasicPublishTask(
     implementation = ChutneyStepImpl(
         type = "kafka-basic-publish",
         target = target,
-        inputs = listOfNotNull(
+        inputs = listOf(
             "topic" to topic,
-            ("headers" to headers).takeIf { headers.isNotEmpty() },
+            "headers" to headers,
             "payload" to payload
-        ).toMap(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -1198,13 +1199,13 @@ fun ChutneyStepBuilder.KafkaBasicConsumeTask(
     implementation = ChutneyStepImpl(
         type = "kafka-basic-consume",
         target = target,
-        inputs = mapOf(
+        inputs = listOf(
             "topic" to topic,
             "group" to group,
             "timeout" to timeout,
             "selector" to selector,
             "properties" to properties
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -1220,11 +1221,11 @@ fun ChutneyStepBuilder.KafkaBrokerStartTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "kafka-broker-start-consume",
-        inputs = listOfNotNull(
+        inputs = listOf(
             "port" to port,
             "topics" to topics,
             "properties" to properties
-        ).toMap(),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -1246,7 +1247,7 @@ fun ChutneyStepBuilder.MicrometerCounterTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "micrometer-counter",
-        inputs = mapOf(
+        inputs = listOf(
             "name" to name,
             "description" to description,
             "unit" to unit,
@@ -1254,7 +1255,7 @@ fun ChutneyStepBuilder.MicrometerCounterTask(
             "counter" to counter,
             "increment" to increment,
             "registry" to registry
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -1274,11 +1275,9 @@ fun ChutneyStepBuilder.MicrometerGaugeTask(
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
-    val inputs = HashMap<String, Any?>()
-    inputs.putAll(mapOf("name" to null))
     implementation = ChutneyStepImpl(
         type = "micrometer-gauge",
-        inputs = mapOf(
+        inputs = listOf(
             "name" to name,
             "description" to description,
             "unit" to unit,
@@ -1287,7 +1286,7 @@ fun ChutneyStepBuilder.MicrometerGaugeTask(
             "gaugeObject" to gaugeObject,
             "gaugeFunction" to gaugeFunction,
             "registry" to registry
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -1316,7 +1315,7 @@ fun ChutneyStepBuilder.MicrometerTimerTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "micrometer-timer",
-        inputs = mapOf(
+        inputs = listOf(
             "name" to name,
             "description" to description,
             "tags" to tags,
@@ -1332,7 +1331,7 @@ fun ChutneyStepBuilder.MicrometerTimerTask(
             "registry" to registry,
             "timeunit" to timeunit,
             "record" to record
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -1347,9 +1346,9 @@ fun ChutneyStepBuilder.MicrometerTimerStartTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "micrometer-timer-start",
-        inputs = mapOf(
+        inputs = listOf(
             "registry" to registry,
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -1364,9 +1363,9 @@ fun ChutneyStepBuilder.MicrometerTimerStopTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "micrometer-timer-stop",
-        inputs = mapOf(
+        inputs = listOf(
             "registry" to registry,
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -1396,7 +1395,7 @@ fun ChutneyStepBuilder.MicrometerSummaryTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "micrometer-summary",
-        inputs = mapOf(
+        inputs = listOf(
             "name" to name,
             "description" to description,
             "unit" to unit,
@@ -1413,7 +1412,7 @@ fun ChutneyStepBuilder.MicrometerSummaryTask(
             "distributionSummary" to distributionSummary,
             "registry" to registry,
             "record" to record
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -1433,12 +1432,12 @@ fun ChutneyStepBuilder.RadiusAuthenticateTask(
     implementation = ChutneyStepImpl(
         type = "radius-authenticate",
         target = target,
-        inputs = mapOf(
+        inputs = listOf(
             "userName" to userName,
             "userPassword" to userPassword,
             "protocol" to protocol,
             "attributes" to attributes
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
@@ -1457,13 +1456,31 @@ fun ChutneyStepBuilder.RadiusAccountingTask(
     implementation = ChutneyStepImpl(
         type = "radius-accounting",
         target = target,
-        inputs = mapOf(
+        inputs = listOf(
             "userName" to userName,
             "accountingType" to accountingType,
             "attributes" to attributes
-        ),
+        ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
     if (strategy != null) this.strategy = strategy
+}
+
+// Helpers
+private fun <T> List<Pair<String, T?>?>.notEmptyToMap(): Map<String, T> {
+    return (this
+        .filterNotNull()
+        .filter { it.second != null }
+        .filter {
+            when (it.second) {
+                is Collection<*> -> (it.second as Collection<*>).isNotEmpty()
+                is Map<*, *> -> (it.second as Map<*, *>).isNotEmpty()
+                else -> true
+            }
+        } as List<Pair<String, T>>).toMap()
+}
+
+private fun Pair<String, Int>.takeIfPositive(): Pair<String, Int>? {
+    return this.takeIf { this.second > 0 }
 }

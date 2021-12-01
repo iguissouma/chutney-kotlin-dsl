@@ -1,5 +1,7 @@
 package com.chutneytesting.kotlin.dsl
 
+import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 
@@ -163,4 +165,19 @@ class ChutneyScenarioDslTest {
             true
         )
     }
+
+    @Test
+    fun `should not have null or empty object in json final inputs`() {
+
+        val chutneyScenario = Scenario(title = "No NULL in final") {
+            When("final") {
+                FinalTask("success", "success")
+            }
+        }
+
+        val json = "$chutneyScenario"
+        Assertions.assertThat(json)
+            .doesNotContain("null", "{}");
+    }
 }
+
