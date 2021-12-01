@@ -50,10 +50,10 @@ fun ChutneyStepBuilder.FinalTask(
 ) {
     implementation = ChutneyStepImpl(
         type = "final",
+        target = target,
         inputs = listOf(
             "name" to name,
             "type" to type,
-            "target" to target,
             "inputs" to inputs,
             "strategy-type" to strategyType,
             "strategy-properties" to strategyProperties,
@@ -527,12 +527,14 @@ fun ChutneyStepBuilder.HttpPatchTask(
     if (strategy != null) this.strategy = strategy
 }
 
+// fun ChutneyStepBuilder.HttpsServerStopTask auto registered by start task
 fun ChutneyStepBuilder.HttpsServerStartTask(
     port: String?,
     trustStorePath: String?,
     trustStorePassword: String?,
     keyStorePath: String?,
     keyStorePassword: String?,
+    keyPassword: String?,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf()
 ) {
@@ -543,7 +545,8 @@ fun ChutneyStepBuilder.HttpsServerStartTask(
             "truststore-path" to trustStorePath,
             "truststore-password" to trustStorePassword,
             "keystore-path" to keyStorePath,
-            "keystore-password" to keyStorePassword
+            "keystore-password" to keyStorePassword,
+            "key-password" to keyPassword
         ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
@@ -554,6 +557,7 @@ fun ChutneyStepBuilder.HttpsListenerTask(
     httpServerVarName: String = "httpsServer",
     uri: String,
     verb: String,
+    expectedMessageCount: Int = 1,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -563,14 +567,14 @@ fun ChutneyStepBuilder.HttpsListenerTask(
         inputs = listOf(
             "https-server" to httpServerVarName.spEL(),
             "uri" to uri,
-            "verb" to verb
+            "verb" to verb,
+            "expected-message-count" to expectedMessageCount
         ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
-// fun ChutneyStepBuilder.HttpsServerStopTask auto registered by start task
 
 
 enum class SSH_CLIENT_CHANNEL { COMMAND, SHELL }
