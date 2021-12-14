@@ -12,6 +12,9 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.SoftAssertions
 import java.io.File
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 const val CHUTNEY_ROOT_PATH = ".chutney"
 const val CHUTNEY_REPORT_ROOT_PATH = "$CHUTNEY_ROOT_PATH/reports"
@@ -31,6 +34,7 @@ class Launcher(
         .findAndRegisterModules()
         .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
 
+    private val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(ZoneId.systemDefault())
 
     fun run(
         scenario: ChutneyScenario,
@@ -97,7 +101,7 @@ class Launcher(
         File(
             reportRootPath,
             scenario.title.split(" ")
-                .joinToString("", postfix = ".json") { it.capitalize() })
+                .joinToString("", postfix = "." + formatter.format(Instant.now()) + ".json") { it.capitalize() })
             .bufferedWriter()
             .use { out -> out.write(om.writerWithDefaultPrettyPrinter().writeValueAsString(report)) }
     }
