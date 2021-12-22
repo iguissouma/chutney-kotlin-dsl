@@ -171,9 +171,9 @@ fun ChutneyStepBuilder.AmqpBasicPublishTask(
 fun ChutneyStepBuilder.AmqpBasicConsumeTask(
     target: String,
     queueName: String,
-    nbMessages: Int = 1,
-    timeout: String = "60 sec",
-    selector: String = "",
+    nbMessages: Int? = null,
+    timeout: String? = null,
+    selector: String? = null,
     ack: Boolean? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
@@ -288,7 +288,7 @@ fun ChutneyStepBuilder.MongoFindTask(
     target: String,
     collection: String,
     query: String,
-    limit: Int = 0,
+    limit: Int? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -299,7 +299,7 @@ fun ChutneyStepBuilder.MongoFindTask(
         inputs = listOf(
             "collection" to collection,
             "query" to query,
-            ("limit" to limit).takeIfPositive()
+            "limit" to limit
         ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
@@ -369,7 +369,7 @@ fun ChutneyStepBuilder.HttpGetTask(
     target: String,
     uri: String,
     headers: Map<String, Any> = mapOf(),
-    timeout: String = "2 sec",
+    timeout: String? = null,
     outputs: Map<String, Any> = mapOf(),
     strategy: Strategy? = null,
     validations: Map<String, Any> = mapOf()
@@ -393,7 +393,7 @@ fun ChutneyStepBuilder.HttpPostTask(
     uri: String,
     headers: Map<String, Any> = mapOf(),
     body: Any?,
-    timeout: String = "2 sec",
+    timeout: String? = null,
     outputs: Map<String, Any> = mapOf(),
     strategy: Strategy? = null,
     validations: Map<String, Any> = mapOf()
@@ -424,7 +424,7 @@ fun ChutneyStepBuilder.HttpPutTask(
     uri: String,
     headers: Map<String, Any> = mapOf(),
     body: Map<String, Any> = mapOf(),
-    timeout: String = "2 sec",
+    timeout: String? = null,
     outputs: Map<String, Any> = mapOf(),
     strategy: Strategy? = null,
     validations: Map<String, Any> = mapOf()
@@ -448,7 +448,7 @@ fun ChutneyStepBuilder.HttpDeleteTask(
     target: String,
     uri: String,
     headers: Map<String, Any> = mapOf(),
-    timeout: String = "2 sec",
+    timeout: String? = null,
     outputs: Map<String, Any> = mapOf(),
     strategy: Strategy? = null,
     validations: Map<String, Any> = mapOf()
@@ -472,9 +472,9 @@ fun ChutneyStepBuilder.HttpSoapTask(
     uri: String,
     body: String,
     headers: Map<String, Any> = mapOf(),
-    timeout: String = "",
-    username: String,
-    password: String,
+    timeout: String? = null,
+    username: String? = null,
+    password: String? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -501,7 +501,7 @@ fun ChutneyStepBuilder.HttpPatchTask(
     uri: String,
     headers: Map<String, Any> = mapOf(),
     body: Any?,
-    timeout: String = "2 sec",
+    timeout: String? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -557,7 +557,7 @@ fun ChutneyStepBuilder.HttpsListenerTask(
     httpServerVarName: String = "httpsServer",
     uri: String,
     verb: String,
-    expectedMessageCount: Int = 1,
+    expectedMessageCount: Int? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -601,12 +601,12 @@ fun ChutneyStepBuilder.SshClientTask(
 }
 
 fun ChutneyStepBuilder.SshServerStartTask(
-    port: String = "",
-    host: String = "",
-    keyPair: String = "",
+    port: String? = null,
+    host: String? = null,
+    keyPair: String? = null,
     usernames: List<String> = emptyList(),
     passwords: List<String> = emptyList(),
-    authorizedKeys: String = "",
+    authorizedKeys: String? = null,
     stubs: List<String> = emptyList(),
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf()
@@ -639,10 +639,10 @@ fun ChutneyStepBuilder.JmsCleanQueuesTask(
 fun ChutneyStepBuilder.JmsCleanQueueTask(
     target: String,
     destination: String,
-    selector: String = "",
-    bodySelector: String = "",
-    browserMaxDepth: Int = 0,
-    timeOut: String = "",
+    selector: String? = null,
+    bodySelector: String? = null,
+    browserMaxDepth: Int? = null,
+    timeOut: String? = null,
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -662,10 +662,10 @@ fun ChutneyStepBuilder.JmsCleanQueueTask(
 fun ChutneyStepBuilder.JmsListenerTask(
     target: String,
     destination: String,
-    selector: String = "",
-    bodySelector: String = "",
-    browserMaxDepth: Int = 0,
-    timeOut: String = "",
+    selector: String? = null,
+    bodySelector: String? = null,
+    browserMaxDepth: Int? = null,
+    timeOut: String? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -677,7 +677,7 @@ fun ChutneyStepBuilder.JmsListenerTask(
             "destination" to destination,
             "selector" to selector,
             "bodySelector" to bodySelector,
-            ("browserMaxDepth" to browserMaxDepth).takeIfPositive(),
+            "browserMaxDepth" to browserMaxDepth,
             "timeOut" to timeOut
         ).notEmptyToMap(),
         outputs = outputs,
@@ -706,7 +706,7 @@ fun ChutneyStepBuilder.JmsSenderTask(
 }
 
 fun ChutneyStepBuilder.JmsBrokerStartTask(
-    configUri: String = "",
+    configUri: String? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf()
 ) {
@@ -726,7 +726,7 @@ fun ChutneyStepBuilder.SqlTask(
     target: String,
     statements: List<String>,
     outputs: Map<String, Any> = mapOf(),
-    nbLoggedRow: Int = 0,
+    nbLoggedRow: Int? = null,
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
@@ -735,7 +735,7 @@ fun ChutneyStepBuilder.SqlTask(
         target = target,
         inputs = listOf(
             "statements" to statements,
-            ("nbLoggedRow" to nbLoggedRow).takeIfPositive()
+            "nbLoggedRow" to nbLoggedRow
         ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
@@ -745,7 +745,7 @@ fun ChutneyStepBuilder.SqlTask(
 
 
 fun ChutneyStepBuilder.SeleniumDriverInitTask(
-    browser: String = "",
+    browser: String? = null,
     driverPath: String,
     browserPath: String,
     outputs: Map<String, Any> = mapOf(),
@@ -782,7 +782,7 @@ fun ChutneyStepBuilder.SeleniumClickTask(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
-    wait: Int = 0,
+    wait: Int? = null,
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -791,7 +791,7 @@ fun ChutneyStepBuilder.SeleniumClickTask(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIfPositive()
+            "wait" to wait
         ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
@@ -812,8 +812,8 @@ fun ChutneyStepBuilder.SeleniumCloseTask(
 
 fun ChutneyStepBuilder.SeleniumGetTask(
     webDriver: String = defaultWebDriverSpel,
-    newTab: Boolean = false,
-    url: String,
+    newTab: String? = null,
+    url: String? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -822,7 +822,7 @@ fun ChutneyStepBuilder.SeleniumGetTask(
         type = "selenium-get",
         inputs = listOf(
             "web-driver" to webDriver,
-            ("selector" to "tab").takeIf { newTab },
+            "selector" to newTab,
             "value" to url
         ).notEmptyToMap(),
         outputs = outputs,
@@ -835,8 +835,8 @@ fun ChutneyStepBuilder.SeleniumGetAttributeTask(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
-    wait: Int = 0,
-    attribute: String = "",
+    wait: Int? = null,
+    attribute: String? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -847,7 +847,7 @@ fun ChutneyStepBuilder.SeleniumGetAttributeTask(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIfPositive(),
+            "wait" to wait,
             "attribute" to attribute
         ).notEmptyToMap(),
         outputs = outputs,
@@ -860,7 +860,7 @@ fun ChutneyStepBuilder.SeleniumGetTextTask(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
-    wait: Int = 0,
+    wait: Int? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -871,7 +871,7 @@ fun ChutneyStepBuilder.SeleniumGetTextTask(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIfPositive(),
+            "wait" to wait,
         ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
@@ -898,8 +898,8 @@ fun ChutneyStepBuilder.SeleniumSendKeysTask(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
-    wait: Int = 0,
-    value: String = "",
+    wait: Int? = null,
+    value: String? = null,
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -908,7 +908,7 @@ fun ChutneyStepBuilder.SeleniumSendKeysTask(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIfPositive(),
+            "wait" to wait,
             "value" to value
         ).notEmptyToMap()
     )
@@ -921,7 +921,7 @@ fun ChutneyStepBuilder.SeleniumSwitchToTask(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
-    wait: Int = 0,
+    wait: Int? = null,
     switchType: SELENIUM_SWITCH? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
@@ -933,7 +933,7 @@ fun ChutneyStepBuilder.SeleniumSwitchToTask(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIfPositive(),
+            "wait" to wait,
             "switchType" to switchType?.name
         ).notEmptyToMap(),
         outputs = outputs,
@@ -946,8 +946,8 @@ fun ChutneyStepBuilder.SeleniumWaitTask(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
-    wait: Int = 0,
-    value: String = "",
+    wait: Int? = null,
+    value: String? = null,
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -956,7 +956,7 @@ fun ChutneyStepBuilder.SeleniumWaitTask(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIfPositive(),
+            "wait" to wait,
             "value" to value
         ).notEmptyToMap()
     )
@@ -967,7 +967,7 @@ fun ChutneyStepBuilder.SeleniumHoverThenClickTask(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
-    wait: Int = 0,
+    wait: Int? = null,
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -976,7 +976,7 @@ fun ChutneyStepBuilder.SeleniumHoverThenClickTask(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIfPositive()
+            "wait" to wait
         ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
@@ -986,7 +986,7 @@ fun ChutneyStepBuilder.SeleniumScrollToTask(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
-    wait: Int = 0,
+    wait: Int? = null,
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -995,7 +995,7 @@ fun ChutneyStepBuilder.SeleniumScrollToTask(
             "web-driver" to webDriver,
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
-            ("wait" to wait).takeIfPositive()
+            "wait" to wait
         ).notEmptyToMap()
     )
     if (strategy != null) this.strategy = strategy
@@ -1003,7 +1003,7 @@ fun ChutneyStepBuilder.SeleniumScrollToTask(
 
 fun ChutneyStepBuilder.SeleniumRemoteDriverInitTask(
     hub: String,
-    browser: String = "",
+    browser: String? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -1193,9 +1193,9 @@ fun ChutneyStepBuilder.KafkaBasicConsumeTask(
     target: String,
     topic: String,
     group: String,
-    properties: Map<String, String> = mapOf("auto.offset.reset" to "earliest"),
-    timeout: String = "60 sec",
-    selector: String = "",
+    properties: Map<String, String> = mapOf(),
+    timeout: String? = null,
+    selector: String? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -1270,7 +1270,7 @@ fun ChutneyStepBuilder.MicrometerGaugeTask(
     name: String,
     description: String? = null,
     unit: String? = null,
-    strongReference: Boolean = false,
+    strongReference: Boolean? = null,
     tags: List<String> = emptyList(),
     gaugeObject: Any? = null, //Number or Object or List or Map
     gaugeFunction: String? = null,
@@ -1306,7 +1306,7 @@ fun ChutneyStepBuilder.MicrometerTimerTask(
     maxValue: String? = null,
     minValue: String? = null,
     percentilePrecision: String? = null,
-    publishPercentilesHistogram: Boolean = false,
+    publishPercentilesHistogram: Boolean? = null,
     percentiles: String? = null,
     sla: String? = null,
     timer: String? = null,
@@ -1386,7 +1386,7 @@ fun ChutneyStepBuilder.MicrometerSummaryTask(
     maxValue: String? = null,
     minValue: String? = null,
     percentilePrecision: String? = null,
-    publishPercentilesHistogram: Boolean = false,
+    publishPercentilesHistogram: Boolean? = null,
     percentiles: String? = null,
     scale: String? = null,
     sla: String? = null,
@@ -1427,7 +1427,7 @@ fun ChutneyStepBuilder.RadiusAuthenticateTask(
     target: String,
     userName: String,
     userPassword: String,
-    protocol: String? = "chap",
+    protocol: String? = null,
     attributes: Map<String, String>? = mapOf(),
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
@@ -1483,8 +1483,4 @@ private fun <T> List<Pair<String, T?>?>.notEmptyToMap(): Map<String, T> {
                 else -> true
             }
         } as List<Pair<String, T>>).toMap()
-}
-
-private fun Pair<String, Int>.takeIfPositive(): Pair<String, Int>? {
-    return this.takeIf { this.second > 0 }
 }

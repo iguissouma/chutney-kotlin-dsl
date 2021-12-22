@@ -1,6 +1,9 @@
 # Changelog
 
-## [Unreleased](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/HEAD)
+## Breaking change : 
+
+KafkaBasicConsumeTask => properties is now defaulted to null (was Map<String, String> = mapOf("auto.offset.reset" to "earliest")) 
+SeleniumGetTask() => selector is now string, was boolean
 
 ## [0.1.11](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.11) (2021-12-01)
 

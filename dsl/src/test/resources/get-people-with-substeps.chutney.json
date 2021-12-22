@@ -36,8 +36,7 @@
             "type": "http-get",
             "target": "swapi.dev",
             "inputs": {
-                "uri": "${#uri}",
-                "timeout": "2 sec"
+                "uri": "${#uri}"
             }
         }
     },
