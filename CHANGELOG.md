@@ -1,13 +1,32 @@
 # Changelog
 
-## Breaking change : 
+## [0.1.12](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/01.12)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.11...0.1.12)
+
+# Breaking change : 
 
 KafkaBasicConsumeTask => properties is now defaulted to null (was Map<String, String> = mapOf("auto.offset.reset" to "earliest")) 
 SeleniumGetTask() => selector is now string, was boolean
 
+**Implemented enhancements:**
+
+- 🚀| Keep all execution reports in target/ folder [\#36](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/36)
+
+**Fixed bugs:**
+
+- 🐛 | Jms tasks input defaulted \(should not be\) [\#39](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/39)
+
+**Merged pull requests:**
+
+- feat: Keep previous execution reports [\#37](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/37) ([bessonm](https://github.com/bessonm))
+- chore: Add Github Templates [\#35](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/35) ([bessonm](https://github.com/bessonm))
+
+
+
 ## [0.1.11](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.11) (2021-12-01)
 
-[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.10...HEAD)
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.10...0.1.11)
 
 **Merged pull requests:**
 
