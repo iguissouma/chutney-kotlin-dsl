@@ -1171,6 +1171,7 @@ fun ChutneyStepBuilder.KafkaBasicPublishTask(
     topic: String,
     headers: Map<String, Any> = mapOf(),
     payload: Any,
+    properties: Map<String, String> = mapOf(),
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -1181,13 +1182,17 @@ fun ChutneyStepBuilder.KafkaBasicPublishTask(
         inputs = listOf(
             "topic" to topic,
             "headers" to headers,
-            "payload" to payload
+            "payload" to payload,
+            "properties" to properties
         ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
+
+// cf. org.springframework.kafka.listener.ContainerProperties.AckMode
+enum class KafkaSpringOffsetCommitBehavior { RECORD, BATCH, TIME, COUNT, COUNT_TIME, MANUAL, MANUAL_IMMEDIATE }
 
 fun ChutneyStepBuilder.KafkaBasicConsumeTask(
     target: String,
@@ -1196,6 +1201,10 @@ fun ChutneyStepBuilder.KafkaBasicConsumeTask(
     properties: Map<String, String> = mapOf(),
     timeout: String? = null,
     selector: String? = null,
+    nbMessages: Int? = null,
+    headerSelector: String? = null,
+    contentType: String? = null,
+    ackMode: KafkaSpringOffsetCommitBehavior? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -1208,7 +1217,11 @@ fun ChutneyStepBuilder.KafkaBasicConsumeTask(
             "group" to group,
             "timeout" to timeout,
             "selector" to selector,
-            "properties" to properties
+            "properties" to properties,
+            "nb-messages" to nbMessages,
+            "header-selector" to headerSelector,
+            "content-type" to contentType,
+            "ackMode" to ackMode
         ).notEmptyToMap(),
         outputs = outputs,
         validations = validations

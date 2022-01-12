@@ -1,9 +1,8 @@
 package com.chutneytesting.kotlin.dsl
 
-import org.assertj.core.api.Assertions
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-import org.skyscreamer.jsonassert.JSONAssert
+import org.assertj.core.api.Assertions.*
+import org.junit.jupiter.api.*
+import org.skyscreamer.jsonassert.*
 
 class ChutneyScenarioDslTest {
 
@@ -176,8 +175,37 @@ class ChutneyScenarioDslTest {
         }
 
         val json = "$chutneyScenario"
-        Assertions.assertThat(json)
+        assertThat(json)
             .doesNotContain("null", "{}");
+    }
+
+    @Test
+    fun `should generate json scenario with kafka tasks`() {
+
+        val chutneyScenario = Scenario(title = "Kafka tasks") {
+            When("nothing") {  }
+            Then("Publish") {
+                KafkaBasicPublishTask(
+                    target = "target", topic = "topic", payload = "payload",
+                    properties = mapOf("bootstrap.servers" to "a.host:666,b.host:999")
+                )
+            }
+            And("Consume") {
+                KafkaBasicConsumeTask(
+                    target = "target", topic = "topic", group = "group",
+                    nbMessages = 2,
+                    headerSelector = "$[json/path]",
+                    contentType = "application/json",
+                    ackMode = KafkaSpringOffsetCommitBehavior.MANUAL
+                )
+            }
+        }
+
+        JSONAssert.assertEquals(
+            "/kafka-tasks.chutney.json".asResource(),
+            "$chutneyScenario",
+            true
+        )
     }
 }
 
