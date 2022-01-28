@@ -1,5 +1,6 @@
 package com.chutneytesting.kotlin.dsl
 
+@Deprecated("Use jsonPath global function")
 fun json(variable: String, path: String = JSON_PATH_ROOT): String {
     require(variable.isNotBlank()) { "variable cannot be empty" }
     return "json(${variable.spELVar}, ${path.elString()})".spEL()
@@ -37,7 +38,12 @@ fun xpath(xmlELExpr: String, path: String = XPATH_ROOT, elEval: Boolean = true):
     return chutneyFunction("xpath", elEval, xmlELExpr, path.elString())
 }
 
-fun xpathNs(xmlELExpr: String, path: String = XPATH_ROOT, prefixes: Map<String, String>, elEval: Boolean = true): String {
+fun xpathNs(
+    xmlELExpr: String,
+    path: String = XPATH_ROOT,
+    prefixes: Map<String, String>,
+    elEval: Boolean = true
+): String {
     require(xmlELExpr.isNotBlank()) { "xmlELExpr cannot be empty" }
     require(prefixes.isNotEmpty()) { "prefixes cannot be empty" }
     return chutneyFunction("xpathNs", elEval, xmlELExpr, path.elString(), prefixes.elMap())
@@ -57,6 +63,38 @@ fun date(date: String, format: String? = null, elEval: Boolean = true): String {
     return chutneyFunction("date", elEval, date.elString(), format?.elString() ?: "null")
 }
 
+fun currentTimeMillis(elEval: Boolean = true): String {
+    return chutneyFunction("currentTimeMillis", elEval)
+}
+
+fun now(elEval: Boolean = true): String {
+    return chutneyFunction("now", elEval)
+}
+
+fun dateFormatter(pattern: String, elEval: Boolean = true): String {
+    require(pattern.isNotBlank()) { "pattern cannot be empty" }
+    return chutneyFunction("dateFormatter", elEval, pattern.elString())
+}
+
+fun dateFormatterWithLocale(pattern: String, locale: String, elEval: Boolean = true): String {
+    require(pattern.isNotBlank()) { "pattern cannot be empty" }
+    return chutneyFunction("dateFormatterWithLocale", elEval, pattern.elString(), locale.elString())
+}
+
+fun isoDateFormatter(type: String, elEval: Boolean = true): String {
+    require(type.isNotBlank()) { "type cannot be empty" }
+    return chutneyFunction("isoDateFormatter", elEval, type.elString())
+}
+
+fun timeAmount(text: String, elEval: Boolean = true): String {
+    require(text.isNotBlank()) { "text cannot be empty" }
+    return chutneyFunction("timeAmount", elEval, text.elString())
+}
+
+fun timeUnit(unit: String, elEval: Boolean = true): String {
+    require(unit.isNotBlank()) { "unit cannot be empty" }
+    return chutneyFunction("timeUnit", elEval, unit.elString())
+}
 
 fun str_replace(inputELExpr: String, regExp: String, replacement: String = "", elEval: Boolean = true): String {
     require(inputELExpr.isNotBlank()) { "inputELExpr cannot be empty" }
@@ -80,6 +118,18 @@ fun generate_randomLong(elEval: Boolean = true): String {
 fun generate_randomInt(max: Int, elEval: Boolean = true): String {
     require(max > 0) { "max must be positive" }
     return chutneyFunction("generate().randomInt", elEval, "$max")
+}
+
+fun generate_id(prefix: String = "", length: Int, elEval: Boolean = true): String {
+    return chutneyFunction("generate().id", elEval, prefix.elString(), "$length")
+}
+
+fun generate_id(length: Int, suffix: String = "", elEval: Boolean = true): String {
+    return chutneyFunction("generate().id", elEval, "$length", suffix.elString())
+}
+
+fun generate_id(prefix: String = "", length: Int, suffix: String = "", elEval: Boolean = true): String {
+    return chutneyFunction("generate().id", elEval, prefix.elString(), "$length", suffix.elString())
 }
 
 

@@ -1,11 +1,69 @@
 package com.chutneytesting.kotlin.dsl
 
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import org.springframework.expression.spel.standard.SpelExpressionParser
+import org.assertj.core.api.*
+import org.assertj.core.util.*
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.params.*
+import org.junit.jupiter.params.provider.*
+import org.springframework.expression.spel.standard.*
+import java.util.stream.*
 
 class ChutneyFunctionsTest {
+
+    companion object {
+        @JvmStatic
+        fun isFunctionsUseful_examples(): Stream<Arguments?>? {
+            return Stream.of(
+                Arguments.of(
+                    "\${#jsonPath(#body, '$.object.attribute')}",
+                    Arrays.array(
+                        "#jsonPath(#body, '$.object.attribute')".elEval(),
+                        "jsonPath(#body, '$.object.attribute')".spEL(),
+                        jsonPath("body".spELVar(), "$.object.attribute")
+                    )
+                ),
+                Arguments.of(
+                    "\${#xpath(#jsonPath(#body.get(0), '$.payload'), 'boolean(//ns:xpath/obj)')}",
+                    Arrays.array(
+                        "#xpath(#jsonPath(#body.get(0), '$.payload'), 'boolean(//ns:xpath/obj)')".elEval(),
+                        "xpath(#jsonPath(#body.get(0), '$.payload'), 'boolean(//ns:xpath/obj)')".spEL(),
+                        "xpath(#jsonPath(${"body.get(0)".spELVar()}, '$.payload'), 'boolean(//ns:xpath/obj)')".spEL(),
+                        "xpath(${
+                            jsonPath(
+                                "body.get(0)".spELVar(),
+                                "$.payload",
+                                false
+                            )
+                        }, 'boolean(//ns:xpath/obj)')".spEL(),
+                        xpath(
+                            jsonPath("body.get(0)".spELVar(), "$.payload", false),
+                            "boolean(//ns:xpath/obj)"
+                        )
+                    )
+                ),
+                Arguments.of(
+                    "\${#generate().id('PREFIX', 4).toUpperCase()}",
+                    Arrays.array(
+                        "#generate().id('PREFIX', 4).toUpperCase()".elEval(),
+                        "generate().id('PREFIX', 4).toUpperCase()".spEL(),
+                        "${generate_id("PREFIX", 4, false)}.toUpperCase()".elEval(),
+                        generate_id("PREFIX", 4, false).plus(".toUpperCase()").elEval()
+                    )
+                )
+            )
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("isFunctionsUseful_examples")
+    fun `is functions really useful`(manualString: String, vararg alternatives: String) {
+        val soft = SoftAssertions()
+        alternatives.forEach {
+            soft.assertThat(manualString).isEqualTo(it)
+        }
+        soft.assertAll()
+    }
 
     @Test
     fun `use json function`() {
@@ -29,6 +87,13 @@ class ChutneyFunctionsTest {
         assertELWrap(getSoapBody("login", "pass", "body"))
 
         assertELWrap(date("date", "format"))
+        assertELWrap(currentTimeMillis())
+        assertELWrap(now())
+        assertELWrap(dateFormatter("pattern"))
+        assertELWrap(dateFormatterWithLocale("pattern", "locale"))
+        assertELWrap(isoDateFormatter("type"))
+        assertELWrap(timeAmount("text"))
+        assertELWrap(timeUnit("unit"))
 
         assertELWrap(str_replace("text", "regexp", "replace"))
 
@@ -36,6 +101,9 @@ class ChutneyFunctionsTest {
         assertELWrap(generate_uuid())
         assertELWrap(generate_randomLong())
         assertELWrap(generate_randomInt(9))
+        assertELWrap(generate_id(prefix = "", length = 5))
+        assertELWrap(generate_id(5, suffix = ""))
+        assertELWrap(generate_id(prefix = "", length = 5, suffix = ""))
 
         assertELWrap(wiremock_extractHeadersAsMap("var"))
         assertELWrap(wiremock_extractParameters("var"))
@@ -149,8 +217,13 @@ class ChutneyFunctionsTest {
     }
 
     @Test
-    fun `use date function`() {
+    fun `use date and time functions`() {
         assertThrows<IllegalArgumentException> { date("") }
+        assertThrows<IllegalArgumentException> { dateFormatter("") }
+        assertThrows<IllegalArgumentException> { dateFormatterWithLocale("", "") }
+        assertThrows<IllegalArgumentException> { isoDateFormatter("") }
+        assertThrows<IllegalArgumentException> { timeAmount("") }
+        assertThrows<IllegalArgumentException> { timeUnit("") }
 
         assertExpressionNotNullWhenParsed(
             date("2011-12-03T10:15:30Z".elString(), elEval = false)
@@ -158,6 +231,34 @@ class ChutneyFunctionsTest {
 
         assertExpressionNotNullWhenParsed(
             date("ctxVar".spELVar, "YYYYDDMM", elEval = false)
+        )
+
+        assertExpressionNotNullWhenParsed(
+            currentTimeMillis(elEval = false)
+        )
+
+        assertExpressionNotNullWhenParsed(
+            now(elEval = false)
+        )
+
+        assertExpressionNotNullWhenParsed(
+            dateFormatter("YYYYMMDD'T'HH:mm:ssZ", elEval = false)
+        )
+
+        assertExpressionNotNullWhenParsed(
+            dateFormatterWithLocale("YYYYMMDD'T'HH:mm:ssZ", "fr_FR", elEval = false)
+        )
+
+        assertExpressionNotNullWhenParsed(
+            isoDateFormatter("INSTANT", elEval = false)
+        )
+
+        assertExpressionNotNullWhenParsed(
+            timeAmount("2 sec", elEval = false)
+        )
+
+        assertExpressionNotNullWhenParsed(
+            timeAmount("day", elEval = false)
         )
     }
 
@@ -193,6 +294,18 @@ class ChutneyFunctionsTest {
 
         assertExpressionNotNullWhenParsed(
             generate_randomInt(100, elEval = false)
+        )
+
+        assertExpressionNotNullWhenParsed(
+            generate_id(prefix = "pre", length = 5, elEval = false)
+        )
+
+        assertExpressionNotNullWhenParsed(
+            generate_id(length = 5, suffix = "suf", elEval = false)
+        )
+
+        assertExpressionNotNullWhenParsed(
+            generate_id(prefix = "pre", length = 5, suffix = "suf", elEval = false)
         )
     }
 
