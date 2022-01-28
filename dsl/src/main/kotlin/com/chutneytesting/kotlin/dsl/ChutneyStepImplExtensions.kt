@@ -576,6 +576,51 @@ fun ChutneyStepBuilder.HttpsListenerTask(
     if (strategy != null) this.strategy = strategy
 }
 
+fun ChutneyStepBuilder.ScpUploadTask(
+    target: String,
+    source: String,
+    destination: String,
+    timeout: String? = "",
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
+    strategy: Strategy? = null
+) {
+    implementation = ChutneyStepImpl(
+        type = "scp-upload",
+        target = target,
+        inputs = listOf(
+            "source" to source,
+            "destination" to destination,
+            "timeout" to timeout
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
+    )
+    if (strategy != null) this.strategy = strategy
+}
+
+fun ChutneyStepBuilder.ScpDownloadTask(
+    target: String,
+    source: String,
+    destination: String,
+    timeout: String? = "",
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
+    strategy: Strategy? = null
+) {
+    implementation = ChutneyStepImpl(
+        type = "scp-download",
+        target = target,
+        inputs = listOf(
+            "source" to source,
+            "destination" to destination,
+            "timeout" to timeout
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
+    )
+    if (strategy != null) this.strategy = strategy
+}
 
 enum class SSH_CLIENT_CHANNEL { COMMAND, SHELL }
 
