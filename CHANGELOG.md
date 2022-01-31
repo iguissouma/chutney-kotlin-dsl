@@ -1,6 +1,17 @@
 # Changelog
 
-## [0.1.12](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/01.12)
+## [0.1.13](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.13)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.12...0.1.13)
+
+**Merged pull requests:**
+
+- feat: Add SCP upload/download [\#43](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/43) ([bessonm](https://github.com/bessonm))
+- Update functions [\#42](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/42) ([boddissattva](https://github.com/boddissattva))
+- Kafka publish consume tasks [\#41](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/41) ([boddissattva](https://github.com/boddissattva))
+
+
+## [0.1.12](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.12)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.11...0.1.12)
 
