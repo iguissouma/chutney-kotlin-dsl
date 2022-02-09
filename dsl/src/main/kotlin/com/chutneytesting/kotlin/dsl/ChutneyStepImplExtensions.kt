@@ -581,8 +581,6 @@ fun ChutneyStepBuilder.ScpUploadTask(
     source: String,
     destination: String,
     timeout: String? = "",
-    outputs: Map<String, Any> = mapOf(),
-    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -593,8 +591,8 @@ fun ChutneyStepBuilder.ScpUploadTask(
             "destination" to destination,
             "timeout" to timeout
         ).notEmptyToMap(),
-        outputs = outputs,
-        validations = validations
+        outputs = emptyMap(),
+        validations = emptyMap()
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -604,8 +602,6 @@ fun ChutneyStepBuilder.ScpDownloadTask(
     source: String,
     destination: String,
     timeout: String? = "",
-    outputs: Map<String, Any> = mapOf(),
-    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -614,6 +610,90 @@ fun ChutneyStepBuilder.ScpDownloadTask(
         inputs = listOf(
             "source" to source,
             "destination" to destination,
+            "timeout" to timeout
+        ).notEmptyToMap(),
+        outputs = emptyMap(),
+        validations = emptyMap()
+    )
+    if (strategy != null) this.strategy = strategy
+}
+
+fun ChutneyStepBuilder.SftpUploadTask(
+    target: String,
+    source: String,
+    destination: String,
+    timeout: String? = "",
+    strategy: Strategy? = null
+) {
+    implementation = ChutneyStepImpl(
+        type = "sftp-upload",
+        target = target,
+        inputs = listOf(
+            "source" to source,
+            "destination" to destination,
+            "timeout" to timeout
+        ).notEmptyToMap(),
+        outputs = emptyMap(),
+        validations = emptyMap()
+    )
+    if (strategy != null) this.strategy = strategy
+}
+
+fun ChutneyStepBuilder.SftpDownloadTask(
+    target: String,
+    source: String,
+    destination: String,
+    timeout: String? = "",
+    strategy: Strategy? = null
+) {
+    implementation = ChutneyStepImpl(
+        type = "sftp-download",
+        target = target,
+        inputs = listOf(
+            "source" to source,
+            "destination" to destination,
+            "timeout" to timeout
+        ).notEmptyToMap(),
+        outputs = emptyMap(),
+        validations = emptyMap()
+    )
+    if (strategy != null) this.strategy = strategy
+}
+
+fun ChutneyStepBuilder.SftpFileInfoTask(
+    target: String,
+    file: String,
+    timeout: String? = "",
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
+    strategy: Strategy? = null
+) {
+    implementation = ChutneyStepImpl(
+        type = "sftp-file-info",
+        target = target,
+        inputs = listOf(
+            "file" to file,
+            "timeout" to timeout
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
+    )
+    if (strategy != null) this.strategy = strategy
+}
+
+fun ChutneyStepBuilder.SftpListDirTask(
+    target: String,
+    directory: String,
+    timeout: String? = "",
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
+    strategy: Strategy? = null
+) {
+    implementation = ChutneyStepImpl(
+        type = "sftp-list-dir",
+        target = target,
+        inputs = listOf(
+            "directory" to directory,
             "timeout" to timeout
         ).notEmptyToMap(),
         outputs = outputs,
