@@ -1189,17 +1189,21 @@ fun ChutneyStepBuilder.JsonAssertTask(
     )
 }
 
+enum class JsonCompareMode { STRICT, LENIENT }
+
 fun ChutneyStepBuilder.JsonCompareTask(
     document1: String,
     document2: String,
-    comparingPaths: Map<String, String> = mapOf()
+    comparingPaths: Map<String, String>? = null,
+    mode: JsonCompareMode? = null
 ) {
     implementation = ChutneyStepImpl(
         type = "json-compare",
         inputs = listOf(
             "document1" to document1,
             "document2" to document2,
-            "comparingPaths" to comparingPaths
+            "comparingPaths" to comparingPaths,
+            "mode" to mode
         ).notEmptyToMap()
     )
 }
