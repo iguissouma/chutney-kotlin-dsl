@@ -1,6 +1,12 @@
 package com.chutneytesting.scenario
 
-import com.chutneytesting.kotlin.dsl.*
+import com.chutneytesting.kotlin.dsl.AssertTask
+import com.chutneytesting.kotlin.dsl.ContextPutTask
+import com.chutneytesting.kotlin.dsl.HttpGetTask
+import com.chutneytesting.kotlin.dsl.Scenario
+import com.chutneytesting.kotlin.dsl.StringAssertTask
+import com.chutneytesting.kotlin.dsl.SuccessTask
+import com.chutneytesting.kotlin.dsl.spEL
 
 val call_google = Scenario(title = "Call google") {
     Given("Create variable") {

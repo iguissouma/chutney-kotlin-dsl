@@ -1,4 +1,9 @@
-import com.chutneytesting.kotlin.dsl.*
+import com.chutneytesting.kotlin.dsl.ContextPutTask
+import com.chutneytesting.kotlin.dsl.HttpGetTask
+import com.chutneytesting.kotlin.dsl.JsonAssertTask
+import com.chutneytesting.kotlin.dsl.RetryTimeOutStrategy
+import com.chutneytesting.kotlin.dsl.Scenario
+import com.chutneytesting.kotlin.dsl.elEval
 
 Scenario(title = "swapi GET people record") {
     Given("I set get people service api endpoint") {

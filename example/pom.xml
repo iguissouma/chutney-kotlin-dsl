@@ -65,6 +65,10 @@
                         <exclude>**/*Gradle*Test.*</exclude>
                     </excludes>
                     <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                    <systemProperties>
+                        <junit.chutney.engine.stepAsTest>false</junit.chutney.engine.stepAsTest>
+                        <junit.chutney.log.color.enabled>false</junit.chutney.log.color.enabled>
+                    </systemProperties>
                 </configuration>
                 <executions>
                     <execution>
@@ -87,7 +91,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
-                    <mainClass>com.chutneytesting.kotlin.launcher.SiteGeneratorMain</mainClass>
+                    <mainClass>com.chutneytesting.kotlin.execution.report.SiteGeneratorMain</mainClass>
                 </configuration>
                 <executions>
                     <execution>

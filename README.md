@@ -5,7 +5,7 @@
 
 ## DO IT IN CODE {"NOT": "JSON"}
 
-This repository aims to add a kotlin flavor for writing chutney scenarios.
+This repository aims to add a kotlin flavor for writing and executing chutney scenarios.
 
 ## Why?
 
@@ -165,6 +165,8 @@ val say_hi = Scenario(title = "Say hi!") {
 
 ## 4. Run your scenarios ! 
 
+### Using the Launcher in JUnit test
+
 For example, you can wrap Chutney execution with JUnit.
 
 ```kotlin
@@ -176,15 +178,15 @@ class CrispyIntegrationTest {
 }
 ```
 
-### Change default reports folder
+#### Change default reports folder
 
 By default, reports are in ".chutney/reports". But you can override it using ```Launcher("target/chutney-reports")```
 
-### Expecting a failure
+#### Expecting a failure
 
 You can change the expecting status of your scenario. For example, the Chutney scenario will fail, 
 but not the running JUnit test.
- 
+
 ```kotlin
 @Test
 fun `is able to fail`() {
@@ -192,7 +194,7 @@ fun `is able to fail`() {
 }
  ```
 
-### Running many scenarios
+#### Running many scenarios
 
 You can simply pass a list of scenarios.
 
@@ -208,7 +210,7 @@ fun `is able to run many scenarios`() {
 }
 ```
 
-### Running many scenarios, again
+#### Running many scenarios, again
 
 You can create campaigns by using ```@ParameterizedTest```
 This is nice because JUnit will wrap each scenario execution into its own.
@@ -229,7 +231,7 @@ fun `is able to emulate a campaign on one environment`(scenario: ChutneyScenario
 }
 ```
 
-### Running a campaign, on different environment
+#### Running a campaign, on different environment
 
 To keep it simple, we will combine the two previous snippets, 
 but this time we will parameterize the environment. 
@@ -254,3 +256,47 @@ fun `is able to run a campaign on different environments`(environment: ChutneyEn
     launcher.run(my_campaign, environment)
 }
 ```
+
+### Using the JUnit5 engine
+
+A JUnit5 engine has been developed to execute Chutney scenarios.
+
+#### Annotation
+The annotation ```@ChutneyTest``` signals that a method is a JUnit5 testable element.
+This annotated method must have a ```ChutneyScenario``` as return type to be taken into account.
+The ```environment``` property could be used to specify a chutney environment to use.
+
+```kotlin
+@ChutneyTest(environment = "CHUTNEY")
+    fun testMethod(): ChutneyScenario {
+        return call_a_website
+    }
+```
+
+#### JUnit listeners
+Four test execution listeners are automatically included :
+* **ConsoleLogScenarioReportExecutionListener** : Log a readable report after a scenario execution
+* **ConsoleLogStepReportExecutionListener** : Log a readable report after a scenario step execution
+* **FileWriterScenarioReportExecutionListener** : Write JSON report on disk after a scenario execution
+* **SiteGeneratorExecutionListener** : Use JSON reports of an execution to install a static website
+
+#### JUnit reports entries
+Two report entries could be listened to with following keys :
+* **chutney.report** : Report entry key for JSON scenario report
+* **chutney.report.step** : Report entry key for JSON scenario's step report
+
+#### Configuration
+As the Kotlin Chutney JUnit engine is packaged in ```chutney-koltin-dsl``` module, just adding it as a dependency will make 
+the engine active when executing tests with the JUnit platform.
+
+Chutney JUnit configuration parameters are :
+* **junit.chutney.environment** : Default environment name to use (string with no default value)
+* **junit.chutney.report.rootPath** : Path where reports and website will be accessible after execution (string with ```.chutney/reports``` default value)
+* **junit.chutney.log.scenario.enabled** : Log scenario report to console (boolean with ```true``` default value)
+* **junit.chutney.log.step.enabled** : Log scenario step report to console (boolean with ```true``` default value)
+* **junit.chutney.log.color.enabled** : Log scenario report and scenario step report to console with ANSI colors (boolean with ```true``` default value)
+* **junit.chutney.report.file.enabled** : Write scenario JSON report to disk (boolean with ```true``` default value)
+* **junit.chutney.report.site.enabled** : Generate website from scenario JSON report (boolean with ```true``` default value)
+* **junit.chutney.engine.stepAsTest** : Do not consider scenario's steps as tests (boolean with ```true``` default value)
+
+Those configuration parameters could be defined as environment, JVM system or JUnit properties.

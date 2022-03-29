@@ -2,6 +2,7 @@ import java.time.Instant
 import java.time.format.DateTimeFormatter
 
 plugins {
+    java
     `maven-publish`
     signing
 }
@@ -31,6 +32,11 @@ dependencies {
     testImplementation("org.springframework:spring-expression:5.1.5.RELEASE")
     testImplementation(kotlin("scripting-jsr223"))
     testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+
+    // JUnit5 engine dependencies
+    implementation("org.junit.platform:junit-platform-engine:1.8.1")
+    implementation("org.junit.platform:junit-platform-launcher:1.8.1")
+    testImplementation("org.junit.platform:junit-platform-testkit:1.8.1")
 }
 
 java {

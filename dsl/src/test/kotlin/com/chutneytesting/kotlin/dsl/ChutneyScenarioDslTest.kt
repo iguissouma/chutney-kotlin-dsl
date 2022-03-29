@@ -1,8 +1,8 @@
 package com.chutneytesting.kotlin.dsl
 
-import org.assertj.core.api.Assertions.*
-import org.junit.jupiter.api.*
-import org.skyscreamer.jsonassert.*
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.skyscreamer.jsonassert.JSONAssert
 
 class ChutneyScenarioDslTest {
 

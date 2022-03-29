@@ -1,5 +1,6 @@
-package com.chutneytesting.kotlin.launcher
+package com.chutneytesting.kotlin.execution.report
 
+import com.chutneytesting.kotlin.execution.CHUTNEY_ROOT_PATH
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import java.io.File
 
@@ -11,6 +12,8 @@ object SiteGeneratorMain {
         SiteGenerator(reportRootPath).generateSite()
     }
 }
+
+const val CHUTNEY_REPORT_ROOT_PATH = "$CHUTNEY_ROOT_PATH/reports"
 
 class SiteGenerator(private val reportRootPath: String = CHUTNEY_REPORT_ROOT_PATH) {
 
@@ -26,7 +29,7 @@ class SiteGenerator(private val reportRootPath: String = CHUTNEY_REPORT_ROOT_PAT
     private fun createReportsListFile(): Boolean {
         if (!File(reportRootPath).exists()) {
             println("Reports' root path does not exist: $reportRootPath")
-            return false;
+            return false
         } else {
             val reportsListFile = File(reportRootPath, reportListFileName)
             reportsListFile
@@ -39,14 +42,14 @@ class SiteGenerator(private val reportRootPath: String = CHUTNEY_REPORT_ROOT_PAT
                         ) { p -> "env\":\"${p.first}\",\"scenario\":\"${p.second}" } + "]")
                 }
             println("Reports' list file generated at ${reportsListFile.absolutePath}")
-            return true;
+            return true
         }
     }
 
     private fun copySiteFiles() {
         pathResolver.getResources("classpath*:chutney-report-website/*").forEach {
             it.inputStream.copyTo(
-                out = File(reportRootPath, it.filename).outputStream()
+                out = File(reportRootPath, it.filename!!).outputStream()
             )
         }
         println("Reports web site copied into ${File(reportRootPath).absolutePath}")
@@ -64,18 +67,4 @@ class SiteGenerator(private val reportRootPath: String = CHUTNEY_REPORT_ROOT_PAT
                 Pair(reportFile.parentFile.name, reportFile.name)
             } ?: emptyList()
     }
-/*
-    private fun readReportsNames(): List<Pair<String, String>> {
-        return pathResolver.getResources(reportRootPath.absolutePath).asList()
-            .filter { r -> r.file.isDirectory }
-            .flatMap {
-                it.file.listFiles { _, name ->
-                    name.endsWith(".json")
-                }?.asList()
-                    ?.map { reportFile ->
-                        Pair(reportFile.parentFile.name, reportFile.name)
-                    } ?: emptyList()
-            }
-    }
-*/
 }
