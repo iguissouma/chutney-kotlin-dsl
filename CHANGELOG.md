@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.14](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.14)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.13...0.1.14)
+
+**Merged pull requests:**
+
+- chore/json compare mode [\#45](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/45) ([boddissattva](https://github.com/boddissattva))
+- task: Add SFTP ls, attributes, upload and download [\#44](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/44) ([bessonm](https://github.com/bessonm))
+- feat/junit engine [\#27](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/27) ([boddissattva](https://github.com/boddissattva))
+
+
 ## [0.1.13](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.13)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.12...0.1.13)
