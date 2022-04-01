@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.*
 
 plugins {
     id("org.ajoberstar.reckon") version "0.13.0"
@@ -12,7 +12,7 @@ reckon {
 }
 
 subprojects {
-    extra["chutneyTestingVersion"] = "1.4.3"
+    extra["chutneyTestingVersion"] = "1.4.6"
     extra["junitJupiterVersion"] = "5.8.2"
     extra["junitPlatformVersion"] = "1.8.2"
 
