@@ -1,5 +1,5 @@
-import java.time.Instant
-import java.time.format.DateTimeFormatter
+import java.time.*
+import java.time.format.*
 
 plugins {
     java
@@ -21,22 +21,22 @@ dependencies {
             strictly("2.12.1")
         }
     }
-    implementation("org.slf4j:slf4j-api:1.7.32")
+    implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("com.chutneytesting:environment:${project.extra["chutneyTestingVersion"]}")
-    implementation("org.assertj:assertj-core:3.21.0")
-    implementation("org.springframework:spring-core:5.3.10")
+    implementation("org.assertj:assertj-core:3.22.0")
+    implementation("org.springframework:spring-core:5.3.17")
 
     runtimeOnly("com.chutneytesting:task-impl:${project.extra["chutneyTestingVersion"]}")
 
     testImplementation("org.skyscreamer:jsonassert:1.5.0")
-    testImplementation("org.springframework:spring-expression:5.1.5.RELEASE")
+    testImplementation("org.springframework:spring-expression:5.3.17")
     testImplementation(kotlin("scripting-jsr223"))
-    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
 
     // JUnit5 engine dependencies
-    implementation("org.junit.platform:junit-platform-engine:1.8.1")
-    implementation("org.junit.platform:junit-platform-launcher:1.8.1")
-    testImplementation("org.junit.platform:junit-platform-testkit:1.8.1")
+    implementation("org.junit.platform:junit-platform-engine:${project.extra["junitPlatformVersion"]}")
+    implementation("org.junit.platform:junit-platform-launcher:${project.extra["junitPlatformVersion"]}")
+    testImplementation("org.junit.platform:junit-platform-testkit:${project.extra["junitPlatformVersion"]}")
 }
 
 java {
