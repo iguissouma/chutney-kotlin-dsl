@@ -14,6 +14,7 @@ import org.junit.platform.engine.UniqueId
 import org.junit.platform.engine.discovery.ClassSelector
 import org.junit.platform.engine.discovery.ClasspathResourceSelector
 import org.junit.platform.engine.discovery.ClasspathRootSelector
+import org.junit.platform.engine.discovery.MethodSelector
 import org.junit.platform.engine.support.descriptor.ClassSource
 import org.junit.platform.engine.support.descriptor.MethodSource
 import org.junit.platform.launcher.LauncherDiscoveryRequest
@@ -54,6 +55,11 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
             buildClassPathResourceClassPredicate(it.classpathResourceName)
         }
 
+        val methodSelectors = discoveryRequest.getSelectorsByType(MethodSelector::class.java)
+        val methodPredicate = selectorToPredicate(methodSelectors) {
+            buildMethodClassPredicate(it.methodName)
+        }
+
         ReflectionSupport
             .findAllClassesInPackage(
                 "",
@@ -71,6 +77,9 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
             }
             .filter {
                 it.returnType == ChutneyScenario::class.java
+            }
+            .filter {
+                methodPredicate.test(it.name)
             }
             .map {
                 mapMethodToClassDescriptor(it, engineDescriptor)
@@ -206,6 +215,12 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
         val path = javaClass.classLoader.getResource(classPathResource)?.path ?: ""
         return Predicate {
             classToPath(it) == path
+        }
+    }
+
+    private fun buildMethodClassPredicate(name: String?): Predicate<String> {
+        return Predicate { methodName: String ->
+            methodName == name
         }
     }
 

@@ -9,9 +9,7 @@ import org.junit.platform.engine.DiscoverySelector
 import org.junit.platform.engine.FilterResult
 import org.junit.platform.engine.TestDescriptor
 import org.junit.platform.engine.UniqueId
-import org.junit.platform.engine.discovery.DiscoverySelectors.selectClass
-import org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathResource
-import org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathRoots
+import org.junit.platform.engine.discovery.DiscoverySelectors.*
 import org.junit.platform.launcher.PostDiscoveryFilter
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder
 import org.junit.platform.testkit.engine.EngineExecutionResults
@@ -34,16 +32,18 @@ private class ChutneyTestEngineTest {
             return arrayOf(
                 selectClass("UnknownClass"),
                 selectClasspathRoots(setOf(Path.of("../.github")))[0],
-                selectClasspathResource("unknownResource")
+                selectClasspathResource("unknownResource"),
+                selectMethod("com.chutneytesting.kotlin.junit.engine.ChutneyTest#unknownMethod()")
             )
         }
 
         @JvmStatic
         fun containerChutneyTestSelectors(): Array<Any> {
             return arrayOf(
-                selectClass("com.chutneytesting.kotlin.junit.engine.ChutneyTest"),
-                selectClasspathRoots(setOf(Path.of(".")))[0],
-                selectClasspathResource("com/chutneytesting/kotlin/junit/engine/ChutneyTest.class")
+                arrayOf(selectClass("com.chutneytesting.kotlin.junit.engine.ChutneyTest"), 22, 24, 22),
+                arrayOf(selectClasspathRoots(setOf(Path.of(".")))[0], 22, 24, 22),
+                arrayOf(selectClasspathResource("com/chutneytesting/kotlin/junit/engine/ChutneyTest.class"), 22, 24, 22),
+                arrayOf(selectMethod("com.chutneytesting.kotlin.junit.engine.ChutneyTest#anotherTestMethod()"), 9, 9, 7)
             )
         }
     }
@@ -80,7 +80,7 @@ private class ChutneyTestEngineTest {
 
     @ParameterizedTest
     @MethodSource("containerChutneyTestSelectors")
-    fun should_execute_scenario_when_select_containerChutneyTest(selector: DiscoverySelector) {
+    fun should_execute_scenario_when_select_containerChutneyTest(selector: DiscoverySelector, startedEvent: Long, finishedEvent: Long, expectedReportingEntryPublished: Long) {
         val result: EngineExecutionResults = EngineTestKit.engine(CHUTNEY_JUNIT_ENGINE_ID)
             .selectors(selector)
             .execute()
@@ -90,17 +90,17 @@ private class ChutneyTestEngineTest {
             //.debug(System.out)
             .assertStatistics { stats: EventStatistics ->
                 stats
-                    .started(19)
-                    .finished(19)
-                    .succeeded(19)
-                    .reportingEntryPublished(17)
+                    .started(startedEvent)
+                    .finished(finishedEvent)
+                    .succeeded(finishedEvent)
+                    .reportingEntryPublished(expectedReportingEntryPublished)
             }
     }
 
     @Test
     fun should_filter_on_method_name() {
-        val filter = MyPostDiscoveryFilter();
-        val filterMock = Mockito.spy(filter);
+        val filter = MyPostDiscoveryFilter()
+        val filterMock = Mockito.spy(filter)
         val discoveryRequest = LauncherDiscoveryRequestBuilder.request()
             .selectors(
                 selectClasspathRoots(Collections.singleton(Path.of("/com/chutneytesting/kotlin/junit/engine"))),
@@ -115,12 +115,12 @@ private class ChutneyTestEngineTest {
         testEngine.discover(discoveryRequest, UniqueId.forEngine(testEngine.id))
 
         // 2 times for 2 tests in ChutneyTest
-        Mockito.verify(filterMock, times(2)).apply(any());
+        Mockito.verify(filterMock, times(3)).apply(any())
     }
 
     open class MyPostDiscoveryFilter : PostDiscoveryFilter {
         override fun apply(`object`: TestDescriptor?): FilterResult {
-            return FilterResult.includedIf(true);
+            return FilterResult.includedIf(true)
         }
     }
 }

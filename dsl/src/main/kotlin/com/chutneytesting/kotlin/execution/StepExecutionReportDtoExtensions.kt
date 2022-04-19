@@ -10,5 +10,5 @@ fun StepExecutionReportDto.findFirstExecutableStep(): StepExecutionReportDto {
 }
 
 fun StepExecutionReportDto.extractExecutionEnvironment(): String {
-    return findFirstExecutableStep().context.scenarioContext["environment"] as String
+    return findFirstExecutableStep().context.scenarioContext["environment"] as String? ?: "no env"
 }

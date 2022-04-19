@@ -1,11 +1,23 @@
 package com.chutneytesting.kotlin.junit.engine
 
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
+import com.chutneytesting.kotlin.dsl.FinalTask
 import com.chutneytesting.kotlin.dsl.Scenario
 import com.chutneytesting.kotlin.dsl.SuccessTask
 import com.chutneytesting.kotlin.junit.api.ChutneyTest
 
 class ChutneyTest {
+
+    @ChutneyTest
+    fun withFinalTask(): ChutneyScenario {
+        return Scenario(title = "A scenario") {
+            When("Action is triggered") {
+                Step("Register final task") {
+                    FinalTask("final task name", "success")
+                }
+            }
+        }
+    }
 
     @ChutneyTest
     fun testMethod(): ChutneyScenario {

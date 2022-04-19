@@ -8,26 +8,20 @@ import com.chutneytesting.engine.domain.execution.event.EndStepExecutionEvent
 import com.chutneytesting.engine.domain.execution.event.StartScenarioExecutionEvent
 import com.chutneytesting.engine.domain.execution.report.Status
 import com.chutneytesting.environment.domain.exception.EnvironmentNotFoundException
+import com.chutneytesting.kotlin.dsl.ChutneyStep
 import com.chutneytesting.kotlin.execution.CannotResolveDefaultEnvironmentException
 import com.chutneytesting.kotlin.execution.ExecutionService
 import com.chutneytesting.kotlin.execution.report.JsonReportWriter
 import com.chutneytesting.kotlin.junit.engine.ChutneyConfigurationParameters.CONFIG_ENGINE_STEP_AS_TEST
 import com.chutneytesting.kotlin.junit.engine.ChutneyConfigurationParameters.CONFIG_ENVIRONMENT
-import com.chutneytesting.kotlin.junit.engine.ChutneyEngineExecutionContext.ListenerEvent.DYNAMIC
-import com.chutneytesting.kotlin.junit.engine.ChutneyEngineExecutionContext.ListenerEvent.FINISHED
-import com.chutneytesting.kotlin.junit.engine.ChutneyEngineExecutionContext.ListenerEvent.REPORT
-import com.chutneytesting.kotlin.junit.engine.ChutneyEngineExecutionContext.ListenerEvent.SKIPPED
-import com.chutneytesting.kotlin.junit.engine.ChutneyEngineExecutionContext.ListenerEvent.STARTED
+import com.chutneytesting.kotlin.junit.engine.ChutneyEngineExecutionContext.ListenerEvent.*
 import com.chutneytesting.kotlin.junit.engine.ChutneyJUnitReportingKeys.REPORT_JSON_STRING
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import org.junit.platform.engine.ConfigurationParameters
-import org.junit.platform.engine.ExecutionRequest
-import org.junit.platform.engine.TestDescriptor
-import org.junit.platform.engine.TestExecutionResult
+import org.junit.platform.engine.*
 import org.junit.platform.engine.TestExecutionResult.successful
-import org.junit.platform.engine.UniqueId
 import org.junit.platform.engine.reporting.ReportEntry
+import org.junit.platform.engine.support.descriptor.ClasspathResourceSource
 import org.junit.platform.engine.support.descriptor.MethodSource
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -286,10 +280,13 @@ class ChutneyScenarioExecutionContext(
 
         if (rootStep != step) {
             val uniqueId = buildStepUniqueId(chutneyScenarioDescriptor.uniqueId, rootStep, step)
-            chutneyScenarioDescriptor.findByUniqueId(uniqueId).ifPresent {
+            chutneyScenarioDescriptor.findByUniqueId(uniqueId).ifPresentOrElse({
                 uniqueIds[step] = it
                 engineExecutionContext.notifyJUnitListener(STARTED, it)
-            }
+            }, {
+                val stepDescriptor = ChutneyStepDescriptor(uniqueId, step.definition().name, ClasspathResourceSource.from("no source"), ChutneyStep("final"))
+                uniqueIds[step] = stepDescriptor
+            })
         }
     }
 
