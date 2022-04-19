@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.15](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.15)
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.14...0.1.15)
+
+**Merged pull requests:**
+
+- feat: filter on method + bugfix: NPE on environment + no unique id on final tasks [\#48](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/48) ([nbrouand](https://github.com/nbrouand))
+
 ## [0.1.14](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.14)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.13...0.1.14)
