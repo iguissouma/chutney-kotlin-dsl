@@ -9,6 +9,8 @@ import com.chutneytesting.engine.domain.execution.event.StartScenarioExecutionEv
 import com.chutneytesting.engine.domain.execution.report.Status
 import com.chutneytesting.environment.domain.exception.EnvironmentNotFoundException
 import com.chutneytesting.kotlin.dsl.ChutneyStep
+import com.chutneytesting.kotlin.dsl.ChutneyStepImpl
+import com.chutneytesting.kotlin.dsl.Strategy
 import com.chutneytesting.kotlin.execution.CannotResolveDefaultEnvironmentException
 import com.chutneytesting.kotlin.execution.ExecutionService
 import com.chutneytesting.kotlin.execution.report.JsonReportWriter
@@ -21,7 +23,6 @@ import io.reactivex.disposables.Disposable
 import org.junit.platform.engine.*
 import org.junit.platform.engine.TestExecutionResult.successful
 import org.junit.platform.engine.reporting.ReportEntry
-import org.junit.platform.engine.support.descriptor.ClasspathResourceSource
 import org.junit.platform.engine.support.descriptor.MethodSource
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -245,6 +246,8 @@ class ChutneyScenarioExecutionContext(
     private var rootStep: Step? = null
     private var executionStatus: Status = Status.NOT_EXECUTED
     private val uniqueIds = mutableMapOf<Step, TestDescriptor>()
+    private val retryParents = mutableSetOf<Step>()
+    private val retry = mutableMapOf<Step, Pair<TestDescriptor, TestExecutionResult?>>()
     private val engineExecutionContext = chutneyClassExecutionContext.engineExecutionContext
 
     companion object {
@@ -255,10 +258,7 @@ class ChutneyScenarioExecutionContext(
         logger.info("Running scenario {} from {}", chutneyScenarioDescriptor.chutneyScenario.title, (chutneyScenarioDescriptor.source.get() as MethodSource).methodName)
 
         try {
-            executionId = engineExecutionContext.executionService.execute(
-                chutneyScenarioDescriptor.chutneyScenario,
-                resolveEnvironmentName(chutneyScenarioDescriptor)
-            )
+            executionId = delegateExecution()
             engineExecutionContext.addScenarioExecution(executionId!!, this)
         } catch (t: Throwable) {
             try {
@@ -268,6 +268,19 @@ class ChutneyScenarioExecutionContext(
             }
         }
     }
+
+    private fun delegateExecution() =
+        if (chutneyScenarioDescriptor.environment != null) {
+            engineExecutionContext.executionService.execute(
+                chutneyScenarioDescriptor.chutneyScenario,
+                chutneyScenarioDescriptor.environment
+            )
+        } else {
+            engineExecutionContext.executionService.execute(
+                chutneyScenarioDescriptor.chutneyScenario,
+                resolveEnvironmentName(chutneyScenarioDescriptor.environmentName)
+            )
+        }
 
     fun startExecution(rootStep: Step) {
         this.rootStep = rootStep
@@ -281,11 +294,27 @@ class ChutneyScenarioExecutionContext(
         if (rootStep != step) {
             val uniqueId = buildStepUniqueId(chutneyScenarioDescriptor.uniqueId, rootStep, step)
             chutneyScenarioDescriptor.findByUniqueId(uniqueId).ifPresentOrElse({
-                uniqueIds[step] = it
-                engineExecutionContext.notifyJUnitListener(STARTED, it)
+                val chutneyStepDescriptor = it as ChutneyStepDescriptor
+                if (chutneyStepDescriptor.hasRetryStrategy()) {
+                    retryParents.remove(step)
+                    retryParents.add(step)
+                }
+                if (hasParentRetryStep(step)) {
+                    retry[step] = Pair(chutneyStepDescriptor, null)
+                }
+                if (!uniqueIds.containsKey(step)) {
+                    uniqueIds[step] = chutneyStepDescriptor
+                    engineExecutionContext.notifyJUnitListener(STARTED, chutneyStepDescriptor)
+                }
             }, {
-                val stepDescriptor = ChutneyStepDescriptor(uniqueId, step.definition().name, ClasspathResourceSource.from("no source"), ChutneyStep("final"))
+                val stepDescriptor = mapStepToChutneyDescriptor(uniqueId, step)
                 uniqueIds[step] = stepDescriptor
+
+                chutneyScenarioDescriptor.addChild(stepDescriptor)
+                stepDescriptor.setParent(chutneyScenarioDescriptor)
+                engineExecutionContext.notifyJUnitListener(DYNAMIC, stepDescriptor)
+                stepDescriptor.children.forEach { engineExecutionContext.notifyJUnitListener(DYNAMIC, it) }
+                engineExecutionContext.notifyJUnitListener(STARTED, stepDescriptor)
             })
         }
     }
@@ -294,9 +323,11 @@ class ChutneyScenarioExecutionContext(
         val rootStep = rootStep!!
 
         if (rootStep != step) {
+            val testDescriptor = uniqueIds[step]!! as ChutneyStepDescriptor
+
             engineExecutionContext.notifyJUnitListener(
                 REPORT,
-                uniqueIds[step]!!,
+                testDescriptor,
                 reportEntry = ReportEntry.from(
                     mapOf(
                         ChutneyJUnitReportingKeys.REPORT_STEP_JSON_STRING.value to JsonReportWriter.reportAsJson(ReportUtil.generateReportDto(step))
@@ -304,14 +335,22 @@ class ChutneyScenarioExecutionContext(
                 )
             )
 
-            engineExecutionContext.notifyJUnitListener(
-                FINISHED,
-                uniqueIds[step]!!,
-                testExecutionResultFromStatus(
-                    throwable = stepFailureException(step),
-                    status = arrayOf(step.status())
-                )
+            val testExecutionResult = testExecutionResultFromStatus(
+                throwable = stepFailureException(step),
+                status = arrayOf(step.status())
             )
+
+            if (hasParentRetryStep(step)) {
+                retry[step] = Pair(testDescriptor, testExecutionResult)
+            } else if (testDescriptor.hasRetryStrategy()) {
+                if (testExecutionResult.status.equals(TestExecutionResult.Status.SUCCESSFUL)) {
+                    endRetryStep(step, testDescriptor, testExecutionResult)
+                } else {
+                    retry[step] = Pair(testDescriptor, testExecutionResult)
+                }
+            } else {
+                engineExecutionContext.notifyJUnitListener(FINISHED, testDescriptor, testExecutionResult)
+            }
         }
     }
 
@@ -319,6 +358,8 @@ class ChutneyScenarioExecutionContext(
         executionStatus = rootStep.status()
 
         try {
+            endPendingFailedRetryStep()
+
             engineExecutionContext.notifyJUnitListener(
                 REPORT,
                 chutneyScenarioDescriptor,
@@ -341,11 +382,11 @@ class ChutneyScenarioExecutionContext(
         }
     }
 
-    private fun resolveEnvironmentName(scenarioDescriptor: ChutneyScenarioDescriptor): String? {
-        if (scenarioDescriptor.environmentName.isBlank()) {
+    private fun resolveEnvironmentName(environmentName: String): String? {
+        if (environmentName.isBlank()) {
             return engineExecutionContext.configurationParameters.get(CONFIG_ENVIRONMENT.parameter).orElse(null)
         }
-        return scenarioDescriptor.environmentName
+        return environmentName
     }
 
     private fun convertExecuteException(t: Throwable, scenarioDescriptor: ChutneyScenarioDescriptor): Throwable {
@@ -394,5 +435,59 @@ class ChutneyScenarioExecutionContext(
                 status = arrayOf(Status.FAILURE)
             )
         )
+    }
+
+    private fun mapStepToChutneyDescriptor(uniqueId: UniqueId, step: Step): TestDescriptor {
+        val chutneyStepDescriptor = ChutneyStepDescriptor(uniqueId, step.definition().name, chutneyScenarioDescriptor.source.get(), mapStepToChutneyStep(step))
+        step.subSteps().forEach {
+            val childId = buildStepUniqueId(uniqueId, step, it)
+            val childDescriptor = mapStepToChutneyDescriptor(childId, it)
+            chutneyStepDescriptor.addChild(childDescriptor)
+        }
+        return chutneyStepDescriptor
+    }
+
+    private fun mapStepToChutneyStep(step: Step): ChutneyStep {
+        return ChutneyStep(
+            step.definition().name,
+            if (step.definition().type.isBlank()) {
+                null
+            } else {
+                ChutneyStepImpl(step.definition().type)
+            },
+            step.definition().strategy.map { Strategy(it.type, it.strategyProperties as Map<String, String>) }.orElse(null)
+        )
+    }
+
+    private fun hasParentRetryStep(step: Step): Boolean {
+        return retryParents.flatMap { flatSubSteps(it) }.distinct().contains(step)
+    }
+
+    private fun flatSubSteps(step: Step, withSelf: Boolean = false): List<Step> {
+        val stepList = step.subSteps().takeIf { it.isNotEmpty() }?.flatMap { flatSubSteps(it, true) } ?: emptyList()
+        return if (withSelf) {
+            stepList.plus(step)
+        } else {
+            stepList
+        }
+    }
+
+    private fun endRetryStep(step: Step, testDescriptor: TestDescriptor, testExecutionResult: TestExecutionResult?) {
+        step.subSteps().forEach {
+            retry.remove(it)?.let { pair ->
+                endRetryStep(it, pair.first, pair.second)
+            }
+        }
+
+        retryParents.remove(step)
+        engineExecutionContext.notifyJUnitListener(FINISHED, testDescriptor, testExecutionResult)
+    }
+
+    private fun endPendingFailedRetryStep() {
+        retryParents.toList().forEach {
+            retry.remove(it)?.let { pair ->
+                endRetryStep(it, pair.first, pair.second)
+            }
+        }
     }
 }

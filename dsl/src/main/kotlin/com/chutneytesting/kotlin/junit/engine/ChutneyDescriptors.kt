@@ -1,7 +1,9 @@
 package com.chutneytesting.kotlin.junit.engine
 
+import com.chutneytesting.kotlin.dsl.ChutneyEnvironment
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
 import com.chutneytesting.kotlin.dsl.ChutneyStep
+import com.chutneytesting.kotlin.dsl.RetryTimeOutStrategy
 import org.junit.platform.engine.TestDescriptor
 import org.junit.platform.engine.TestSource
 import org.junit.platform.engine.UniqueId
@@ -27,6 +29,7 @@ class ChutneyScenarioDescriptor(
     source: TestSource,
     val chutneyScenario: ChutneyScenario,
     val environmentName: String,
+    val environment: ChutneyEnvironment?,
     private val stepAsTest: Boolean
 ) : AbstractTestDescriptor(uniqueId, displayName, source) {
 
@@ -45,5 +48,9 @@ class ChutneyStepDescriptor(
     override fun getType(): TestDescriptor.Type {
         return chutneyStep.implementation?.let { TestDescriptor.Type.TEST }
             ?: TestDescriptor.Type.CONTAINER_AND_TEST
+    }
+
+    fun hasRetryStrategy(): Boolean {
+        return RetryTimeOutStrategy.TYPE == chutneyStep.strategy?.type
     }
 }

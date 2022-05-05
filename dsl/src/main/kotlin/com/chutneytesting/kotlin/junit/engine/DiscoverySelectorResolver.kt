@@ -1,16 +1,13 @@
 package com.chutneytesting.kotlin.junit.engine
 
+import com.chutneytesting.kotlin.dsl.ChutneyEnvironment
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
 import com.chutneytesting.kotlin.dsl.ChutneyStep
 import com.chutneytesting.kotlin.junit.api.ChutneyTest
 import org.junit.platform.commons.support.AnnotationSupport
 import org.junit.platform.commons.support.HierarchyTraversalMode
 import org.junit.platform.commons.support.ReflectionSupport
-import org.junit.platform.engine.DiscoverySelector
-import org.junit.platform.engine.EngineDiscoveryRequest
-import org.junit.platform.engine.Filter
-import org.junit.platform.engine.TestDescriptor
-import org.junit.platform.engine.UniqueId
+import org.junit.platform.engine.*
 import org.junit.platform.engine.discovery.ClassSelector
 import org.junit.platform.engine.discovery.ClasspathResourceSelector
 import org.junit.platform.engine.discovery.ClasspathRootSelector
@@ -111,15 +108,24 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
     private fun mapMethodToClassDescriptor(it: Method, engineDescriptor: TestDescriptor): ChutneyClassDescriptor {
         val environmentName = it.getAnnotation(ChutneyTest::class.java).environment
         val classInstance = it.declaringClass.getConstructor().newInstance()
+        val environment = resolveEnvironment(classInstance, environmentName)
         val chutneyScenario = it.invoke(classInstance) as ChutneyScenario
 
         val chutneyClassDescriptor = resolveChutneyClassDescriptor(engineDescriptor, it)
         chutneyClassDescriptor
             .addChild(
-                buildChutneyScenarioDescriptor(chutneyClassDescriptor, it, chutneyScenario, environmentName)
+                buildChutneyScenarioDescriptor(chutneyClassDescriptor, it, chutneyScenario, environmentName, environment)
             )
 
         return chutneyClassDescriptor
+    }
+
+    private fun resolveEnvironment(it: Any, environmentName: String): ChutneyEnvironment? {
+        return try {
+            it.javaClass.getDeclaredField(environmentName).get(null) as? ChutneyEnvironment
+        } catch (e: Exception) {
+            null
+        }
     }
 
     private fun resolveChutneyClassDescriptor(
@@ -148,16 +154,18 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
         parentTestDescriptor: TestDescriptor,
         method: Method,
         chutneyScenario: ChutneyScenario,
-        environmentName: String
+        environmentName: String,
+        environment: ChutneyEnvironment?
     ): ChutneyScenarioDescriptor {
         val methodSource = MethodSource.from(method)
 
         val chutneyScenarioDescriptor = ChutneyScenarioDescriptor(
             parentTestDescriptor.uniqueId.addScenario(method.name),
-            chutneyScenario.title,
+            "${method.name} - ${chutneyScenario.title}",
             methodSource,
             chutneyScenario,
             environmentName,
+            environment,
             stepAsTest
         )
 
