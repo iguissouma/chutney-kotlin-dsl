@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.1.16](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.16)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.15...0.1.16)
+
+**Implemented enhancements:**
+
+- 🚀 | Environment resolution by junit listener [\#50](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/50)
+- 🚀 | Improve junit engine [\#47](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/47)
+
+**Merged pull requests:**
+
+- Upgrade to Chutney 1.4.8 and remove environment workaround [\#51](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/51) ([nbrouand](https://github.com/nbrouand))
+- Improve junit engine [\#49](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/49) ([boddissattva](https://github.com/boddissattva))
+
+
 ## [0.1.15](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.15)
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.14...0.1.15)
 
