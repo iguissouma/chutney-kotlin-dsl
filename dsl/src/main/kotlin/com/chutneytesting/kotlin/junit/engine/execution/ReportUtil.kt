@@ -1,4 +1,4 @@
-package com.chutneytesting.kotlin.junit.engine
+package com.chutneytesting.kotlin.junit.engine.execution
 
 import com.chutneytesting.engine.api.execution.StatusDto
 import com.chutneytesting.engine.api.execution.StepExecutionReportDto
@@ -29,12 +29,14 @@ object ReportUtil {
             .setType(step.type())
             .setTarget(step.target())
             .setStrategy(step.strategy().map { it.type }.orElse(null))
+            .setEnvironment(step.definition().environment)
             .createStepExecutionReport()
     }
 
     private fun toDto(report: StepExecutionReport): StepExecutionReportDto {
         return StepExecutionReportDto(
             report.name,
+            report.environment,
             report.startDate,
             report.duration,
             statusToDto(report.status),

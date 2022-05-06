@@ -39,7 +39,8 @@ class ExecutionService(
         return executionConfiguration.embeddedTestEngine()
             .executeAsync(
                 ExecutionRequestDto(
-                    ExecutionRequestMapper.mapScenarioToExecutionRequest(scenario, environment)
+                    ExecutionRequestMapper.mapScenarioToExecutionRequest(scenario, environment),
+                    environment.name
                 )
             )
     }

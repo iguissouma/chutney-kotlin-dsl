@@ -1,7 +1,6 @@
 package com.chutneytesting.kotlin.execution.report
 
 import com.chutneytesting.engine.api.execution.StepExecutionReportDto
-import com.chutneytesting.kotlin.execution.extractExecutionEnvironment
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import java.io.File
@@ -39,7 +38,7 @@ object JsonReportWriter {
         reportRootPath: String,
         pretty: Boolean = true
     ) {
-        val reportPath = File(reportRootPath, report.extractExecutionEnvironment())
+        val reportPath = File(reportRootPath, report.environment)
         reportPath.mkdirs()
         File(
             reportPath,

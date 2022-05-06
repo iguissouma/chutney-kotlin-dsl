@@ -27,8 +27,7 @@ object ExecutionRequestMapper {
             mapOf(), //inputs
             mapStepDefinition(steps, environment), // steps
             mapOf(), //outputs
-            mapOf(), // validations
-            environment.name
+            mapOf() // validations
         )
     }
 
@@ -45,8 +44,7 @@ object ExecutionRequestMapper {
                 step.implementation?.inputs,
                 mapStepDefinition(step.subSteps, environment), // steps
                 step.implementation?.outputs,  //outputs
-                step.implementation?.validations,  // validations
-                environment.name
+                step.implementation?.validations  // validations
             )
         }
     }

@@ -7,7 +7,6 @@ import com.chutneytesting.engine.api.execution.StatusDto.STOPPED
 import com.chutneytesting.engine.api.execution.StatusDto.SUCCESS
 import com.chutneytesting.engine.api.execution.StatusDto.WARN
 import com.chutneytesting.engine.api.execution.StepExecutionReportDto
-import com.chutneytesting.kotlin.execution.extractExecutionEnvironment
 import com.chutneytesting.kotlin.execution.report.AnsiColor.BLUE
 import com.chutneytesting.kotlin.execution.report.AnsiColor.GREEN
 import com.chutneytesting.kotlin.execution.report.AnsiColor.MAGENTA
@@ -66,7 +65,7 @@ class AnsiReportWriter(private val withColor: Boolean = true) {
 
     private fun reportHeader(report: StepExecutionReportDto): String {
         return color(
-            "[" + report.status + "] " + "scenario: \"" + report.name + "\"" + " on environment " + report.extractExecutionEnvironment() + "\n",
+            "[" + report.status + "] " + "scenario: \"" + report.name + "\"" + " on environment " + report.environment + "\n",
             report.status
         )
     }

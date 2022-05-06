@@ -1,17 +1,13 @@
-package com.chutneytesting.kotlin.junit.engine
+package com.chutneytesting.kotlin.junit.engine.execution
 
-import com.chutneytesting.kotlin.execution.report.CHUTNEY_REPORT_ROOT_PATH
 import com.chutneytesting.kotlin.execution.report.AnsiReportWriter
+import com.chutneytesting.kotlin.execution.report.CHUTNEY_REPORT_ROOT_PATH
 import com.chutneytesting.kotlin.execution.report.JsonReportWriter
 import com.chutneytesting.kotlin.execution.report.SiteGenerator
-import com.chutneytesting.kotlin.junit.engine.ChutneyConfigurationParameters.CONFIG_CONSOLE_LOG_COLOR
-import com.chutneytesting.kotlin.junit.engine.ChutneyConfigurationParameters.CONFIG_REPORT_FILE
-import com.chutneytesting.kotlin.junit.engine.ChutneyConfigurationParameters.CONFIG_REPORT_ROOT_PATH
-import com.chutneytesting.kotlin.junit.engine.ChutneyConfigurationParameters.CONFIG_REPORT_SITE
-import com.chutneytesting.kotlin.junit.engine.ChutneyConfigurationParameters.CONFIG_SCENARIO_LOG
-import com.chutneytesting.kotlin.junit.engine.ChutneyConfigurationParameters.CONFIG_STEP_LOG
-import com.chutneytesting.kotlin.junit.engine.ChutneyJUnitReportingKeys.REPORT_JSON_STRING
-import com.chutneytesting.kotlin.junit.engine.ChutneyJUnitReportingKeys.REPORT_STEP_JSON_STRING
+import com.chutneytesting.kotlin.junit.engine.SystemEnvConfigurationParameters
+import com.chutneytesting.kotlin.junit.engine.execution.ChutneyConfigurationParameters.*
+import com.chutneytesting.kotlin.junit.engine.execution.ChutneyJUnitReportingKeys.REPORT_JSON_STRING
+import com.chutneytesting.kotlin.junit.engine.execution.ChutneyJUnitReportingKeys.REPORT_STEP_JSON_STRING
 import org.junit.platform.engine.ConfigurationParameters
 import org.junit.platform.engine.reporting.ReportEntry
 import org.junit.platform.launcher.TestExecutionListener
