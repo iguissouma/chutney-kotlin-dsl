@@ -40,10 +40,10 @@ private class ChutneyTestEngineTest {
         @JvmStatic
         fun containerChutneyTestSelectors(): Array<Any> {
             return arrayOf(
-                arrayOf(selectClass("com.chutneytesting.kotlin.junit.engine.ChutneyTest"), 42, 42, 71),
-                arrayOf(selectClasspathRoots(setOf(Path.of(".")))[0], 42, 42, 71),
-                arrayOf(selectClasspathResource("com/chutneytesting/kotlin/junit/engine/ChutneyTest.class"), 42, 42, 71),
-                arrayOf(selectMethod("com.chutneytesting.kotlin.junit.engine.ChutneyTest#anotherTestMethod()"), 9, 9, 7)
+                arrayOf(selectClass("com.chutneytesting.kotlin.junit.engine.ChutneyTest"), 39, 39, 68),
+                arrayOf(selectClasspathRoots(setOf(Path.of(".")))[0], 39, 39, 68),
+                arrayOf(selectClasspathResource("com/chutneytesting/kotlin/junit/engine/ChutneyTest.class"), 39, 39, 68),
+                arrayOf(selectMethod("com.chutneytesting.kotlin.junit.engine.ChutneyTest#withSubSteps()"), 12, 12, 10)
             )
         }
     }
@@ -114,8 +114,8 @@ private class ChutneyTestEngineTest {
 
         testEngine.discover(discoveryRequest, UniqueId.forEngine(testEngine.id))
 
-        // 2 times for 2 tests in ChutneyTest
-        Mockito.verify(filterMock, times(6)).apply(any())
+        // 7 times for 7 scenarios in 6 test methods in ChutneyTest
+        Mockito.verify(filterMock, times(7)).apply(any())
     }
 
     open class MyPostDiscoveryFilter : PostDiscoveryFilter {

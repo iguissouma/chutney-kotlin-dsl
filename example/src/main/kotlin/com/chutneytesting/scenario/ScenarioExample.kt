@@ -1,12 +1,6 @@
 package com.chutneytesting.scenario
 
-import com.chutneytesting.kotlin.dsl.AssertTask
-import com.chutneytesting.kotlin.dsl.ContextPutTask
-import com.chutneytesting.kotlin.dsl.HttpGetTask
-import com.chutneytesting.kotlin.dsl.Scenario
-import com.chutneytesting.kotlin.dsl.StringAssertTask
-import com.chutneytesting.kotlin.dsl.SuccessTask
-import com.chutneytesting.kotlin.dsl.spEL
+import com.chutneytesting.kotlin.dsl.*
 
 val call_google = Scenario(title = "Call google") {
     Given("Create variable") {
@@ -57,6 +51,12 @@ val should_fail = Scenario(title = "Call unknown and fail") {
         AssertTask(listOf("status == 200".spEL))
     }
     And("Should not be executed") {
+        SuccessTask()
+    }
+}
+
+fun alwaysSuccessWithParam(param: String) = Scenario(title = "Always success with $param") {
+    When("Just ok") {
         SuccessTask()
     }
 }

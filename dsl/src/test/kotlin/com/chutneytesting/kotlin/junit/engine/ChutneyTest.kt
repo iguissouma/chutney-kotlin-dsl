@@ -96,7 +96,7 @@ class ChutneyTest {
     }
 
     @ChutneyTest
-    fun testMethod(): ChutneyScenario {
+    fun withSubSteps(): ChutneyScenario {
         return Scenario(title = "A scenario") {
             Given("A initial state") {
                 Step("A sub step for setting the state") {
@@ -126,23 +126,18 @@ class ChutneyTest {
     }
 
     @ChutneyTest
-    fun anotherTestMethod(): ChutneyScenario {
-        return Scenario(title = "Another scenario") {
-            Given("A initial state") {
-                Step("A sub step for setting the state") {
+    fun withScenarioList(): List<ChutneyScenario> {
+        return listOf(
+            Scenario(title = "First scenario") {
+                When("Action is triggered") {
+                    SuccessTask()
+                }
+            },
+            Scenario(title = "Second scenario") {
+                When("Action is triggered") {
                     SuccessTask()
                 }
             }
-            When("Action is triggered") {
-                Step("A sub step for action") {
-                    SuccessTask()
-                }
-            }
-            Then("A new state is there") {
-                Step("A sub step for validating the new state") {
-                    SuccessTask()
-                }
-            }
-        }
+        )
     }
 }

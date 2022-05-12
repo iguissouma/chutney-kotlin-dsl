@@ -23,8 +23,8 @@ fun UniqueId.addClass(className: String): UniqueId {
     return this.append("class", className)
 }
 
-fun UniqueId.addScenario(scenarioName: String): UniqueId {
-    return this.append("scenario", scenarioName)
+fun UniqueId.addScenario(methodName: String, index: Int): UniqueId {
+    return this.append("scenario", "$methodName - $index")
 }
 
 fun UniqueId.addStep(stepIndex: Int): UniqueId {
@@ -73,7 +73,7 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
                 )
             }
             .filter {
-                it.returnType == ChutneyScenario::class.java
+                it.returnType == ChutneyScenario::class.java || it.returnType == List::class.java
             }
             .filter {
                 methodPredicate.test(it.name)
@@ -105,17 +105,30 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
         return true
     }
 
-    private fun mapMethodToClassDescriptor(it: Method, engineDescriptor: TestDescriptor): ChutneyClassDescriptor {
-        val environmentName = it.getAnnotation(ChutneyTest::class.java).environment
-        val classInstance = it.declaringClass.getConstructor().newInstance()
+    private fun mapMethodToClassDescriptor(method: Method, engineDescriptor: TestDescriptor): ChutneyClassDescriptor {
+        val environmentName = method.getAnnotation(ChutneyTest::class.java).environment
+        val classInstance = method.declaringClass.getConstructor().newInstance()
         val environment = resolveEnvironment(classInstance, environmentName)
-        val chutneyScenario = it.invoke(classInstance) as ChutneyScenario
+        val chutneyClassDescriptor = resolveChutneyClassDescriptor(engineDescriptor, method)
 
-        val chutneyClassDescriptor = resolveChutneyClassDescriptor(engineDescriptor, it)
-        chutneyClassDescriptor
-            .addChild(
-                buildChutneyScenarioDescriptor(chutneyClassDescriptor, it, chutneyScenario, environmentName, environment)
-            )
+        when (val methodResult = method.invoke(classInstance)) {
+            is ChutneyScenario -> {
+                chutneyClassDescriptor
+                    .addChild(
+                        buildChutneyScenarioDescriptor(chutneyClassDescriptor, method, methodResult, environmentName, environment)
+                    )
+            }
+            is List<*> -> {
+                methodResult
+                    .filterIsInstance<ChutneyScenario>()
+                    .forEachIndexed { index, it ->
+                        chutneyClassDescriptor
+                            .addChild(
+                                buildChutneyScenarioDescriptor(chutneyClassDescriptor, method, it, environmentName, environment, index)
+                            )
+                    }
+            }
+        }
 
         return chutneyClassDescriptor
     }
@@ -155,12 +168,13 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
         method: Method,
         chutneyScenario: ChutneyScenario,
         environmentName: String,
-        environment: ChutneyEnvironment?
+        environment: ChutneyEnvironment?,
+        scenarioIndex: Int = 1
     ): ChutneyScenarioDescriptor {
         val methodSource = MethodSource.from(method)
 
         val chutneyScenarioDescriptor = ChutneyScenarioDescriptor(
-            parentTestDescriptor.uniqueId.addScenario(method.name),
+            parentTestDescriptor.uniqueId.addScenario(method.name, scenarioIndex),
             "${method.name} - ${chutneyScenario.title}",
             methodSource,
             chutneyScenario,
