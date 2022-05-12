@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.17](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.17)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.16...0.1.17)
+
+**Merged pull requests:**
+
+- JUnit Engine - Allow test methods with chutney scenarios list return type [\#52](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/52) ([boddissattva](https://github.com/boddissattva))
+
+
 ## [0.1.16](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.16)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.15...0.1.16)
