@@ -16,7 +16,7 @@
 
         <kotlin.version>1.4.10</kotlin.version>
         <chutney-kotlin-dsl.verion>0.2.0-SNAPSHOT</chutney-kotlin-dsl.verion>
-        <junit.version>5.8.1</junit.version>
+        <junit.version>5.8.2</junit.version>
     </properties>
 
     <dependencies>
@@ -152,7 +152,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.0.0-M5</version>
+                    <version>3.0.0-M6</version>
                 </plugin>
             </plugins>
         </pluginManagement>
