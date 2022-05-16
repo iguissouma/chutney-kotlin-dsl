@@ -7,11 +7,7 @@ import com.chutneytesting.environment.api.EmbeddedEnvironmentApi
 import com.chutneytesting.environment.api.dto.EnvironmentDto
 import com.chutneytesting.environment.domain.EnvironmentService
 import com.chutneytesting.environment.infra.JsonFilesEnvironmentRepository
-import com.chutneytesting.kotlin.dsl.ChutneyConfiguration
-import com.chutneytesting.kotlin.dsl.ChutneyEnvironment
-import com.chutneytesting.kotlin.dsl.ChutneyScenario
-import com.chutneytesting.kotlin.dsl.ChutneySecurityProperties
-import com.chutneytesting.kotlin.dsl.ChutneyTarget
+import com.chutneytesting.kotlin.dsl.*
 
 const val CHUTNEY_ROOT_PATH = ".chutney"
 
@@ -98,6 +94,7 @@ class ExecutionService(
                             },
                             keyStore = targetDto.keyStore,
                             keyStorePassword = targetDto.keyStorePassword,
+                            keyPassword = targetDto.keyPassword,
                             privateKey = targetDto.privateKey
                         )
                     )

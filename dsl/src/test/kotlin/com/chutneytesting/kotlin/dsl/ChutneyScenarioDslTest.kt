@@ -1,5 +1,6 @@
 package com.chutneytesting.kotlin.dsl
 
+import com.chutneytesting.kotlin.asResourceContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -26,7 +27,7 @@ class ChutneyScenarioDslTest {
         }
 
         JSONAssert.assertEquals(
-            "/get-people.chutney.json".asResource(),
+            "dsl/get-people.chutney.json".asResourceContent(),
             "$`swapi GET people record`",
             true
         )
@@ -53,7 +54,7 @@ class ChutneyScenarioDslTest {
         }
 
         JSONAssert.assertEquals(
-            "/get-people-with-substeps.chutney.json".asResource(),
+            "dsl/get-people-with-substeps.chutney.json".asResourceContent(),
             "$`swapi GET people record`",
             true
         )
@@ -80,7 +81,7 @@ class ChutneyScenarioDslTest {
         }
 
         JSONAssert.assertEquals(
-            "/get-people.chutney.json".asResource(),
+            "dsl/get-people.chutney.json".asResourceContent(),
             "$`swapi GET people record`",
             true
         )
@@ -105,7 +106,7 @@ class ChutneyScenarioDslTest {
         }
 
         JSONAssert.assertEquals(
-            "/get-people-multiple-assertions.chutney.json".asResource(),
+            "dsl/get-people-multiple-assertions.chutney.json".asResourceContent(),
             "$`swapi GET people record`",
             true
         )
@@ -134,7 +135,7 @@ class ChutneyScenarioDslTest {
         }
 
         JSONAssert.assertEquals(
-            "/get-people.chutney.json".asResource(),
+            "dsl/get-people.chutney.json".asResourceContent(),
             "$`swapi GET people record`",
             true
         )
@@ -159,7 +160,7 @@ class ChutneyScenarioDslTest {
         }
 
         JSONAssert.assertEquals(
-            "/get-people-multiple-assertions-soft-strategy.chutney.json".asResource(),
+            "dsl/get-people-multiple-assertions-soft-strategy.chutney.json".asResourceContent(),
             "$`swapi GET people record`",
             true
         )
@@ -202,7 +203,7 @@ class ChutneyScenarioDslTest {
         }
 
         JSONAssert.assertEquals(
-            "/kafka-tasks.chutney.json".asResource(),
+            "dsl/kafka-tasks.chutney.json".asResourceContent(),
             "$chutneyScenario",
             true
         )

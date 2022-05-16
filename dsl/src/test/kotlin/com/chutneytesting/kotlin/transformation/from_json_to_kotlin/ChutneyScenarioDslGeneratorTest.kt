@@ -1,7 +1,7 @@
 package com.chutneytesting.kotlin.transformation.from_json_to_kotlin
 
+import com.chutneytesting.kotlin.asResourceContent
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
-import com.chutneytesting.kotlin.dsl.asResource
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -13,7 +13,7 @@ class ChutneyScenarioDslGeneratorTest {
     @Test
     fun `abe to create kotlin chutney scenario from json`() {
 
-        val generateDsl = ChutneyScenarioDslGenerator().generateDsl("/get-people.chutney.json".asResource())
+        val generateDsl = ChutneyScenarioDslGenerator().generateDsl("dsl/get-people.chutney.json".asResourceContent())
 
         assertEquals(
             generateDsl,
@@ -36,11 +36,11 @@ class ChutneyScenarioDslGeneratorTest {
 
     @Test
     fun `abe to compile kotlin dsl chutney scenario to json`() {
-        val scriptContent = "/get-people.chutney.kts".asResource()
+        val scriptContent = "dsl/get-people.chutney.kts".asResourceContent()
         val fromScript: ChutneyScenario = load(scriptContent)
 
         JSONAssert.assertEquals(
-            "/get-people.chutney.json".asResource(),
+            "dsl/get-people.chutney.json".asResourceContent(),
             "$fromScript",
             false
         )
