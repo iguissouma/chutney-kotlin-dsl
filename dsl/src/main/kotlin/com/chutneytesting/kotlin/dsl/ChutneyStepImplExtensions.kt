@@ -1195,7 +1195,7 @@ fun ChutneyStepBuilder.JsonCompareTask(
     document1: String,
     document2: String,
     comparingPaths: Map<String, String>? = null,
-    mode: JsonCompareMode? = null
+    mode: JsonCompareMode = JsonCompareMode.STRICT
 ) {
     implementation = ChutneyStepImpl(
         type = "json-compare",
@@ -1203,7 +1203,7 @@ fun ChutneyStepBuilder.JsonCompareTask(
             "document1" to document1,
             "document2" to document2,
             "comparingPaths" to comparingPaths,
-            "mode" to mode
+            "mode" to mode.name
         ).notEmptyToMap()
     )
 }
