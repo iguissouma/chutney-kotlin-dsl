@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.1.18](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.18)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.17...0.1.18)
+
+**Fixed bugs:**
+
+- 🐛 | Task \[json-compare\] failed: mode type is class com.chutneytesting.kotlin.dsl.JsonCompareMode, should be class java.lang.String [\#57](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/57)
+
+**Merged pull requests:**
+
+- fix\(json-compare\): use enum name on json compare [\#58](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/58) ([KarimGl](https://github.com/KarimGl))
+- chore\(\) : Target without security [\#56](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/56) ([boddissattva](https://github.com/boddissattva))
+- fix key passord mapping from environment [\#54](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/54) ([boddissattva](https://github.com/boddissattva))
+- Example - bump junit and failsafe versions [\#53](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/53) ([boddissattva](https://github.com/boddissattva))
+
 ## [0.1.17](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.17)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.16...0.1.17)
