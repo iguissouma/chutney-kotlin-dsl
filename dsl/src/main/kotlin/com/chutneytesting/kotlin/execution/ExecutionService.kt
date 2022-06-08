@@ -3,11 +3,11 @@ package com.chutneytesting.kotlin.execution
 import com.chutneytesting.ExecutionConfiguration
 import com.chutneytesting.engine.api.execution.ExecutionRequestDto
 import com.chutneytesting.engine.api.execution.StepExecutionReportDto
-import com.chutneytesting.environment.api.EmbeddedEnvironmentApi
+import com.chutneytesting.environment.EnvironmentConfiguration
 import com.chutneytesting.environment.api.dto.EnvironmentDto
-import com.chutneytesting.environment.domain.EnvironmentService
-import com.chutneytesting.environment.infra.JsonFilesEnvironmentRepository
-import com.chutneytesting.kotlin.dsl.*
+import com.chutneytesting.kotlin.dsl.ChutneyEnvironment
+import com.chutneytesting.kotlin.dsl.ChutneyScenario
+import com.chutneytesting.kotlin.dsl.ChutneyTarget
 
 const val CHUTNEY_ROOT_PATH = ".chutney"
 
@@ -18,11 +18,7 @@ class ExecutionService(
 ) {
 
     private val executionConfiguration = ExecutionConfiguration()
-    private val embeddedEnvironmentApi = EmbeddedEnvironmentApi(
-        EnvironmentService(
-            JsonFilesEnvironmentRepository(environmentJsonRootPath)
-        )
-    )
+    private val embeddedEnvironmentApi = EnvironmentConfiguration(environmentJsonRootPath).embeddedEnvironmentApi
 
     companion object {
         val EMPTY = ChutneyEnvironment("EMPTY")
@@ -83,21 +79,7 @@ class ExecutionService(
                 ChutneyTarget(
                     name = targetDto.name,
                     url = targetDto.url,
-                    configuration = ChutneyConfiguration(
-                        properties = targetDto.propertiesToMap(),
-                        security = ChutneySecurityProperties(
-                            credential = targetDto.username?.let {
-                                ChutneySecurityProperties.Credential(
-                                    it,
-                                    targetDto.password
-                                )
-                            },
-                            keyStore = targetDto.keyStore,
-                            keyStorePassword = targetDto.keyStorePassword,
-                            keyPassword = targetDto.keyPassword,
-                            privateKey = targetDto.privateKey
-                        )
-                    )
+                    properties = targetDto.propertiesToMap()
                 )
             }
         )

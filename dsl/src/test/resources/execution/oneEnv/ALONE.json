@@ -6,13 +6,9 @@
             "name": "target",
             "url": "url",
             "properties": {
-                "key": "value"
-            },
-            "security": {
-                "credential": {
-                    "username": "username",
-                    "password": "password"
-                },
+                "key": "value",
+                "username": "username",
+                "password": "password",
                 "trustStore": "path",
                 "trustStorePassword": "password",
                 "keyStore": "path",

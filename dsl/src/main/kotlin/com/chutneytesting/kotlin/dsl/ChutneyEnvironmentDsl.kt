@@ -21,26 +21,5 @@ data class ChutneyEnvironment(
 data class ChutneyTarget(
     val name: String,
     val url: String,
-    val configuration: ChutneyConfiguration = ChutneyConfiguration()
+    val properties: Map<String, String> = emptyMap()
 )
-
-data class ChutneyConfiguration(
-    val properties: Map<String, String> = emptyMap(),
-    val security: ChutneySecurityProperties = ChutneySecurityProperties()
-)
-
-data class ChutneySecurityProperties(
-    val credential: Credential? = null,
-    val trustStore: String? = null,
-    val trustStorePassword: String? = null,
-    val keyStore: String? = null,
-    val keyStorePassword: String? = null,
-    val keyPassword: String? = null,
-    val privateKey: String? = null
-) {
-
-    data class Credential(
-        val username: String? = null,
-        val password: String? = null
-    )
-}

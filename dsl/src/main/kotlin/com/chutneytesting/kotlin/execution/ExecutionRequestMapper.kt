@@ -1,15 +1,8 @@
 package com.chutneytesting.kotlin.execution
 
-import com.chutneytesting.engine.api.execution.CredentialExecutionDto
 import com.chutneytesting.engine.api.execution.ExecutionRequestDto
-import com.chutneytesting.engine.api.execution.SecurityInfoExecutionDto
 import com.chutneytesting.engine.api.execution.TargetExecutionDto
-import com.chutneytesting.kotlin.dsl.ChutneyEnvironment
-import com.chutneytesting.kotlin.dsl.ChutneyScenario
-import com.chutneytesting.kotlin.dsl.ChutneySecurityProperties
-import com.chutneytesting.kotlin.dsl.ChutneyStep
-import com.chutneytesting.kotlin.dsl.ChutneyTarget
-import com.chutneytesting.kotlin.dsl.Strategy
+import com.chutneytesting.kotlin.dsl.*
 
 object ExecutionRequestMapper {
 
@@ -66,26 +59,8 @@ object ExecutionRequestMapper {
         return TargetExecutionDto(
             target.name,
             target.url,
-            target.configuration.properties,
-            toSecurityDto(target.configuration.security),
+            target.properties,
             listOf()
-        )
-    }
-
-    private fun toSecurityDto(securityProperties: ChutneySecurityProperties): SecurityInfoExecutionDto {
-        return SecurityInfoExecutionDto(
-            securityProperties.credential?.username.let {
-                CredentialExecutionDto(
-                    it,
-                    securityProperties.credential?.password
-                )
-            },
-            securityProperties.trustStore?.ifEmpty { null },
-            securityProperties.trustStorePassword?.ifEmpty { null },
-            securityProperties.keyStore?.ifEmpty { null },
-            securityProperties.keyStorePassword?.ifEmpty { null },
-            securityProperties.keyPassword?.ifEmpty { null },
-            securityProperties.privateKey?.ifEmpty { null }
         )
     }
 }

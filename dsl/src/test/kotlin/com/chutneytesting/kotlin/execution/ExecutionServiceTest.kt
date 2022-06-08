@@ -3,7 +3,6 @@ package com.chutneytesting.kotlin.execution
 import com.chutneytesting.environment.domain.exception.EnvironmentNotFoundException
 import com.chutneytesting.kotlin.asResource
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.entry
 import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -71,16 +70,16 @@ class ExecutionServiceTest {
         val targetPropertiesAssert = SoftAssertions()
         targetPropertiesAssert.assertThat(target.name).isEqualTo("target")
         targetPropertiesAssert.assertThat(target.url).isEqualTo("url")
-        targetPropertiesAssert.assertThat(target.configuration.properties).containsExactly(entry("key", "value"))
-        targetPropertiesAssert.assertThat(target.configuration.security.credential?.username).isEqualTo("username")
-        targetPropertiesAssert.assertThat(target.configuration.security.credential?.password).isEqualTo("password")
-// Not present in dto !!
-//        targetPropertiesAssert.assertThat(target.configuration.security.trustStore).isEqualTo("path")
-//        targetPropertiesAssert.assertThat(target.configuration.security.trustStorePassword).isEqualTo("password")
-        targetPropertiesAssert.assertThat(target.configuration.security.keyStore).isEqualTo("path")
-        targetPropertiesAssert.assertThat(target.configuration.security.keyStorePassword).isEqualTo("password")
-        targetPropertiesAssert.assertThat(target.configuration.security.keyPassword).isEqualTo("password")
-        targetPropertiesAssert.assertThat(target.configuration.security.privateKey).isEqualTo("path")
+        targetPropertiesAssert.assertThat(target.properties)
+            .containsEntry("key", "value")
+            .containsEntry("username", "username")
+            .containsEntry("password", "password")
+            .containsEntry("trustStore", "path")
+            .containsEntry("trustStorePassword", "password")
+            .containsEntry("keyStore", "path")
+            .containsEntry("keyStorePassword", "password")
+            .containsEntry("keyPassword", "password")
+            .containsEntry("privateKey", "path")
         targetPropertiesAssert.assertAll()
     }
 }
