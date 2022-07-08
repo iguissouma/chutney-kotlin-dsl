@@ -5,7 +5,7 @@ import com.chutneytesting.scenario.call_google
 import org.junit.jupiter.params.provider.Arguments
 import java.util.stream.Stream
 
-open class ParametrizedMethods {
+open class ParameterizedMethods {
 
     companion object {
         @JvmStatic

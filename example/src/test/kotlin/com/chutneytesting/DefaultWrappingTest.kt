@@ -11,14 +11,14 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class DefaultWrappingTest : ParametrizedMethods() {
+class DefaultWrappingTest : ParameterizedMethods() {
 
     private val launcher = Launcher()
 
     companion object {
-        fun campaign_scenarios() = ParametrizedMethods.campaign_scenarios()
-        fun environments() = ParametrizedMethods.environments()
-        fun environments_names() = ParametrizedMethods.environments_names()
+        fun campaign_scenarios() = ParameterizedMethods.campaign_scenarios()
+        fun environments() = ParameterizedMethods.environments()
+        fun environments_names() = ParameterizedMethods.environments_names()
     }
 
     @ParameterizedTest
