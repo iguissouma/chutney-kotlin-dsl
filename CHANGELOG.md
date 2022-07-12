@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.19](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.19)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.18...0.1.19)
+
+**Merged pull requests:**
+
+- chore: Typo [\#61](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/61) ([bessonm](https://github.com/bessonm))
+- chore: documentation of task output [\#60](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/60) ([nbrouand](https://github.com/nbrouand))
+
+
 ## [0.1.18](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.18)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.17...0.1.18)
@@ -14,6 +24,7 @@
 - chore\(\) : Target without security [\#56](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/56) ([boddissattva](https://github.com/boddissattva))
 - fix key passord mapping from environment [\#54](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/54) ([boddissattva](https://github.com/boddissattva))
 - Example - bump junit and failsafe versions [\#53](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/53) ([boddissattva](https://github.com/boddissattva))
+
 
 ## [0.1.17](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.17)
 
