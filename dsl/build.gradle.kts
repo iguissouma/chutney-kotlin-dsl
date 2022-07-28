@@ -23,7 +23,7 @@ dependencies {
     }
     implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("com.chutneytesting:environment:${project.extra["chutneyTestingVersion"]}")
-    implementation("org.assertj:assertj-core:3.22.0")
+    implementation("org.assertj:assertj-core:3.23.1")
     implementation("org.springframework:spring-core:5.3.17")
 
     runtimeOnly("com.chutneytesting:task-impl:${project.extra["chutneyTestingVersion"]}")

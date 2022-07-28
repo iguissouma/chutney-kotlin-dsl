@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.ajoberstar.reckon") version "0.13.0"
 
-    kotlin("jvm") version "1.4.32" apply false
+    kotlin("jvm") version "1.6.21" apply false
 }
 
 reckon {
