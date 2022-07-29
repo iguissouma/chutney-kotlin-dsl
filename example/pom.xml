@@ -11,10 +11,16 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
-        <kotlin.version>1.4.32</kotlin.version>
+        <kotlin.compiler.languageVersion>1.6</kotlin.compiler.languageVersion>
+        <kotlin.compiler.apiVersion>1.6</kotlin.compiler.apiVersion>
+        <kotlin.compiler.jvmTarget>11</kotlin.compiler.jvmTarget>
+
+        <kotlin.version>1.6.21</kotlin.version>
+
         <chutney-kotlin-dsl.version>0.2.0-SNAPSHOT</chutney-kotlin-dsl.version>
         <junit.version>5.8.2</junit.version>
     </properties>
@@ -127,9 +133,6 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <version>${kotlin.version}</version>
-                <configuration>
-                    <jvmTarget>${maven.compiler.target}</jvmTarget>
-                </configuration>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -152,7 +155,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.0.0-M6</version>
+                    <version>3.0.0-M7</version>
                 </plugin>
             </plugins>
         </pluginManagement>
