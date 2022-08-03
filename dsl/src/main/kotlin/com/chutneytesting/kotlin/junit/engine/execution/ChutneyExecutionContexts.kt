@@ -9,10 +9,14 @@ import com.chutneytesting.kotlin.execution.ExecutionService
 import com.chutneytesting.kotlin.junit.engine.ChutneyClassDescriptor
 import com.chutneytesting.kotlin.junit.engine.SystemEnvConfigurationParameters
 import com.chutneytesting.kotlin.junit.engine.execution.ChutneyConfigurationParameters.CONFIG_ENGINE_STEP_AS_TEST
+import com.chutneytesting.kotlin.junit.engine.execution.ChutneyConfigurationParameters.CONFIG_ENVIRONMENT_ROOT_PATH
 import com.chutneytesting.kotlin.junit.engine.execution.ChutneyEngineExecutionContext.ListenerEvent.*
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import org.junit.platform.engine.*
+import org.junit.platform.engine.ConfigurationParameters
+import org.junit.platform.engine.ExecutionRequest
+import org.junit.platform.engine.TestDescriptor
+import org.junit.platform.engine.TestExecutionResult
 import org.junit.platform.engine.TestExecutionResult.successful
 import org.junit.platform.engine.reporting.ReportEntry
 import org.slf4j.Logger
@@ -22,14 +26,16 @@ import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 
 class ChutneyEngineExecutionContext(val request: ExecutionRequest) {
-    val executionService = ExecutionService()
     val configurationParameters: ConfigurationParameters = SystemEnvConfigurationParameters(request.configurationParameters)
+    val executionService: ExecutionService
 
     private val scenarioExecutions = HashMap<Long, ChutneyScenarioExecutionContext>()
     private val syncExecutionSemaphore: Semaphore = Semaphore(1)
 
     private val endExecutionLatch: CountDownLatch = CountDownLatch(request.rootTestDescriptor.children.size)
-    private val stepAsTest: Boolean = configurationParameters.getBoolean(CONFIG_ENGINE_STEP_AS_TEST.parameter).orElse(true)
+
+    private val stepAsTest: Boolean = configurationParameters.getBoolean(CONFIG_ENGINE_STEP_AS_TEST.parameter).orElse(CONFIG_ENGINE_STEP_AS_TEST.defaultBoolean())
+    private val environmentRootPath: String? = configurationParameters.get(CONFIG_ENVIRONMENT_ROOT_PATH.parameter).orElse(CONFIG_ENVIRONMENT_ROOT_PATH.defaultString())
 
     private val startScenarioDisposable: Disposable
     private val beginStepDisposable: Disposable
@@ -41,6 +47,8 @@ class ChutneyEngineExecutionContext(val request: ExecutionRequest) {
     }
 
     init {
+        executionService = if (environmentRootPath == null) ExecutionService() else ExecutionService(environmentRootPath)
+
         val chutneyBus = RxBus.getInstance()
         startScenarioDisposable =
             chutneyBus.register(StartScenarioExecutionEvent::class.java, this::startScenarioExecution)

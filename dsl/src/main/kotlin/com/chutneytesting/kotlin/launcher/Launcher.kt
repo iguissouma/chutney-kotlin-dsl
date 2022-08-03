@@ -4,17 +4,17 @@ import com.chutneytesting.engine.api.execution.StatusDto
 import com.chutneytesting.engine.api.execution.StatusDto.SUCCESS
 import com.chutneytesting.kotlin.dsl.ChutneyEnvironment
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
-import com.chutneytesting.kotlin.execution.CHUTNEY_ROOT_PATH
+import com.chutneytesting.kotlin.execution.CHUTNEY_ENV_ROOT_PATH
 import com.chutneytesting.kotlin.execution.ExecutionService
-import com.chutneytesting.kotlin.execution.report.CHUTNEY_REPORT_ROOT_PATH
 import com.chutneytesting.kotlin.execution.report.AnsiReportWriter
+import com.chutneytesting.kotlin.execution.report.CHUTNEY_REPORT_ROOT_PATH
 import com.chutneytesting.kotlin.execution.report.JsonReportWriter
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.SoftAssertions
 
 class Launcher(
     private val reportRootPath: String = CHUTNEY_REPORT_ROOT_PATH,
-    environmentJsonRootPath: String = CHUTNEY_ROOT_PATH
+    environmentJsonRootPath: String = CHUTNEY_ENV_ROOT_PATH
 ) {
 
     private val executionService = ExecutionService(environmentJsonRootPath)

@@ -10,11 +10,12 @@ import com.chutneytesting.kotlin.dsl.ChutneyScenario
 import com.chutneytesting.kotlin.dsl.ChutneyTarget
 
 const val CHUTNEY_ROOT_PATH = ".chutney"
+const val CHUTNEY_ENV_ROOT_PATH = "$CHUTNEY_ROOT_PATH/environments"
 
 class CannotResolveDefaultEnvironmentException : Exception("No environment name was given and there is more than one environment. Defaulting is impossible. Please, specify a name or declare only one environment.")
 
 class ExecutionService(
-    environmentJsonRootPath: String = CHUTNEY_ROOT_PATH
+    environmentJsonRootPath: String = CHUTNEY_ENV_ROOT_PATH
 ) {
 
     private val executionConfiguration = ExecutionConfiguration()

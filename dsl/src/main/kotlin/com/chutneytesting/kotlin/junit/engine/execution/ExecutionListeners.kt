@@ -1,7 +1,6 @@
 package com.chutneytesting.kotlin.junit.engine.execution
 
 import com.chutneytesting.kotlin.execution.report.AnsiReportWriter
-import com.chutneytesting.kotlin.execution.report.CHUTNEY_REPORT_ROOT_PATH
 import com.chutneytesting.kotlin.execution.report.JsonReportWriter
 import com.chutneytesting.kotlin.execution.report.SiteGenerator
 import com.chutneytesting.kotlin.junit.engine.SystemEnvConfigurationParameters
@@ -13,8 +12,9 @@ import org.junit.platform.engine.reporting.ReportEntry
 import org.junit.platform.launcher.TestExecutionListener
 import org.junit.platform.launcher.TestIdentifier
 import org.junit.platform.launcher.TestPlan
+import java.util.Optional.ofNullable
 
-class ConsoleLogScenarioReportExecutionListener : EnabledTestExecutionListener(enabledProperty = CONFIG_SCENARIO_LOG.parameter) {
+class ConsoleLogScenarioReportExecutionListener : EnabledTestExecutionListener(enabledProperty = CONFIG_SCENARIO_LOG) {
 
     private var ansiReportWriter: AnsiReportWriter? = null
 
@@ -23,7 +23,7 @@ class ConsoleLogScenarioReportExecutionListener : EnabledTestExecutionListener(e
 
         if (enabled()) {
             ansiReportWriter = AnsiReportWriter(
-                configurationParameters().getBoolean(CONFIG_CONSOLE_LOG_COLOR.parameter).orElse(true)
+                configurationParameters().getBoolean(CONFIG_CONSOLE_LOG_COLOR.parameter).orElse(CONFIG_CONSOLE_LOG_COLOR.defaultBoolean())
             )
         }
     }
@@ -43,7 +43,7 @@ class ConsoleLogScenarioReportExecutionListener : EnabledTestExecutionListener(e
     }
 }
 
-class ConsoleLogStepReportExecutionListener : EnabledTestExecutionListener(enabledProperty = CONFIG_STEP_LOG.parameter) {
+class ConsoleLogStepReportExecutionListener : EnabledTestExecutionListener(enabledProperty = CONFIG_STEP_LOG) {
 
     private var ansiReportWriter: AnsiReportWriter? = null
 
@@ -52,7 +52,7 @@ class ConsoleLogStepReportExecutionListener : EnabledTestExecutionListener(enabl
 
         if (enabled()) {
             ansiReportWriter = AnsiReportWriter(
-                configurationParameters().getBoolean(CONFIG_CONSOLE_LOG_COLOR.parameter).orElse(true)
+                configurationParameters().getBoolean(CONFIG_CONSOLE_LOG_COLOR.parameter).orElse(CONFIG_CONSOLE_LOG_COLOR.defaultBoolean())
             )
         }
     }
@@ -75,7 +75,7 @@ class ConsoleLogStepReportExecutionListener : EnabledTestExecutionListener(enabl
     }
 }
 
-class FileWriterScenarioReportExecutionListener : EnabledTestExecutionListener(enabledProperty = CONFIG_REPORT_FILE.parameter) {
+class FileWriterScenarioReportExecutionListener : EnabledTestExecutionListener(enabledProperty = CONFIG_REPORT_FILE) {
 
     private var reportRootPathConfig: String? = null
 
@@ -84,7 +84,7 @@ class FileWriterScenarioReportExecutionListener : EnabledTestExecutionListener(e
 
         if (enabled()) {
             reportRootPathConfig =
-                configurationParameters().get(CONFIG_REPORT_ROOT_PATH.parameter).orElse(CHUTNEY_REPORT_ROOT_PATH)
+                configurationParameters().get(CONFIG_REPORT_ROOT_PATH.parameter).orElse(CONFIG_REPORT_ROOT_PATH.defaultString())
         }
     }
 
@@ -108,7 +108,7 @@ class FileWriterScenarioReportExecutionListener : EnabledTestExecutionListener(e
     }
 }
 
-class SiteGeneratorExecutionListener : EnabledTestExecutionListener(enabledProperty = CONFIG_REPORT_SITE.parameter) {
+class SiteGeneratorExecutionListener : EnabledTestExecutionListener(enabledProperty = CONFIG_REPORT_SITE) {
 
     private var reportRootPathConfig: String? = null
 
@@ -117,27 +117,29 @@ class SiteGeneratorExecutionListener : EnabledTestExecutionListener(enabledPrope
 
         if (enabled()) {
             reportRootPathConfig =
-                configurationParameters().get(CONFIG_REPORT_ROOT_PATH.parameter).orElse(CHUTNEY_REPORT_ROOT_PATH)
+                configurationParameters().get(CONFIG_REPORT_ROOT_PATH.parameter).orElse(CONFIG_REPORT_ROOT_PATH.defaultString())
         }
     }
 
     override fun testPlanExecutionFinished(testPlan: TestPlan?) {
         if (enabled()) {
-            SiteGenerator(reportRootPathConfig!!).generateSite()
+            ofNullable(reportRootPathConfig).ifPresentOrElse(
+                { SiteGenerator(it).generateSite() },
+                { SiteGenerator().generateSite() }
+            )
         }
     }
 }
 
 abstract class EnabledTestExecutionListener(
-    private val enabledProperty: String,
-    private val enabledDefault: Boolean = true
+    private val enabledProperty: ChutneyConfigurationParameters
 ) : TestExecutionListener {
     private var configurationParameters: ConfigurationParameters? = null
-    private var enabled: Boolean? = null
+    private var enabled: Boolean = false
 
     override fun testPlanExecutionStarted(testPlan: TestPlan) {
         configurationParameters = SystemEnvConfigurationParameters(testPlan.configurationParameters)
-        enabled = (configurationParameters as SystemEnvConfigurationParameters).getBoolean(enabledProperty).orElse(enabledDefault)
+        enabled = configurationParameters!!.getBoolean(enabledProperty.parameter).orElse(enabledProperty.defaultBoolean())
     }
 
     protected fun configurationParameters(): ConfigurationParameters {
@@ -145,6 +147,6 @@ abstract class EnabledTestExecutionListener(
     }
 
     protected fun enabled(): Boolean {
-        return enabled!!
+        return enabled
     }
 }
