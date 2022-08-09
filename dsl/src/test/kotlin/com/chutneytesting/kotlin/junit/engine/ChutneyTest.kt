@@ -6,6 +6,15 @@ import com.chutneytesting.kotlin.junit.api.ChutneyTest
 class ChutneyTest {
 
     @ChutneyTest
+    fun sameMethodNameInOtherClassTest(): ChutneyScenario {
+        return Scenario(title = "A scenario") {
+            When("Something happens") {
+                SuccessTask()
+            }
+        }
+    }
+
+    @ChutneyTest
     fun withFinalTask(): ChutneyScenario {
         return Scenario(title = "A final task scenario") {
             When("Final task is registered") {

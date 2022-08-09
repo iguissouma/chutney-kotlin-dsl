@@ -21,7 +21,6 @@ import org.mockito.Mockito.times
 import java.nio.file.Path
 import java.util.*
 
-
 private class ChutneyTestEngineTest {
 
     val sut = ChutneyTestEngine()
@@ -40,9 +39,11 @@ private class ChutneyTestEngineTest {
         @JvmStatic
         fun containerChutneyTestSelectors(): Array<Any> {
             return arrayOf(
-                arrayOf(selectClass("com.chutneytesting.kotlin.junit.engine.ChutneyTest"), 39, 39, 68),
-                arrayOf(selectClasspathRoots(setOf(Path.of(".")))[0], 39, 39, 68),
-                arrayOf(selectClasspathResource("com/chutneytesting/kotlin/junit/engine/ChutneyTest.class"), 39, 39, 68),
+                arrayOf(selectClass("com.chutneytesting.kotlin.junit.engine.ChutneyTest"), 41, 41, 70),
+                arrayOf(selectClasspathRoots(setOf(Path.of(".")))[0], 44, 44, 72),
+                arrayOf(
+                    selectClasspathResource("com/chutneytesting/kotlin/junit/engine/ChutneyTest.class"), 41, 41, 70
+                ),
                 arrayOf(selectMethod("com.chutneytesting.kotlin.junit.engine.ChutneyTest#withSubSteps()"), 12, 12, 10)
             )
         }
@@ -114,8 +115,8 @@ private class ChutneyTestEngineTest {
 
         testEngine.discover(discoveryRequest, UniqueId.forEngine(testEngine.id))
 
-        // 7 times for 7 scenarios in 6 test methods in ChutneyTest
-        Mockito.verify(filterMock, times(7)).apply(any())
+        // 9 times for 9 scenarios in 8 tests methods in ChutneyTest and SameMethodNameClassTest
+        Mockito.verify(filterMock, times(9)).apply(any())
     }
 
     open class MyPostDiscoveryFilter : PostDiscoveryFilter {

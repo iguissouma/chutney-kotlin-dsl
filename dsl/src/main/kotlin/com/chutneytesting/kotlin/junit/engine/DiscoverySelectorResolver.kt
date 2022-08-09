@@ -39,7 +39,7 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
 
         val classSelectors = discoveryRequest.getSelectorsByType(ClassSelector::class.java)
         val classSelectorPredicate = selectorToPredicate(classSelectors) {
-            buildClassNamePredicate(it.className)
+            buildNamePredicate(it.className)
         }
 
         val classPathRootSelectors = discoveryRequest.getSelectorsByType(ClasspathRootSelector::class.java)
@@ -54,7 +54,10 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
 
         val methodSelectors = discoveryRequest.getSelectorsByType(MethodSelector::class.java)
         val methodPredicate = selectorToPredicate(methodSelectors) {
-            buildMethodClassPredicate(it.methodName)
+            buildNamePredicate(it.methodName)
+        }
+        val classFromMethodPredicate = selectorToPredicate(methodSelectors) {
+            buildNamePredicate(it.className)
         }
 
         ReflectionSupport
@@ -64,6 +67,7 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
                     .and(classPathRootPredicate)
                     .and(classPathResourcePredicate),
                 classSelectorPredicate
+                    .and(classFromMethodPredicate)
             )
             .flatMap {
                 AnnotationSupport.findAnnotatedMethods(
@@ -220,9 +224,9 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
         return chutneyStepDescriptor
     }
 
-    private fun buildClassNamePredicate(name: String): Predicate<String> {
-        return Predicate { className: String ->
-            className == name
+    private fun buildNamePredicate(name: String): Predicate<String> {
+        return Predicate { aName: String ->
+            aName == name
         }
     }
 
@@ -237,12 +241,6 @@ class DiscoverySelectorResolver(private val stepAsTest: Boolean = true) {
         val path = javaClass.classLoader.getResource(classPathResource)?.path ?: ""
         return Predicate {
             classToPath(it) == path
-        }
-    }
-
-    private fun buildMethodClassPredicate(name: String?): Predicate<String> {
-        return Predicate { methodName: String ->
-            methodName == name
         }
     }
 
