@@ -1,5 +1,6 @@
 package com.chutneytesting.kotlin.synchronize
 
+import com.chutneytesting.environment.api.dto.EnvironmentDto
 import com.chutneytesting.kotlin.transformation.from_component_to_kotlin.ComposableStepDto
 import com.chutneytesting.kotlin.transformation.from_component_to_kotlin.ComposableTestCaseDto
 import com.chutneytesting.kotlin.util.ChutneyServerInfo
@@ -11,6 +12,7 @@ interface ChutneyServerService {
     fun getAllScenarios(serverInfo: ChutneyServerInfo): List<LinkedHashMap<String, Any>>
     fun getComposedScenario(serverInfo: ChutneyServerInfo, scenarioId: String): ComposableTestCaseDto
     fun updateJsonScenario(serverInfo: ChutneyServerInfo, scenarioContent: String, scenarioId: String)
+    fun getEnvironments(serverInfo: ChutneyServerInfo): Set<EnvironmentDto>
 }
 
 object ChutneyServerServiceImpl : ChutneyServerService {
@@ -33,6 +35,10 @@ object ChutneyServerServiceImpl : ChutneyServerService {
         val body = "update scenario set content='$escapeSql', version=version+1, tags=CASE WHEN tags like '%$generatedTag%' THEN tags ELSE CONCAT_WS(',',tags,'$generatedTag') end where id = '$scenarioId'"
 
         HttpClient.post<Any>(serverInfo, "/api/v1/admin/database/execute/jdbc", body)
+    }
+
+    override fun getEnvironments(serverInfo: ChutneyServerInfo): Set<EnvironmentDto> {
+        return HttpClient.get(serverInfo, "/api/v2/environment")
     }
 
     private fun escapeSql(str: String?): String? = str?.replace("'", "''")

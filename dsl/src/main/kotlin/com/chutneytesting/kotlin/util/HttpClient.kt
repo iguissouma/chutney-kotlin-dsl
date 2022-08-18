@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.paranamer.ParanamerModule
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.BufferedInputStream
@@ -67,6 +68,7 @@ object HttpClient {
         return jacksonObjectMapper()
             .registerModule(stepImplModule)
             .registerModule(JavaTimeModule())
+            .registerModule(ParanamerModule())
     }
 
     fun createConnection(
