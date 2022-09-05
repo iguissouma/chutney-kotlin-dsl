@@ -141,6 +141,8 @@ fun ChutneyStepBuilder.AmqpCreateBoundTemporaryQueueTask(
 fun ChutneyStepBuilder.AmqpDeleteQueueTask(
     target: String,
     queueName: String,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -148,7 +150,9 @@ fun ChutneyStepBuilder.AmqpDeleteQueueTask(
         target = target,
         inputs = listOf(
             "queue-name" to queueName
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -161,6 +165,8 @@ fun ChutneyStepBuilder.AmqpUnbindQueueTask(
     exchangeName: String,
     routingKey: String,
     queueName: String,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -170,7 +176,9 @@ fun ChutneyStepBuilder.AmqpUnbindQueueTask(
             "exchange-name" to exchangeName,
             "routing-key" to routingKey,
             "queue-name" to queueName
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -277,12 +285,16 @@ fun ChutneyStepBuilder.AmqpBasicGetTask(
 fun ChutneyStepBuilder.AmqpCleanQueuesTask(
     target: String,
     queueNames: List<String>,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
         type = "amqp-clean-queues",
         target = target,
-        inputs = listOf("queue-names" to queueNames).notEmptyToMap()
+        inputs = listOf("queue-names" to queueNames).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -398,6 +410,8 @@ fun ChutneyStepBuilder.MongoInsertTask(
     target: String,
     collection: String,
     document: String,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -406,7 +420,9 @@ fun ChutneyStepBuilder.MongoInsertTask(
         inputs = listOf(
             "collection" to collection,
             "document" to document
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -971,6 +987,8 @@ fun ChutneyStepBuilder.JmsCleanQueueTask(
     bodySelector: String? = null,
     browserMaxDepth: Int? = null,
     timeOut: String? = null,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -982,7 +1000,9 @@ fun ChutneyStepBuilder.JmsCleanQueueTask(
             "bodySelector" to bodySelector,
             "browserMaxDepth" to browserMaxDepth,
             "timeOut" to timeOut
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -1029,6 +1049,8 @@ fun ChutneyStepBuilder.JmsSenderTask(
     queueName: String,
     headers: Map<String, Any> = mapOf(),
     payload: String,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -1038,7 +1060,9 @@ fun ChutneyStepBuilder.JmsSenderTask(
             "destination" to queueName,
             "body" to payload,
             "headers" to headers
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -1143,6 +1167,8 @@ fun ChutneyStepBuilder.SeleniumClickTask(
     selector: String,
     by: SELENIUM_BY,
     wait: Int? = null,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -1152,7 +1178,9 @@ fun ChutneyStepBuilder.SeleniumClickTask(
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
             "wait" to wait
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -1162,13 +1190,17 @@ fun ChutneyStepBuilder.SeleniumClickTask(
  */
 fun ChutneyStepBuilder.SeleniumCloseTask(
     webDriver: String = defaultWebDriverSpel,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-close",
         inputs = mapOf(
             "web-driver" to webDriver
-        )
+        ),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -1265,13 +1297,17 @@ fun ChutneyStepBuilder.SeleniumGetTextTask(
  */
 fun ChutneyStepBuilder.SeleniumScreenShotTask(
     webDriver: String = defaultWebDriverSpel,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
         type = "selenium-screenshot",
         inputs = mapOf(
             "web-driver" to webDriver
-        )
+        ),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -1285,6 +1321,8 @@ fun ChutneyStepBuilder.SeleniumSendKeysTask(
     by: SELENIUM_BY,
     wait: Int? = null,
     value: String? = null,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -1295,7 +1333,9 @@ fun ChutneyStepBuilder.SeleniumSendKeysTask(
             "by" to SELENIUM_BY.name(by),
             "wait" to wait,
             "value" to value
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -1342,6 +1382,8 @@ fun ChutneyStepBuilder.SeleniumWaitTask(
     by: SELENIUM_BY,
     wait: Int? = null,
     value: String? = null,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -1352,7 +1394,9 @@ fun ChutneyStepBuilder.SeleniumWaitTask(
             "by" to SELENIUM_BY.name(by),
             "wait" to wait,
             "value" to value
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -1365,6 +1409,8 @@ fun ChutneyStepBuilder.SeleniumHoverThenClickTask(
     selector: String,
     by: SELENIUM_BY,
     wait: Int? = null,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -1374,7 +1420,9 @@ fun ChutneyStepBuilder.SeleniumHoverThenClickTask(
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
             "wait" to wait
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -1387,6 +1435,8 @@ fun ChutneyStepBuilder.SeleniumScrollToTask(
     selector: String,
     by: SELENIUM_BY,
     wait: Int? = null,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -1396,7 +1446,9 @@ fun ChutneyStepBuilder.SeleniumScrollToTask(
             "selector" to selector,
             "by" to SELENIUM_BY.name(by),
             "wait" to wait
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -1435,6 +1487,8 @@ fun ChutneyStepBuilder.SeleniumSetBrowserSizeTask(
     webDriver: String = defaultWebDriverSpel,
     width: Int,
     height: Int,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
@@ -1443,7 +1497,9 @@ fun ChutneyStepBuilder.SeleniumSetBrowserSizeTask(
             "web-driver" to webDriver,
             "width" to width,
             "height" to height
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
     if (strategy != null) this.strategy = strategy
 }
@@ -1455,14 +1511,18 @@ fun ChutneyStepBuilder.SeleniumSetBrowserSizeTask(
  */
 fun ChutneyStepBuilder.JsonAssertTask(
     document: String,
-    expected: Map<String, Any> = mapOf()
+    expected: Map<String, Any> = mapOf(),
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf()
 ) {
     implementation = ChutneyStepImpl(
         type = "json-assert",
         inputs = listOf(
             "document" to document,
             "expected" to expected
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
 }
 
@@ -1472,14 +1532,18 @@ fun ChutneyStepBuilder.JsonAssertTask(
  */
 fun ChutneyStepBuilder.JsonAssertTask(
     documentVariable: String,
-    expectationsVariable: String
+    expectationsVariable: String,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf()
 ) {
     implementation = ChutneyStepImpl(
         type = "json-assert",
         inputs = listOf(
             "document" to documentVariable.spEL,
             "expected" to expectationsVariable.spEL
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
 }
 
@@ -1492,7 +1556,9 @@ fun ChutneyStepBuilder.JsonCompareTask(
     document1: String,
     document2: String,
     comparingPaths: Map<String, String>? = null,
-    mode: JsonCompareMode = JsonCompareMode.STRICT
+    mode: JsonCompareMode = JsonCompareMode.STRICT,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf()
 ) {
     implementation = ChutneyStepImpl(
         type = "json-compare",
@@ -1501,7 +1567,9 @@ fun ChutneyStepBuilder.JsonCompareTask(
             "document2" to document2,
             "comparingPaths" to comparingPaths,
             "mode" to mode.name
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
 }
 
@@ -1510,14 +1578,18 @@ fun ChutneyStepBuilder.JsonCompareTask(
  */
 fun ChutneyStepBuilder.JsonValidationTask(
     schema: String,
-    json: String
+    json: String,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf()
 ) {
     implementation = ChutneyStepImpl(
         type = "json-validation",
         inputs = listOf(
             "schema" to schema,
             "json" to json
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
 }
 
@@ -1528,14 +1600,18 @@ fun ChutneyStepBuilder.JsonValidationTask(
  */
 fun ChutneyStepBuilder.XmlAssertTask(
     document: String,
-    expected: Map<String, Any> = mapOf()
+    expected: Map<String, Any> = mapOf(),
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf()
 ) {
     implementation = ChutneyStepImpl(
         type = "xml-assert",
         inputs = listOf(
             "document" to document,
             "expected" to expected
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
 }
 
@@ -1544,14 +1620,18 @@ fun ChutneyStepBuilder.XmlAssertTask(
  */
 fun ChutneyStepBuilder.StringAssertTask(
     document: String,
-    expected: String
+    expected: String,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf()
 ) {
     implementation = ChutneyStepImpl(
         type = "string-assert",
         inputs = listOf(
             "document" to document,
             "expected" to expected
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
 }
 
@@ -1567,13 +1647,17 @@ fun ChutneyStepBuilder.AssertTrueTask(asserts: List<Map<String, Any>>) {
  * List of spEL to assert (spEL must return a boolean value)
  */
 fun ChutneyStepBuilder.AssertTask(
-    asserts: List<String>
+    asserts: List<String>,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf()
 ) {
     implementation = ChutneyStepImpl(
         type = "assert",
         inputs = listOf(
             "asserts" to asserts.map { s -> mapOf("assert-true" to s) }
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
 }
 
@@ -1582,14 +1666,18 @@ fun ChutneyStepBuilder.AssertTask(
  */
 fun ChutneyStepBuilder.XsdValidationTask(
     xml: String,
-    xsdPath: String
+    xsdPath: String,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf()
 ) {
     implementation = ChutneyStepImpl(
         type = "xsd-validation",
         inputs = listOf(
             "xml" to xml,
             "xsd" to xsdPath
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
 }
 
@@ -1600,7 +1688,9 @@ fun ChutneyStepBuilder.XsdValidationTask(
 fun ChutneyStepBuilder.CompareTask(
     mode: String,
     actual: String,
-    expected: String
+    expected: String,
+    outputs: Map<String, Any> = mapOf(),
+    validations: Map<String, Any> = mapOf()
 ) {
     implementation = ChutneyStepImpl(
         type = "compare",
@@ -1608,7 +1698,9 @@ fun ChutneyStepBuilder.CompareTask(
             "mode" to mode,
             "actual" to actual,
             "expected" to expected
-        ).notEmptyToMap()
+        ).notEmptyToMap(),
+        outputs = outputs,
+        validations = validations
     )
 }
 
