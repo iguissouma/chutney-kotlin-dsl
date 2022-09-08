@@ -1,14 +1,41 @@
 # Changelog
 
+# Changelog
+
+## [0.1.20](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.20)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.19...HEAD)
+
+**Fixed bugs:**
+
+- 🐛 | test with same method name in different
+  class  [\#59](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/59)
+- 🐛 | Run junit test in // with launcher results on
+  failure [\#55](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/55)
+
+**Merged pull requests:**
+
+- feat\(\): add outputs and validations support to
+  tasks [\#67](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/67) ([rbenyoussef](https://github.com/rbenyoussef))
+- feat\(environment\): synchronise local environments from
+  remote [\#65](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/65) ([KarimGl](https://github.com/KarimGl))
+- fix same method name
+  junit [\#64](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/64) ([boddissattva](https://github.com/boddissattva))
+- feat\(\): Allow JUnit configuration of Environments' definitions
+  path [\#63](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/63) ([boddissattva](https://github.com/boddissattva))
+- chore\(\): Bump to Koltin
+  1.6.21 [\#62](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/62) ([boddissattva](https://github.com/boddissattva))
+
 ## [0.1.19](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.19)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.18...0.1.19)
 
 **Merged pull requests:**
 
-- chore: Typo [\#61](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/61) ([bessonm](https://github.com/bessonm))
-- chore: documentation of task output [\#60](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/60) ([nbrouand](https://github.com/nbrouand))
-
+- chore:
+  Typo [\#61](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/61) ([bessonm](https://github.com/bessonm))
+- chore: documentation of task
+  output [\#60](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/60) ([nbrouand](https://github.com/nbrouand))
 
 ## [0.1.18](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.18)
 
