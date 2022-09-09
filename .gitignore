@@ -9,6 +9,7 @@ gen
 .gradle
 **/build/
 !src/**/build/
+DEVREP
 
 # Ignore Gradle GUI config
 gradle-app.setting

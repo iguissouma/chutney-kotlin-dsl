@@ -2,22 +2,50 @@ package com.chutneytesting.kotlin.launcher
 
 import com.chutneytesting.engine.api.execution.StatusDto
 import com.chutneytesting.engine.api.execution.StatusDto.SUCCESS
+import com.chutneytesting.kotlin.ChutneyConfigurationParameters.CONFIG_ENVIRONMENT_ROOT_PATH
+import com.chutneytesting.kotlin.ChutneyConfigurationParameters.CONFIG_REPORT_ROOT_PATH
 import com.chutneytesting.kotlin.dsl.ChutneyEnvironment
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
-import com.chutneytesting.kotlin.execution.CHUTNEY_ENV_ROOT_PATH
 import com.chutneytesting.kotlin.execution.ExecutionService
 import com.chutneytesting.kotlin.execution.report.AnsiReportWriter
-import com.chutneytesting.kotlin.execution.report.CHUTNEY_REPORT_ROOT_PATH
 import com.chutneytesting.kotlin.execution.report.JsonReportWriter
+import com.chutneytesting.kotlin.util.SystemEnvConfigurationParameters
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.SoftAssertions
+import java.util.Optional.ofNullable
 
+/**
+ * reportRootPathInput defaulted to ChutneyConfigurationParameters.CONFIG_REPORT_ROOT_PATH
+ * -------
+ * environmentJsonRootPathInput defaulted to ChutneyConfigurationParameters.CONFIG_ENVIRONMENT_ROOT_PATH
+ */
 class Launcher(
-    private val reportRootPath: String = CHUTNEY_REPORT_ROOT_PATH,
-    environmentJsonRootPath: String = CHUTNEY_ENV_ROOT_PATH
+    reportRootPathInput: String? = null,
+    environmentJsonRootPathInput: String? = null
 ) {
+    private val systemParameters = SystemEnvConfigurationParameters(null);
 
-    private val executionService = ExecutionService(environmentJsonRootPath)
+    init {
+        if(reportRootPathInput != null) {
+            System.setProperty(CONFIG_REPORT_ROOT_PATH.parameter,reportRootPathInput);
+        }
+    }
+    private val reportRootPath: String = systemParameters.get(CONFIG_REPORT_ROOT_PATH.parameter).orElse(CONFIG_REPORT_ROOT_PATH.defaultString())
+
+    private val executionService = ExecutionService(ofNullable(environmentJsonRootPathInput).orElse(
+            systemParameters.get(CONFIG_ENVIRONMENT_ROOT_PATH.parameter).orElse(CONFIG_ENVIRONMENT_ROOT_PATH.defaultString())
+        )
+    )
+
+    private fun run(
+        scenario: ChutneyScenario,
+        environment: ChutneyEnvironment
+    ): StatusDto? {
+        val report = executionService.waitLastReport(executionService.execute(scenario, environment))
+        AnsiReportWriter().printReport(report)
+        JsonReportWriter.writeReport(report, reportRootPath)
+        return report.status
+    }
 
     fun run(
         scenario: ChutneyScenario,
@@ -61,15 +89,5 @@ class Launcher(
     ) {
         val status = run(scenario, environment)
         softly.assertThat(status).isEqualTo(expected)
-    }
-
-    private fun run(
-        scenario: ChutneyScenario,
-        environment: ChutneyEnvironment
-    ): StatusDto? {
-        val report = executionService.waitLastReport(executionService.execute(scenario, environment))
-        AnsiReportWriter().printReport(report)
-        JsonReportWriter.writeReport(report, reportRootPath)
-        return report.status
     }
 }

@@ -7,9 +7,9 @@ import com.chutneytesting.engine.domain.execution.event.EndStepExecutionEvent
 import com.chutneytesting.engine.domain.execution.event.StartScenarioExecutionEvent
 import com.chutneytesting.kotlin.execution.ExecutionService
 import com.chutneytesting.kotlin.junit.engine.ChutneyClassDescriptor
-import com.chutneytesting.kotlin.junit.engine.SystemEnvConfigurationParameters
-import com.chutneytesting.kotlin.junit.engine.execution.ChutneyConfigurationParameters.CONFIG_ENGINE_STEP_AS_TEST
-import com.chutneytesting.kotlin.junit.engine.execution.ChutneyConfigurationParameters.CONFIG_ENVIRONMENT_ROOT_PATH
+import com.chutneytesting.kotlin.util.SystemEnvConfigurationParameters
+import com.chutneytesting.kotlin.ChutneyConfigurationParameters.CONFIG_ENGINE_STEP_AS_TEST
+import com.chutneytesting.kotlin.ChutneyConfigurationParameters.CONFIG_ENVIRONMENT_ROOT_PATH
 import com.chutneytesting.kotlin.junit.engine.execution.ChutneyEngineExecutionContext.ListenerEvent.*
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable

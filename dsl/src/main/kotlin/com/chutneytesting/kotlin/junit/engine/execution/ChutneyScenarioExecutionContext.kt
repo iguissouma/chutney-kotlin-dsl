@@ -3,6 +3,7 @@ package com.chutneytesting.kotlin.junit.engine.execution
 import com.chutneytesting.engine.domain.execution.engine.step.Step
 import com.chutneytesting.engine.domain.execution.report.Status
 import com.chutneytesting.environment.domain.exception.EnvironmentNotFoundException
+import com.chutneytesting.kotlin.ChutneyConfigurationParameters
 import com.chutneytesting.kotlin.dsl.ChutneyStep
 import com.chutneytesting.kotlin.dsl.ChutneyStepImpl
 import com.chutneytesting.kotlin.dsl.Strategy

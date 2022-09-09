@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class GradleWrappingTest : ParameterizedMethods() {
 
-    private val launcher = Launcher(reportRootPath = "build/reports/chutney")
+    private val launcher = Launcher(reportRootPathInput = "build/reports/chutney")
 
     companion object {
         fun campaign_scenarios() = ParameterizedMethods.campaign_scenarios()

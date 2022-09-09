@@ -1,7 +1,7 @@
 import com.chutneytesting.environment.domain.EnvironmentService
 import com.chutneytesting.environment.domain.exception.AlreadyExistingEnvironmentException
 import com.chutneytesting.environment.infra.JsonFilesEnvironmentRepository
-import com.chutneytesting.kotlin.execution.CHUTNEY_ENV_ROOT_PATH
+import com.chutneytesting.kotlin.execution.CHUTNEY_ENV_ROOT_PATH_DEFAULT
 import com.chutneytesting.kotlin.synchronize.ChutneyServerServiceImpl
 import com.chutneytesting.kotlin.util.ChutneyServerInfo
 
@@ -14,7 +14,7 @@ class EnvironmentSynchronizeService(
 
     fun synchroniseLocal(
         serverInfo: ChutneyServerInfo,
-        environmentsPath: String = "$CHUTNEY_ENV_ROOT_PATH/",
+        environmentsPath: String = "$CHUTNEY_ENV_ROOT_PATH_DEFAULT/",
         force: Boolean = false
     ) {
         val environmentRepository = JsonFilesEnvironmentRepository(environmentsPath)

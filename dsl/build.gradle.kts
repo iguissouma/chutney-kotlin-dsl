@@ -33,6 +33,7 @@ dependencies {
     testImplementation(kotlin("scripting-jsr223"))
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation("org.mock-server:mockserver-netty:5.4.1")
+    testImplementation("org.junit-pioneer:junit-pioneer:1.7.1")
 
     // JUnit5 engine dependencies
     implementation("org.junit.platform:junit-platform-engine:${project.extra["junitPlatformVersion"]}")

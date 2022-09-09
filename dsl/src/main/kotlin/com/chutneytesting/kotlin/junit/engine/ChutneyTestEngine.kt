@@ -1,7 +1,8 @@
 package com.chutneytesting.kotlin.junit.engine
 
-import com.chutneytesting.kotlin.junit.engine.execution.ChutneyConfigurationParameters.CONFIG_ENGINE_STEP_AS_TEST
+import com.chutneytesting.kotlin.ChutneyConfigurationParameters.CONFIG_ENGINE_STEP_AS_TEST
 import com.chutneytesting.kotlin.junit.engine.execution.ChutneyEngineExecutionContext
+import com.chutneytesting.kotlin.util.SystemEnvConfigurationParameters
 import org.junit.platform.engine.EngineDiscoveryRequest
 import org.junit.platform.engine.ExecutionRequest
 import org.junit.platform.engine.TestDescriptor
