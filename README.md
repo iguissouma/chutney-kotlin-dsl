@@ -300,7 +300,7 @@ Chutney JUnit configuration parameters are :
 * **chutney.log.color.enabled** : Log scenario report and scenario step report to console with ANSI colors (
   boolean with ```true``` default value)
 * **chutney.report.file.enabled** : Write scenario JSON report to disk (boolean with ```true``` default value)
-* **chutney.report.site.enabled** : Generate website from scenario JSON report (boolean with ```true``` default
+* **chutney.report.site.enabled** : Generate website from scenario JSON report (boolean with ```false``` default
   value)
 * **chutney.engine.stepAsTest** : Do not consider scenario's steps as tests (boolean with ```true``` default
   value)
