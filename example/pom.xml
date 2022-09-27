@@ -72,8 +72,8 @@
                     </excludes>
                     <classesDirectory>${project.build.outputDirectory}</classesDirectory>
                     <systemProperties>
-                        <junit.chutney.engine.stepAsTest>false</junit.chutney.engine.stepAsTest>
-                        <junit.chutney.log.color.enabled>false</junit.chutney.log.color.enabled>
+                        <chutney.engine.stepAsTest>false</chutney.engine.stepAsTest>
+                        <chutney.log.color.enabled>false</chutney.log.color.enabled>
                     </systemProperties>
                 </configuration>
                 <executions>

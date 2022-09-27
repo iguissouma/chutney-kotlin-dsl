@@ -1,7 +1,8 @@
 package com.chutneytesting.kotlin.junit.engine
 
-import com.chutneytesting.kotlin.junit.engine.execution.ChutneyConfigurationParameters.CONFIG_ENGINE_STEP_AS_TEST
+import com.chutneytesting.kotlin.ChutneyConfigurationParameters.CONFIG_ENGINE_STEP_AS_TEST
 import com.chutneytesting.kotlin.junit.engine.execution.ChutneyEngineExecutionContext
+import com.chutneytesting.kotlin.util.SystemEnvConfigurationParameters
 import org.junit.platform.engine.EngineDiscoveryRequest
 import org.junit.platform.engine.ExecutionRequest
 import org.junit.platform.engine.TestDescriptor
@@ -33,7 +34,7 @@ class ChutneyTestEngine : TestEngine {
 
     override fun discover(discoveryRequest: EngineDiscoveryRequest, uniqueId: UniqueId): TestDescriptor {
         try {
-            val stepAsTest = SystemEnvConfigurationParameters(discoveryRequest.configurationParameters).getBoolean(CONFIG_ENGINE_STEP_AS_TEST.parameter).orElse(true)
+            val stepAsTest = SystemEnvConfigurationParameters().getBoolean(CONFIG_ENGINE_STEP_AS_TEST.parameter).orElse(true)
             val engineDescriptor = ChutneyEngineDescriptor(uniqueId, CHUTNEY_JUNIT_ENGINE_DISPLAY_NAME)
             DiscoverySelectorResolver(stepAsTest).resolveSelectors(discoveryRequest, engineDescriptor)
             return engineDescriptor

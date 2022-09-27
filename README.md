@@ -290,19 +290,19 @@ As the Kotlin Chutney JUnit engine is packaged in ```chutney-koltin-dsl``` modul
 the engine active when executing tests with the JUnit platform.
 
 Chutney JUnit configuration parameters are :
-* **junit.chutney.environment.default** : Default environment name to use (string with no default value)
-* **junit.chutney.environment.rootPath** : Path of environments JSON definitions (string
+* **chutney.environment.default** : Default environment name to use (string with no default value)
+* **chutney.environment.rootPath** : Path of environments JSON definitions (string
   with ```.chutney/environments``` default value)
-* **junit.chutney.report.rootPath** : Path where reports and website will be accessible after execution (string
+* **chutney.report.rootPath** : Path where reports and website will be accessible after execution (string
   with ```.chutney/reports``` default value)
-* **junit.chutney.log.scenario.enabled** : Log scenario report to console (boolean with ```true``` default value)
-* **junit.chutney.log.step.enabled** : Log scenario step report to console (boolean with ```true``` default value)
-* **junit.chutney.log.color.enabled** : Log scenario report and scenario step report to console with ANSI colors (
+* **chutney.log.scenario.enabled** : Log scenario report to console (boolean with ```true``` default value)
+* **chutney.log.step.enabled** : Log scenario step report to console (boolean with ```true``` default value)
+* **chutney.log.color.enabled** : Log scenario report and scenario step report to console with ANSI colors (
   boolean with ```true``` default value)
-* **junit.chutney.report.file.enabled** : Write scenario JSON report to disk (boolean with ```true``` default value)
-* **junit.chutney.report.site.enabled** : Generate website from scenario JSON report (boolean with ```true``` default
+* **chutney.report.file.enabled** : Write scenario JSON report to disk (boolean with ```true``` default value)
+* **chutney.report.site.enabled** : Generate website from scenario JSON report (boolean with ```true``` default
   value)
-* **junit.chutney.engine.stepAsTest** : Do not consider scenario's steps as tests (boolean with ```true``` default
+* **chutney.engine.stepAsTest** : Do not consider scenario's steps as tests (boolean with ```true``` default
   value)
 
-Those configuration parameters could be defined as environment, JVM system or JUnit properties.
+Those configuration parameters could be defined as environment, JVM system or JUnit properties (junit-platform.properties).

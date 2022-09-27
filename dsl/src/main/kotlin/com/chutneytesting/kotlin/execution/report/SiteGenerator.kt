@@ -1,24 +1,33 @@
 package com.chutneytesting.kotlin.execution.report
 
-import com.chutneytesting.kotlin.execution.CHUTNEY_ROOT_PATH
+import com.chutneytesting.kotlin.ChutneyConfigurationParameters
+import com.chutneytesting.kotlin.execution.CHUTNEY_ROOT_PATH_DEFAULT
+import com.chutneytesting.kotlin.util.SystemEnvConfigurationParameters
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import java.io.File
+import java.util.*
 
 object SiteGeneratorMain {
     @JvmStatic
     fun main(args: Array<String>) {
-        val reportRootPath: String =
-            args.getOrElse(0) { System.getProperty("chutney.reports.rootpath") } ?: CHUTNEY_REPORT_ROOT_PATH
-        SiteGenerator(reportRootPath).generateSite()
+        SiteGenerator(args.getOrElse(0) { null }).generateSite()
     }
 }
 
-const val CHUTNEY_REPORT_ROOT_PATH = "$CHUTNEY_ROOT_PATH/reports"
+const val CHUTNEY_REPORT_ROOT_PATH_DEFAULT = "$CHUTNEY_ROOT_PATH_DEFAULT/reports"
 
-class SiteGenerator(private val reportRootPath: String = CHUTNEY_REPORT_ROOT_PATH) {
+class SiteGenerator(reportRootPathInput: String? = null) {
 
     private val reportListFileName = "reports-list.json"
     private val pathResolver = PathMatchingResourcePatternResolver()
+
+    private val systemParameters = SystemEnvConfigurationParameters()
+
+    private val reportRootPath: String = Optional.ofNullable(reportRootPathInput).orElse(
+        systemParameters.get(ChutneyConfigurationParameters.CONFIG_REPORT_ROOT_PATH.parameter).orElse(
+            ChutneyConfigurationParameters.CONFIG_REPORT_ROOT_PATH.defaultString()
+        )
+    )
 
     fun generateSite() {
         if (createReportsListFile()) {

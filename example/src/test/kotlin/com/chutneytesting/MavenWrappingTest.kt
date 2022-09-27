@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class MavenWrappingTest : ParameterizedMethods() {
 
-    private val launcher = Launcher(reportRootPath = "target/chutney-reports", environmentJsonRootPath = "chutney_env")
+    private val launcher = Launcher(reportRootPathInput = "target/chutney-reports", environmentJsonRootPathInput = "chutney_env")
 
     companion object {
         fun campaign_scenarios() = ParameterizedMethods.campaign_scenarios()

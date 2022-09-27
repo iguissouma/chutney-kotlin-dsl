@@ -1,10 +1,11 @@
 package com.chutneytesting.kotlin.junit.engine.execution
 
+import com.chutneytesting.kotlin.ChutneyConfigurationParameters
 import com.chutneytesting.kotlin.execution.report.AnsiReportWriter
 import com.chutneytesting.kotlin.execution.report.JsonReportWriter
 import com.chutneytesting.kotlin.execution.report.SiteGenerator
-import com.chutneytesting.kotlin.junit.engine.SystemEnvConfigurationParameters
-import com.chutneytesting.kotlin.junit.engine.execution.ChutneyConfigurationParameters.*
+import com.chutneytesting.kotlin.util.SystemEnvConfigurationParameters
+import com.chutneytesting.kotlin.ChutneyConfigurationParameters.*
 import com.chutneytesting.kotlin.junit.engine.execution.ChutneyJUnitReportingKeys.REPORT_JSON_STRING
 import com.chutneytesting.kotlin.junit.engine.execution.ChutneyJUnitReportingKeys.REPORT_STEP_JSON_STRING
 import org.junit.platform.engine.ConfigurationParameters
@@ -110,39 +111,24 @@ class FileWriterScenarioReportExecutionListener : EnabledTestExecutionListener(e
 
 class SiteGeneratorExecutionListener : EnabledTestExecutionListener(enabledProperty = CONFIG_REPORT_SITE) {
 
-    private var reportRootPathConfig: String? = null
-
-    override fun testPlanExecutionStarted(testPlan: TestPlan) {
-        super.testPlanExecutionStarted(testPlan)
-
-        if (enabled()) {
-            reportRootPathConfig =
-                configurationParameters().get(CONFIG_REPORT_ROOT_PATH.parameter).orElse(CONFIG_REPORT_ROOT_PATH.defaultString())
-        }
-    }
-
     override fun testPlanExecutionFinished(testPlan: TestPlan?) {
         if (enabled()) {
-            ofNullable(reportRootPathConfig).ifPresentOrElse(
-                { SiteGenerator(it).generateSite() },
-                { SiteGenerator().generateSite() }
-            )
+           SiteGenerator().generateSite()
         }
     }
 }
 
 abstract class EnabledTestExecutionListener(
-    private val enabledProperty: ChutneyConfigurationParameters
-) : TestExecutionListener {
-    private var configurationParameters: ConfigurationParameters? = null
+    private val enabledProperty: ChutneyConfigurationParameters) : TestExecutionListener {
+    private var configurationParameters: SystemEnvConfigurationParameters? = null
     private var enabled: Boolean = false
 
     override fun testPlanExecutionStarted(testPlan: TestPlan) {
-        configurationParameters = SystemEnvConfigurationParameters(testPlan.configurationParameters)
+        configurationParameters = SystemEnvConfigurationParameters()
         enabled = configurationParameters!!.getBoolean(enabledProperty.parameter).orElse(enabledProperty.defaultBoolean())
     }
 
-    protected fun configurationParameters(): ConfigurationParameters {
+    protected fun configurationParameters(): SystemEnvConfigurationParameters {
         return configurationParameters!!
     }
 

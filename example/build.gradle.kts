@@ -31,8 +31,8 @@ task("chutneyDefaultReportSite", JavaExec::class) {
 
 tasks {
     test {
-        systemProperty("junit.chutney.engine.stepAsTest", false)
-        systemProperty("junit.chutney.log.color.enabled", false)
+        systemProperty("chutney.engine.stepAsTest", false)
+        systemProperty("chutney.log.color.enabled", false)
 
         exclude("**/*Maven*Test.class")
         finalizedBy("chutneyGradleReportSite")
