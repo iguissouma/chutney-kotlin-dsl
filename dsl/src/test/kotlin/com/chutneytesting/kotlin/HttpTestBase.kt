@@ -2,6 +2,7 @@ package com.chutneytesting.kotlin
 
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.mockserver.client.MockServerClient
 import org.mockserver.integration.ClientAndServer
 import java.util.*
@@ -20,6 +21,11 @@ abstract class HttpTestBase {
     @BeforeAll
     fun prepare() {
         mockServer = ClientAndServer.startClientAndServer(port)
+    }
+
+    @BeforeEach
+    fun reset() {
+        mockServer.reset()
     }
 
     @AfterAll
