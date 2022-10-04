@@ -33,4 +33,4 @@ gradle.properties
 
 # Chutney reports
 ###############################################################################
-**/.chutney/reports/
+**/.chutney/
