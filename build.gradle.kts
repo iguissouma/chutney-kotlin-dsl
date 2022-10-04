@@ -12,7 +12,7 @@ reckon {
 }
 
 subprojects {
-    extra["chutneyTestingVersion"] = "1.4.9"
+    extra["chutneyTestingVersion"] = "1.5.1"
     extra["junitJupiterVersion"] = "5.8.2"
     extra["junitPlatformVersion"] = "1.8.2"
 

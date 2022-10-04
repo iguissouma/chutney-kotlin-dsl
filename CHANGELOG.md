@@ -1,6 +1,30 @@
 # Changelog
 
-# Changelog
+## [1.0.0](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/1.0.0)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.20...1.0.0)
+
+**Implemented enhancements:**
+
+- 🚀 | New scenarios must be created by synchronize function [\#69](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/69)
+- 🚀 | src/resources/chutney/in\_progress folder must be created automatically if not exist [\#68](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/68)
+
+**Fixed bugs:**
+
+- 🐛 | Scenario synchronization should display explanatory errors [\#71](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/71)
+- 🐛 | .chutney folder created when report forlder is different [\#70](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/70)
+- 🐛 | Site generator bugs [\#66](https://github.com/chutney-testing/chutney-kotlin-dsl/issues/66)
+
+**Merged pull requests:**
+
+- fix\(synchronize\): refactor synchronize function [\#75](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/75) 
+- Normalize and simply use of launcher and engine [\#74](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/74) 
+
+**Breaking changes:**
+
+- JUnit 5 Chutney engine configuration properties are not prefixed by **junit.** anymore.
+- JUnit 5 Chutney engine **SiteGeneratorExecutionListener** is disable by default from now on.
+
 
 ## [0.1.20](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/0.1.20)
 
