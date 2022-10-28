@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.2](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/1.0.2)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.0.1...1.0.2)
+
+- Update to Chutney 1.5.4
+
 ## [1.0.1](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/1.0.1)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.0.0...1.0.1)
