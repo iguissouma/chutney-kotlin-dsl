@@ -14,31 +14,30 @@ val publicationName = "chutneyKotlinDSL"
 
 dependencies {
 
-    api("com.chutneytesting:engine:${project.extra["chutneyTestingVersion"]}")
-
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin") {
-        version {
-            strictly("2.12.1")
-        }
+    api("com.chutneytesting:engine:${project.extra["chutneyTestingVersion"]}") {
+        exclude(group = "com.fasterxml.jackson.module", module = "jackson-module-scala_2.13")
     }
-    implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("com.chutneytesting:environment:${project.extra["chutneyTestingVersion"]}")
-    implementation("org.assertj:assertj-core:3.23.1")
-    implementation("org.springframework:spring-core:5.3.17")
+    runtimeOnly("com.chutneytesting:task-impl:${project.extra["chutneyTestingVersion"]}")  {
+        exclude(group = "com.fasterxml.jackson.module", module = "jackson-module-scala_2.13")
+    }
 
-    runtimeOnly("com.chutneytesting:task-impl:${project.extra["chutneyTestingVersion"]}")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.slf4j:slf4j-api")
+    implementation("org.assertj:assertj-core")
+    implementation("org.springframework:spring-core")
 
-    testImplementation("org.skyscreamer:jsonassert:1.5.0")
-    testImplementation("org.springframework:spring-expression:5.3.17")
+    testImplementation("org.skyscreamer:jsonassert")
+    testImplementation("org.springframework:spring-expression")
     testImplementation(kotlin("scripting-jsr223"))
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation("org.mock-server:mockserver-netty:5.4.1")
     testImplementation("org.junit-pioneer:junit-pioneer:1.7.1")
 
     // JUnit5 engine dependencies
-    implementation("org.junit.platform:junit-platform-engine:${project.extra["junitPlatformVersion"]}")
-    implementation("org.junit.platform:junit-platform-launcher:${project.extra["junitPlatformVersion"]}")
-    testImplementation("org.junit.platform:junit-platform-testkit:${project.extra["junitPlatformVersion"]}")
+    implementation("org.junit.platform:junit-platform-engine")
+    implementation("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.junit.platform:junit-platform-testkit")
 }
 
 java {
