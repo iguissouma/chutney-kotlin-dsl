@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.ajoberstar.reckon") version "0.13.0"
-    id("org.springframework.boot") version "2.7.4"
 
     kotlin("jvm") version "1.6.21" apply false
 }
@@ -13,11 +12,10 @@ reckon {
 }
 
 subprojects {
-    extra["chutneyTestingVersion"] = "1.5.4"
+    extra["chutneyTestingVersion"] = "1.5.5"
 
     repositories {
         mavenCentral()
-        jcenter()
     }
 
     apply(plugin = "org.jetbrains.kotlin.jvm")
@@ -27,7 +25,7 @@ subprojects {
         val testImplementation by configurations
         val testRuntimeOnly by configurations
 
-        implementation(platform("org.springframework.boot:spring-boot-dependencies:2.7.4"))
+        implementation(enforcedPlatform("com.chutneytesting:chutney-parent:${project.extra["chutneyTestingVersion"]}"))
 
         testImplementation("org.junit.jupiter:junit-jupiter-api")
         testImplementation("org.junit.jupiter:junit-jupiter-params")

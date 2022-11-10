@@ -12,14 +12,21 @@ val timestamp: String = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
 val githubUrl = "https://github.com/chutney-testing/${project.name}"
 val publicationName = "chutneyKotlinDSL"
 
+configurations {
+    all {
+        resolutionStrategy {
+            failOnVersionConflict()
+        }
+    }
+}
+
 dependencies {
 
-    api("com.chutneytesting:engine:${project.extra["chutneyTestingVersion"]}") {
-        exclude(group = "com.fasterxml.jackson.module", module = "jackson-module-scala_2.13")
-    }
+    api("com.chutneytesting:engine:${project.extra["chutneyTestingVersion"]}")
     implementation("com.chutneytesting:environment:${project.extra["chutneyTestingVersion"]}")
-    runtimeOnly("com.chutneytesting:task-impl:${project.extra["chutneyTestingVersion"]}")  {
+    runtimeOnly("com.chutneytesting:task-impl:${project.extra["chutneyTestingVersion"]}") {
         exclude(group = "com.fasterxml.jackson.module", module = "jackson-module-scala_2.13")
+        exclude(group = "com.fasterxml.jackson.dataformat", module = "jackson-dataformat-csv")
     }
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -43,12 +50,21 @@ dependencies {
 java {
     withJavadocJar()
     withSourcesJar()
+
+    consistentResolution {
+        useCompileClasspathVersions() // OR set in configurations using shouldResolveConsistentlyWith()
+    }
+
 }
 
 tasks.javadoc {
     if (JavaVersion.current().isJava11Compatible) {
         (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
     }
+}
+
+tasks.withType<GenerateModuleMetadata> {
+    suppressedValidationErrors.add("enforced-platform")
 }
 
 publishing {
