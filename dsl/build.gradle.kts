@@ -117,6 +117,10 @@ publishing {
                         id.set("nbrouand")
                         name.set("Nicolas Brouand")
                     }
+                    developer {
+                        id.set("KarimGl")
+                        name.set("Karim Goubbaa")
+                    }
                 }
             }
         }
