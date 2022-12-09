@@ -33,6 +33,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api")
     implementation("org.assertj:assertj-core")
     implementation("org.springframework:spring-core")
+    implementation("org.apache.commons:commons-text")
 
     testImplementation("org.skyscreamer:jsonassert")
     testImplementation("org.springframework:spring-expression")

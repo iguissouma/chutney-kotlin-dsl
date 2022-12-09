@@ -7,7 +7,7 @@ import com.chutneytesting.kotlin.transformation.from_component_to_kotlin.Composa
 import com.chutneytesting.kotlin.transformation.from_component_to_kotlin.ComposableTestCaseDto
 import com.chutneytesting.kotlin.util.ChutneyServerInfo
 import com.chutneytesting.kotlin.util.HttpClient
-import org.apache.commons.lang3.StringEscapeUtils
+import org.apache.commons.text.StringEscapeUtils
 
 
 interface ChutneyServerService {
