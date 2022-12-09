@@ -1,15 +1,43 @@
 # Changelog
 
+## [1.1.0](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/1.1.0)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.0.3...1.1.0)
+
+**breaking changes :**
+- Tasks methods were renamed to Action
+
+**Technical enhancements:**
+- 🔧 | Use StringEscapeUtils from commons-text [\#85](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/85)
+- 🔧 | Rename Task into Action [\#84](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/84) 
+- 🔧 | Add developer in Maven published pom [\#83](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/83) 
+
+**Dependencies updated:**
+- Upgrade to Chutney 1.6.0
+
+## [1.0.3](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/1.0.3)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.0.2...1.0.3)
+
+**Technical enhancements:**
+- 🔧 | Enforce dependency convergence (https://github.com/chutney-testing/chutney-kotlin-dsl/pull/81)
+
+**Dependencies updated:**
+- Update to Chutney 1.5.6
+
+
 ## [1.0.2](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/1.0.2)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.0.1...1.0.2)
 
+**Dependencies updated:**
 - Update to Chutney 1.5.4
 
 ## [1.0.1](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/1.0.1)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.0.0...1.0.1)
 
+**Dependencies updated:**
 - Update to Chutney 1.5.2
 
 ## [1.0.0](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/1.0.0)
