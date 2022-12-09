@@ -1,6 +1,6 @@
 {
-    "title": "Kafka tasks",
-    "description": "Kafka tasks",
+    "title": "Kafka actions",
+    "description": "Kafka actions",
     "when": {
         "description": "nothing"
     },

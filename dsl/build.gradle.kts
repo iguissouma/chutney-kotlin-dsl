@@ -24,7 +24,7 @@ dependencies {
 
     api("com.chutneytesting:engine:${project.extra["chutneyTestingVersion"]}")
     implementation("com.chutneytesting:environment:${project.extra["chutneyTestingVersion"]}")
-    runtimeOnly("com.chutneytesting:task-impl:${project.extra["chutneyTestingVersion"]}") {
+    runtimeOnly("com.chutneytesting:action-impl:${project.extra["chutneyTestingVersion"]}") {
         exclude(group = "com.fasterxml.jackson.module", module = "jackson-module-scala_2.13")
         exclude(group = "com.fasterxml.jackson.dataformat", module = "jackson-dataformat-csv")
     }

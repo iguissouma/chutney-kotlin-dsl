@@ -20,13 +20,13 @@ class ChutneyScenarioDslGeneratorTest {
             """
             >val `swapi GET people record` = Scenario(title = "swapi GET people record") {
             >    Given("I set get people service api endpoint") {
-            >        ContextPutTask(entries = mapOf("uri" to "api/people/1"))
+            >        ContextPutAction(entries = mapOf("uri" to "api/people/1"))
             >    }
             >    When("I send GET HTTP request", RetryTimeOutStrategy("5 s", "1 s")) {
-            >        HttpGetTask(target = "swapi.dev", uri = "\${'$'}{#uri}")
+            >        HttpGetAction(target = "swapi.dev", uri = "\${'$'}{#uri}")
             >    }
             >    Then("I receive valid HTTP response") {
-            >        JsonAssertTask(document = "\${'$'}{#body}", expected = mapOf("${'$'}.name" to "Luke Skywalker"))
+            >        JsonAssertAction(document = "\${'$'}{#body}", expected = mapOf("${'$'}.name" to "Luke Skywalker"))
             >    }
             >}
             """.trimMargin('>'.toString())

@@ -1,11 +1,11 @@
 package com.chutneytesting.kotlin.dsl
 
-// Based on chutney.tasks file
+// Based on chutney.actions file
 
 /**
  * Always success
  */
-fun ChutneyStepBuilder.SuccessTask() {
+fun ChutneyStepBuilder.SuccessAction() {
     Implementation {
         type = "success"
     }
@@ -14,7 +14,7 @@ fun ChutneyStepBuilder.SuccessTask() {
 /**
  * Always fail
  */
-fun ChutneyStepBuilder.FailTask() {
+fun ChutneyStepBuilder.FailAction() {
     Implementation {
         type = "fail"
     }
@@ -23,7 +23,7 @@ fun ChutneyStepBuilder.FailTask() {
 /**
  * Log values in the execution context
  */
-fun ChutneyStepBuilder.DebugTask(filters: List<String> = listOf()) {
+fun ChutneyStepBuilder.DebugAction(filters: List<String> = listOf()) {
     Implementation {
         type = "debug"
         inputs = listOf(
@@ -35,7 +35,7 @@ fun ChutneyStepBuilder.DebugTask(filters: List<String> = listOf()) {
 /**
  * Wait "5 min", "300 sec", "500 ms" or "until 14:34"
  */
-fun ChutneyStepBuilder.SleepTask(duration: String) {
+fun ChutneyStepBuilder.SleepAction(duration: String) {
     Implementation {
         type = "sleep"
         inputs = mapOf("duration" to duration)
@@ -45,7 +45,7 @@ fun ChutneyStepBuilder.SleepTask(duration: String) {
 /**
  * Add variable to execution context
  */
-fun ChutneyStepBuilder.ContextPutTask(entries: Map<String, Any>, outs: Map<String, Any> = mapOf()) {
+fun ChutneyStepBuilder.ContextPutAction(entries: Map<String, Any>, outs: Map<String, Any> = mapOf()) {
     Implementation {
         type = "context-put"
         inputs = mapOf("entries" to entries)
@@ -54,9 +54,9 @@ fun ChutneyStepBuilder.ContextPutTask(entries: Map<String, Any>, outs: Map<Strin
 }
 
 /**
- * Add a final task, execute at the end of the execution in a teardown final step
+ * Add a final action, execute at the end of the execution in a teardown final step
  */
-fun ChutneyStepBuilder.FinalTask(
+fun ChutneyStepBuilder.FinalAction(
     name: String,
     type: String,
     target: String? = null,
@@ -87,7 +87,7 @@ fun ChutneyStepBuilder.FinalTask(
  * Outputs:
  * - Key/value returned by the script (outputs = (Map<String, Object>) script.run())
  */
-fun ChutneyStepBuilder.GroovyTask(
+fun ChutneyStepBuilder.GroovyAction(
     script: String,
     parameters: Map<String, Any> = mapOf(),
     outputs: Map<String, Any> = mapOf(),
@@ -112,7 +112,7 @@ fun ChutneyStepBuilder.GroovyTask(
  * Outputs:
  * - queueName : queue name created
  */
-fun ChutneyStepBuilder.AmqpCreateBoundTemporaryQueueTask(
+fun ChutneyStepBuilder.AmqpCreateBoundTemporaryQueueAction(
     target: String,
     exchangeName: String,
     routingKey: String,
@@ -138,7 +138,7 @@ fun ChutneyStepBuilder.AmqpCreateBoundTemporaryQueueTask(
 /**
  * On an amqp target, delete a queue
  */
-fun ChutneyStepBuilder.AmqpDeleteQueueTask(
+fun ChutneyStepBuilder.AmqpDeleteQueueAction(
     target: String,
     queueName: String,
     outputs: Map<String, Any> = mapOf(),
@@ -160,7 +160,7 @@ fun ChutneyStepBuilder.AmqpDeleteQueueTask(
 /**
  * On an amqp target, unbind a queue from an exchange
  */
-fun ChutneyStepBuilder.AmqpUnbindQueueTask(
+fun ChutneyStepBuilder.AmqpUnbindQueueAction(
     target: String,
     exchangeName: String,
     routingKey: String,
@@ -190,7 +190,7 @@ fun ChutneyStepBuilder.AmqpUnbindQueueTask(
  * - payload : the payload sent  (String)
  * - headers : the headers sent [key1,value1];[key2,value2]... (String)
  */
-fun ChutneyStepBuilder.AmqpBasicPublishTask(
+fun ChutneyStepBuilder.AmqpBasicPublishAction(
     target: String,
     exchangeName: String,
     routingKey: String,
@@ -225,7 +225,7 @@ fun ChutneyStepBuilder.AmqpBasicPublishTask(
  * - payload : the payloads consumed  (List<Map<String, Object>> if json, List<String> if not)
  * - headers : the headers consumed  (List<Map<String, Object>>)
  */
-fun ChutneyStepBuilder.AmqpBasicConsumeTask(
+fun ChutneyStepBuilder.AmqpBasicConsumeAction(
     target: String,
     queueName: String,
     nbMessages: Int? = null,
@@ -260,7 +260,7 @@ fun ChutneyStepBuilder.AmqpBasicConsumeTask(
  * - body : the payload as String  (String)
  * - headers : the headers as Map  (Map<String, Object>)
  */
-fun ChutneyStepBuilder.AmqpBasicGetTask(
+fun ChutneyStepBuilder.AmqpBasicGetAction(
     target: String,
     queueName: String,
     outputs: Map<String, Any> = mapOf(),
@@ -282,7 +282,7 @@ fun ChutneyStepBuilder.AmqpBasicGetTask(
 /**
  * On an amqp target, purge messages from queues
  */
-fun ChutneyStepBuilder.AmqpCleanQueuesTask(
+fun ChutneyStepBuilder.AmqpCleanQueuesAction(
     target: String,
     queueNames: List<String>,
     outputs: Map<String, Any> = mapOf(),
@@ -305,9 +305,9 @@ fun ChutneyStepBuilder.AmqpCleanQueuesTask(
  * Outputs:
  * - qpidLauncher : the systemLauncher of the qpid server (org.apache.qpid.server.SystemLauncher)
  * -------
- * Finally action registered : QpidServerStopTask
+ * Finally action registered : QpidServerStopAction
  */
-fun ChutneyStepBuilder.QpidServerStartTask(
+fun ChutneyStepBuilder.QpidServerStartAction(
     initConfig: String,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf()
@@ -326,7 +326,7 @@ fun ChutneyStepBuilder.QpidServerStartTask(
  * Outputs:
  * - count : the count value (long)
  */
-fun ChutneyStepBuilder.MongoCountTask(
+fun ChutneyStepBuilder.MongoCountAction(
     target: String,
     collection: String,
     query: String,
@@ -353,7 +353,7 @@ fun ChutneyStepBuilder.MongoCountTask(
  * Outputs:
  * - deletedCount : the number of deleted document (long)
  */
-fun ChutneyStepBuilder.MongoDeleteTask(
+fun ChutneyStepBuilder.MongoDeleteAction(
     target: String,
     collection: String,
     query: String,
@@ -380,7 +380,7 @@ fun ChutneyStepBuilder.MongoDeleteTask(
  * Outputs:
  * - documents : the list as json of documents (List<String>)
  */
-fun ChutneyStepBuilder.MongoFindTask(
+fun ChutneyStepBuilder.MongoFindAction(
     target: String,
     collection: String,
     query: String,
@@ -406,7 +406,7 @@ fun ChutneyStepBuilder.MongoFindTask(
 /**
  * On a mongoDb target, insert a document
  */
-fun ChutneyStepBuilder.MongoInsertTask(
+fun ChutneyStepBuilder.MongoInsertAction(
     target: String,
     collection: String,
     document: String,
@@ -433,7 +433,7 @@ fun ChutneyStepBuilder.MongoInsertTask(
  * Outputs:
  * - modifiedCount : the number of updated documents (long)
  */
-fun ChutneyStepBuilder.MongoUpdateTask(
+fun ChutneyStepBuilder.MongoUpdateAction(
     target: String,
     collection: String,
     filter: String,
@@ -464,7 +464,7 @@ fun ChutneyStepBuilder.MongoUpdateTask(
  * Outputs:
  * - collectionNames : the list of collection names (List<String>)
  */
-fun ChutneyStepBuilder.MongoListTask(
+fun ChutneyStepBuilder.MongoListAction(
     target: String,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
@@ -487,7 +487,7 @@ fun ChutneyStepBuilder.MongoListTask(
  * - body : http response body (String)
  * - headers : http response headers (org.springframework.http.HttpHeaders)
  */
-fun ChutneyStepBuilder.HttpGetTask(
+fun ChutneyStepBuilder.HttpGetAction(
     target: String,
     uri: String,
     headers: Map<String, Any> = mapOf(),
@@ -518,7 +518,7 @@ fun ChutneyStepBuilder.HttpGetTask(
  * - body : http response body (String)
  * - headers : http response headers (org.springframework.http.HttpHeaders)
  */
-fun ChutneyStepBuilder.HttpPostTask(
+fun ChutneyStepBuilder.HttpPostAction(
     target: String,
     uri: String,
     headers: Map<String, Any> = mapOf(),
@@ -557,7 +557,7 @@ fun ChutneyStepBuilder.HttpPostTask(
  * - body : http response body (String)
  * - headers : http response headers (org.springframework.http.HttpHeaders)
  */
-fun ChutneyStepBuilder.HttpPutTask(
+fun ChutneyStepBuilder.HttpPutAction(
     target: String,
     uri: String,
     headers: Map<String, Any> = mapOf(),
@@ -590,7 +590,7 @@ fun ChutneyStepBuilder.HttpPutTask(
  * - body : http response body (String)
  * - headers : http response headers (org.springframework.http.HttpHeaders)
  */
-fun ChutneyStepBuilder.HttpDeleteTask(
+fun ChutneyStepBuilder.HttpDeleteAction(
     target: String,
     uri: String,
     headers: Map<String, Any> = mapOf(),
@@ -621,7 +621,7 @@ fun ChutneyStepBuilder.HttpDeleteTask(
  * - body : http response body (String)
  * - headers : http response headers (org.springframework.http.HttpHeaders)
  */
-fun ChutneyStepBuilder.HttpSoapTask(
+fun ChutneyStepBuilder.HttpSoapAction(
     target: String,
     uri: String,
     body: String,
@@ -658,7 +658,7 @@ fun ChutneyStepBuilder.HttpSoapTask(
  * - body : http response body (String)
  * - headers : http response headers (org.springframework.http.HttpHeaders)
  */
-fun ChutneyStepBuilder.HttpPatchTask(
+fun ChutneyStepBuilder.HttpPatchAction(
     target: String,
     uri: String,
     headers: Map<String, Any> = mapOf(),
@@ -695,9 +695,9 @@ fun ChutneyStepBuilder.HttpPatchTask(
  * Outputs:
  * - httpsServer : instance of the http server (com.github.tomakehurst.wiremock.WireMockServer)
  * -------
- * Finally action registered : HttpsServerStopTask
+ * Finally action registered : HttpsServerStopAction
  */
-fun ChutneyStepBuilder.HttpsServerStartTask(
+fun ChutneyStepBuilder.HttpsServerStartAction(
     port: String?,
     trustStorePath: String?,
     trustStorePassword: String?,
@@ -728,7 +728,7 @@ fun ChutneyStepBuilder.HttpsServerStartTask(
  * Outputs:
  * - requests : list of message received (List<com.github.tomakehurst.wiremock.verification.LoggedRequest>)
  */
-fun ChutneyStepBuilder.HttpsListenerTask(
+fun ChutneyStepBuilder.HttpsListenerAction(
     httpServerVarName: String = "httpsServer",
     uri: String,
     verb: String,
@@ -754,7 +754,7 @@ fun ChutneyStepBuilder.HttpsListenerTask(
 /**
  * Upload via scp
  */
-fun ChutneyStepBuilder.ScpUploadTask(
+fun ChutneyStepBuilder.ScpUploadAction(
     target: String,
     source: String,
     destination: String,
@@ -778,7 +778,7 @@ fun ChutneyStepBuilder.ScpUploadTask(
 /**
  * Download via scp
  */
-fun ChutneyStepBuilder.ScpDownloadTask(
+fun ChutneyStepBuilder.ScpDownloadAction(
     target: String,
     source: String,
     destination: String,
@@ -802,7 +802,7 @@ fun ChutneyStepBuilder.ScpDownloadTask(
 /**
  * Upload via sftp
  */
-fun ChutneyStepBuilder.SftpUploadTask(
+fun ChutneyStepBuilder.SftpUploadAction(
     target: String,
     source: String,
     destination: String,
@@ -826,7 +826,7 @@ fun ChutneyStepBuilder.SftpUploadTask(
 /**
  * Download via sftp
  */
-fun ChutneyStepBuilder.SftpDownloadTask(
+fun ChutneyStepBuilder.SftpDownloadAction(
     target: String,
     source: String,
     destination: String,
@@ -857,7 +857,7 @@ fun ChutneyStepBuilder.SftpDownloadTask(
  * - type : String
  * - owner:group : String
  */
-fun ChutneyStepBuilder.SftpFileInfoTask(
+fun ChutneyStepBuilder.SftpFileInfoAction(
     target: String,
     file: String,
     timeout: String? = "",
@@ -884,7 +884,7 @@ fun ChutneyStepBuilder.SftpFileInfoTask(
  * Outputs:
  * - files : list of files (List<String>)
  */
-fun ChutneyStepBuilder.SftpListDirTask(
+fun ChutneyStepBuilder.SftpListDirAction(
     target: String,
     directory: String,
     timeout: String? = "",
@@ -905,13 +905,15 @@ fun ChutneyStepBuilder.SftpListDirTask(
     if (strategy != null) this.strategy = strategy
 }
 
+enum class SSH_CLIENT_CHANNEL { COMMAND, SHELL }
+
 /**
  * Execute ssh command
  * -------
  * Outputs:
- * - results : list of result of commands (List<com.chutneytesting.task.ssh.sshj.CommandResult>)
+ * - results : list of result of commands (List<com.chutneytesting.action.ssh.sshj.CommandResult>)
  */
-fun ChutneyStepBuilder.SshClientTask(
+fun ChutneyStepBuilder.SshClientAction(
     target: String,
     commands: List<Any>,
     channel: SSH_CLIENT_CHANNEL?,
@@ -936,11 +938,11 @@ fun ChutneyStepBuilder.SshClientTask(
  * Start a ssh server
  * -------
  * Outputs:
- * - sshServer : instance of ssh server (com.chutneytesting.task.ssh.sshd.SshServerMock)
+ * - sshServer : instance of ssh server (com.chutneytesting.action.ssh.sshd.SshServerMock)
  * -------
- * Finally action registered : SshServerStopTask
+ * Finally action registered : SshServerStopAction
  */
-fun ChutneyStepBuilder.SshServerStartTask(
+fun ChutneyStepBuilder.SshServerStartAction(
     port: String? = null,
     host: String? = null,
     keyPair: String? = null,
@@ -967,18 +969,18 @@ fun ChutneyStepBuilder.SshServerStartTask(
     )
 }
 
-@Deprecated("Bad naming", ReplaceWith("JmsCleanQueueTask(target, queueName)"), DeprecationLevel.WARNING)
-fun ChutneyStepBuilder.JmsCleanQueuesTask(
+@Deprecated("Bad naming", ReplaceWith("JmsCleanQueueAction(target, queueName)"), DeprecationLevel.WARNING)
+fun ChutneyStepBuilder.JmsCleanQueuesAction(
     target: String,
     queueName: String
 ) {
-    JmsCleanQueueTask(target, queueName)
+    JmsCleanQueueAction(target, queueName)
 }
 
 /**
  * On a jms target, consume all messages from a queue
  */
-fun ChutneyStepBuilder.JmsCleanQueueTask(
+fun ChutneyStepBuilder.JmsCleanQueueAction(
     target: String,
     destination: String,
     selector: String? = null,
@@ -1012,7 +1014,7 @@ fun ChutneyStepBuilder.JmsCleanQueueTask(
  * - textMessage : content of the message (String)
  * - jmsProperties : jms properties of the message (Map<String, Object>)
  */
-fun ChutneyStepBuilder.JmsListenerTask(
+fun ChutneyStepBuilder.JmsListenerAction(
     target: String,
     destination: String,
     selector: String? = null,
@@ -1042,7 +1044,7 @@ fun ChutneyStepBuilder.JmsListenerTask(
 /**
  * On a jms target, send a message to a queue
  */
-fun ChutneyStepBuilder.JmsSenderTask(
+fun ChutneyStepBuilder.JmsSenderAction(
     target: String,
     queueName: String,
     headers: Map<String, Any> = mapOf(),
@@ -1071,9 +1073,9 @@ fun ChutneyStepBuilder.JmsSenderTask(
  * Outputs:
  * - jmsBrokerService : instance of jms server (org.apache.activemq.broker.BrokerService)
  * -------
- * Finally action registered : JmsBrokerStopTask
+ * Finally action registered : JmsBrokerStopAction
  */
-fun ChutneyStepBuilder.JmsBrokerStartTask(
+fun ChutneyStepBuilder.JmsBrokerStartAction(
     configUri: String? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf()
@@ -1092,9 +1094,9 @@ fun ChutneyStepBuilder.JmsBrokerStartTask(
  * Execute SQL requests
  * -------
  * Outputs:
- * - recordResult : list of result of sql command (List<com.chutneytesting.task.sql.core.Records>)
+ * - recordResult : list of result of sql command (List<com.chutneytesting.action.sql.core.Records>)
  */
-fun ChutneyStepBuilder.SqlTask(
+fun ChutneyStepBuilder.SqlAction(
     target: String,
     statements: List<String>,
     outputs: Map<String, Any> = mapOf(),
@@ -1121,9 +1123,9 @@ fun ChutneyStepBuilder.SqlTask(
  * Outputs:
  * - webDriver : instance of webdriver (org.openqa.selenium.WebDriver)
  * -------
- * Finally action registered : SeleniumQuitTask
+ * Finally action registered : SeleniumQuitAction
  */
-fun ChutneyStepBuilder.SeleniumDriverInitTask(
+fun ChutneyStepBuilder.SeleniumDriverInitAction(
     browser: String? = null,
     driverPath: String,
     browserPath: String,
@@ -1144,10 +1146,23 @@ fun ChutneyStepBuilder.SeleniumDriverInitTask(
     if (strategy != null) this.strategy = strategy
 }
 
+val defaultWebDriverSpel = "webDriver".spEL()
+
+enum class SELENIUM_BY {
+    id, NAME, className, cssSelector, xpath, zk;
+
+    companion object {
+        fun name(v: SELENIUM_BY): String {
+            if (v == NAME) return "name"
+            return v.name
+        }
+    }
+}
+
 /**
  * Selenium click on an element
  */
-fun ChutneyStepBuilder.SeleniumClickTask(
+fun ChutneyStepBuilder.SeleniumClickAction(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
@@ -1173,7 +1188,7 @@ fun ChutneyStepBuilder.SeleniumClickTask(
 /**
  * Close webdriver instance
  */
-fun ChutneyStepBuilder.SeleniumCloseTask(
+fun ChutneyStepBuilder.SeleniumCloseAction(
     webDriver: String = defaultWebDriverSpel,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
@@ -1196,7 +1211,7 @@ fun ChutneyStepBuilder.SeleniumCloseTask(
  * Outputs:
  * - outputGet : window handle identifier (String)
  */
-fun ChutneyStepBuilder.SeleniumGetTask(
+fun ChutneyStepBuilder.SeleniumGetAction(
     webDriver: String = defaultWebDriverSpel,
     newTab: String? = null,
     url: String? = null,
@@ -1223,7 +1238,7 @@ fun ChutneyStepBuilder.SeleniumGetTask(
  * Outputs:
  * - outputAttributeValue : attribute value retrieved (String)
  */
-fun ChutneyStepBuilder.SeleniumGetAttributeTask(
+fun ChutneyStepBuilder.SeleniumGetAttributeAction(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
@@ -1254,7 +1269,7 @@ fun ChutneyStepBuilder.SeleniumGetAttributeTask(
  * Outputs:
  * - outputGetText : web element text or value attribute (String)
  */
-fun ChutneyStepBuilder.SeleniumGetTextTask(
+fun ChutneyStepBuilder.SeleniumGetTextAction(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
@@ -1280,7 +1295,7 @@ fun ChutneyStepBuilder.SeleniumGetTextTask(
 /**
  * Selenium screenshot
  */
-fun ChutneyStepBuilder.SeleniumScreenShotTask(
+fun ChutneyStepBuilder.SeleniumScreenShotAction(
     webDriver: String = defaultWebDriverSpel,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
@@ -1300,7 +1315,7 @@ fun ChutneyStepBuilder.SeleniumScreenShotTask(
 /**
  * Selenium simulate typing into an element
  */
-fun ChutneyStepBuilder.SeleniumSendKeysTask(
+fun ChutneyStepBuilder.SeleniumSendKeysAction(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
@@ -1325,13 +1340,15 @@ fun ChutneyStepBuilder.SeleniumSendKeysTask(
     if (strategy != null) this.strategy = strategy
 }
 
+enum class SELENIUM_SWITCH { Frame, Window, Popup, AlertOk, AlertCancel }
+
 /**
  * Selenium switch to frame, window, alertok, alertcancel or popup
  * -------
  * Outputs:
  * outputSwitchTo : window handler of popup (if Popup switch used) (String)
  */
-fun ChutneyStepBuilder.SeleniumSwitchToTask(
+fun ChutneyStepBuilder.SeleniumSwitchToAction(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
@@ -1357,9 +1374,9 @@ fun ChutneyStepBuilder.SeleniumSwitchToTask(
 }
 
 /**
- * Selenium wait until com.chutneytesting.task.selenium.SeleniumWaitTask.ExpectedByConditionEnum
+ * Selenium wait until com.chutneytesting.action.selenium.SeleniumWaitAction.ExpectedByConditionEnum
  */
-fun ChutneyStepBuilder.SeleniumWaitTask(
+fun ChutneyStepBuilder.SeleniumWaitAction(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
@@ -1387,7 +1404,7 @@ fun ChutneyStepBuilder.SeleniumWaitTask(
 /**
  * Selenium move and click
  */
-fun ChutneyStepBuilder.SeleniumHoverThenClickTask(
+fun ChutneyStepBuilder.SeleniumHoverThenClickAction(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
@@ -1413,7 +1430,7 @@ fun ChutneyStepBuilder.SeleniumHoverThenClickTask(
 /**
  * Selenium scroll to element
  */
-fun ChutneyStepBuilder.SeleniumScrollToTask(
+fun ChutneyStepBuilder.SeleniumScrollToAction(
     webDriver: String = defaultWebDriverSpel,
     selector: String,
     by: SELENIUM_BY,
@@ -1442,9 +1459,9 @@ fun ChutneyStepBuilder.SeleniumScrollToTask(
  * Outputs:
  * - webDriver : instance of webdriver (org.openqa.selenium.WebDriver)
  * -------
- * Finally action registered : SeleniumQuitTask
+ * Finally action registered : SeleniumQuitAction
  */
-fun ChutneyStepBuilder.SeleniumRemoteDriverInitTask(
+fun ChutneyStepBuilder.SeleniumRemoteDriverInitAction(
     hub: String,
     browser: String? = null,
     outputs: Map<String, Any> = mapOf(),
@@ -1466,7 +1483,7 @@ fun ChutneyStepBuilder.SeleniumRemoteDriverInitTask(
 /**
  * Selenium resize browser
  */
-fun ChutneyStepBuilder.SeleniumSetBrowserSizeTask(
+fun ChutneyStepBuilder.SeleniumSetBrowserSizeAction(
     webDriver: String = defaultWebDriverSpel,
     width: Int,
     height: Int,
@@ -1492,7 +1509,7 @@ fun ChutneyStepBuilder.SeleniumSetBrowserSizeTask(
  * - Keys of the expected map are jsonpath
  * - Values of the expected map are expected values
  */
-fun ChutneyStepBuilder.JsonAssertTask(
+fun ChutneyStepBuilder.JsonAssertAction(
     document: String,
     expected: Map<String, Any> = mapOf(),
     outputs: Map<String, Any> = mapOf(),
@@ -1510,10 +1527,10 @@ fun ChutneyStepBuilder.JsonAssertTask(
 }
 
 /**
- * Same as com.chutneytesting.kotlin.dsl.ChutneyStepImplExtensionsKt.JsonAssertTask(String, Map<String,Object>)
+ * Same as com.chutneytesting.kotlin.dsl.ChutneyStepImplExtensionsKt.JsonAssertAction(String, Map<String,Object>)
  * but inputs are execution context variables instead
  */
-fun ChutneyStepBuilder.JsonAssertTask(
+fun ChutneyStepBuilder.JsonAssertAction(
     documentVariable: String,
     expectationsVariable: String,
     outputs: Map<String, Any> = mapOf(),
@@ -1530,10 +1547,12 @@ fun ChutneyStepBuilder.JsonAssertTask(
     )
 }
 
+enum class JsonCompareMode { STRICT, LENIENT }
+
 /**
  * Compare path in two jsons
  */
-fun ChutneyStepBuilder.JsonCompareTask(
+fun ChutneyStepBuilder.JsonCompareAction(
     document1: String,
     document2: String,
     comparingPaths: Map<String, String>? = null,
@@ -1557,7 +1576,7 @@ fun ChutneyStepBuilder.JsonCompareTask(
 /**
  * Validate a json from a json schema
  */
-fun ChutneyStepBuilder.JsonValidationTask(
+fun ChutneyStepBuilder.JsonValidationAction(
     schema: String,
     json: String,
     outputs: Map<String, Any> = mapOf(),
@@ -1579,7 +1598,7 @@ fun ChutneyStepBuilder.JsonValidationTask(
  * - Keys of the expected map are xpath
  * - Values of the expected map are expected values
  */
-fun ChutneyStepBuilder.XmlAssertTask(
+fun ChutneyStepBuilder.XmlAssertAction(
     document: String,
     expected: Map<String, Any> = mapOf(),
     outputs: Map<String, Any> = mapOf(),
@@ -1599,7 +1618,7 @@ fun ChutneyStepBuilder.XmlAssertTask(
 /**
  * Compare two Strings
  */
-fun ChutneyStepBuilder.StringAssertTask(
+fun ChutneyStepBuilder.StringAssertAction(
     document: String,
     expected: String,
     outputs: Map<String, Any> = mapOf(),
@@ -1616,8 +1635,8 @@ fun ChutneyStepBuilder.StringAssertTask(
     )
 }
 
-@Deprecated("Bad naming", ReplaceWith("AssertTask(List<String>)"), DeprecationLevel.WARNING)
-fun ChutneyStepBuilder.AssertTrueTask(asserts: List<Map<String, Any>>) {
+@Deprecated("Bad naming", ReplaceWith("AssertAction(List<String>)"), DeprecationLevel.WARNING)
+fun ChutneyStepBuilder.AssertTrueAction(asserts: List<Map<String, Any>>) {
     implementation = ChutneyStepImpl(
         type = "assert",
         inputs = listOf("asserts" to asserts).notEmptyToMap()
@@ -1627,7 +1646,7 @@ fun ChutneyStepBuilder.AssertTrueTask(asserts: List<Map<String, Any>>) {
 /**
  * List of spEL to assert (spEL must return a boolean value)
  */
-fun ChutneyStepBuilder.AssertTask(
+fun ChutneyStepBuilder.AssertAction(
     asserts: List<String>,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf()
@@ -1645,7 +1664,7 @@ fun ChutneyStepBuilder.AssertTask(
 /**
  *  Validate a xml from a xsd
  */
-fun ChutneyStepBuilder.XsdValidationTask(
+fun ChutneyStepBuilder.XsdValidationAction(
     xml: String,
     xsdPath: String,
     outputs: Map<String, Any> = mapOf(),
@@ -1666,7 +1685,7 @@ fun ChutneyStepBuilder.XsdValidationTask(
  * Compare two String on multiple mode (equals, not-equals, contains, not-contains, greater-than, less-than)
  * For greater and less comparator, numerics are expected.
  */
-fun ChutneyStepBuilder.CompareTask(
+fun ChutneyStepBuilder.CompareAction(
     mode: String,
     actual: String,
     expected: String,
@@ -1692,7 +1711,7 @@ fun ChutneyStepBuilder.CompareTask(
  * - payload : payload sent (String)
  * - headers : headers of the message sent (Map<String, String>)
  */
-fun ChutneyStepBuilder.KafkaBasicPublishTask(
+fun ChutneyStepBuilder.KafkaBasicPublishAction(
     target: String,
     topic: String,
     headers: Map<String, Any> = mapOf(),
@@ -1717,6 +1736,9 @@ fun ChutneyStepBuilder.KafkaBasicPublishTask(
     if (strategy != null) this.strategy = strategy
 }
 
+// cf. org.springframework.kafka.listener.ContainerProperties.AckMode
+enum class KafkaSpringOffsetCommitBehavior { RECORD, BATCH, TIME, COUNT, COUNT_TIME, MANUAL, MANUAL_IMMEDIATE }
+
 /**
  * On a kafka target, consume messages from a topic
  * -------
@@ -1725,7 +1747,7 @@ fun ChutneyStepBuilder.KafkaBasicPublishTask(
  * - payloads : list of payload of messages consumed (List<Object>)
  * - headers : list of headers of messages consumed (List<Map<String, Object>>)
  */
-fun ChutneyStepBuilder.KafkaBasicConsumeTask(
+fun ChutneyStepBuilder.KafkaBasicConsumeAction(
     target: String,
     topic: String,
     group: String,
@@ -1766,9 +1788,9 @@ fun ChutneyStepBuilder.KafkaBasicConsumeTask(
  * Outputs:
  * - kafkaBroker : instance of kafka broker (org.springframework.kafka.test.EmbeddedKafkaBroker)
  * -------
- * Finally action registered : KafkaBrokerStopTask
+ * Finally action registered : KafkaBrokerStopAction
  */
-fun ChutneyStepBuilder.KafkaBrokerStartTask(
+fun ChutneyStepBuilder.KafkaBrokerStartAction(
     port: String? = null,
     topics: List<String>? = null,
     properties: Map<String, Any>? = null,
@@ -1793,7 +1815,7 @@ fun ChutneyStepBuilder.KafkaBrokerStartTask(
  * Outputs:
  * - micrometerCounter : instance of the counter (io.micrometer.core.instrument.Counter)
  */
-fun ChutneyStepBuilder.MicrometerCounterTask(
+fun ChutneyStepBuilder.MicrometerCounterAction(
     name: String,
     description: String? = null,
     unit: String? = null,
@@ -1828,7 +1850,7 @@ fun ChutneyStepBuilder.MicrometerCounterTask(
  * Outputs:
  * - micrometerGaugeObject : instance of the gauge (io.micrometer.core.instrument.Gauge)
  */
-fun ChutneyStepBuilder.MicrometerGaugeTask(
+fun ChutneyStepBuilder.MicrometerGaugeAction(
     name: String,
     description: String? = null,
     unit: String? = null,
@@ -1865,7 +1887,7 @@ fun ChutneyStepBuilder.MicrometerGaugeTask(
  * Outputs:
  * - micrometerTimer : instance of the timer (io.micrometer.core.instrument.Timer)
  */
-fun ChutneyStepBuilder.MicrometerTimerTask(
+fun ChutneyStepBuilder.MicrometerTimerAction(
     name: String,
     description: String? = null,
     tags: List<String> = emptyList(),
@@ -1916,7 +1938,7 @@ fun ChutneyStepBuilder.MicrometerTimerTask(
  * Outputs:
  * - micrometerTimerSample : instance of the timer sample (io.micrometer.core.instrument.Timer.Sample)
  */
-fun ChutneyStepBuilder.MicrometerTimerStartTask(
+fun ChutneyStepBuilder.MicrometerTimerStartAction(
     registry: String? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
@@ -1939,7 +1961,7 @@ fun ChutneyStepBuilder.MicrometerTimerStartTask(
  * Outputs:
  * - micrometerTimerSampleDuration : duration of the timer (java.time.Duration)
  */
-fun ChutneyStepBuilder.MicrometerTimerStopTask(
+fun ChutneyStepBuilder.MicrometerTimerStopAction(
     registry: String? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
@@ -1962,7 +1984,7 @@ fun ChutneyStepBuilder.MicrometerTimerStopTask(
  * Outputs:
  * - micrometerSummary : instance of the timer (io.micrometer.core.instrument.DistributionSummary)
  */
-fun ChutneyStepBuilder.MicrometerSummaryTask(
+fun ChutneyStepBuilder.MicrometerSummaryAction(
     name: String,
     description: String? = null,
     unit: String? = null,
@@ -2015,7 +2037,7 @@ fun ChutneyStepBuilder.MicrometerSummaryTask(
  * Outputs:
  * - radiusResponse : radius response (org.tinyradius.packet.RadiusPacket)
  */
-fun ChutneyStepBuilder.RadiusAuthenticateTask(
+fun ChutneyStepBuilder.RadiusAuthenticateAction(
     target: String,
     userName: String,
     userPassword: String,
@@ -2046,7 +2068,7 @@ fun ChutneyStepBuilder.RadiusAuthenticateTask(
  * Outputs:
  * - radiusResponse : radius response (org.tinyradius.packet.RadiusPacket)
  */
-fun ChutneyStepBuilder.RadiusAccountingTask(
+fun ChutneyStepBuilder.RadiusAccountingAction(
     target: String,
     userName: String,
     accountingType: Int,

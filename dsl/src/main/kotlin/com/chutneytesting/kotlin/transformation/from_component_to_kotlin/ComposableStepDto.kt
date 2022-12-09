@@ -5,7 +5,7 @@ data class ComposableStepDto(
     val name: String?,
     val strategy: Strategy?,
     val usage: String?,
-    val task: StepImplementation?,
+    val action: StepImplementation?,
     val steps: List<ComposableStepDto>?,
     val parameters: List<KeyValue>?,
     val computedParameters: List<KeyValue>?,

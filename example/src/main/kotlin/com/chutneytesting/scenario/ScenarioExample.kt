@@ -4,23 +4,23 @@ import com.chutneytesting.kotlin.dsl.*
 
 val call_google = Scenario(title = "Call google") {
     Given("Create variable") {
-        ContextPutTask(
+        ContextPutAction(
             entries = mapOf(
                 "name" to "Chutney"
             )
         )
     }
     And("Some http call") {
-        HttpGetTask(
+        HttpGetAction(
             target = "google",
             uri = "/"
         )
     }
     When("Hello world") {
-        SuccessTask()
+        SuccessAction()
     }
     Then("Stupid assert") {
-        StringAssertTask(
+        StringAssertAction(
             document = "name".spEL,
             expected = "Chutney"
         )
@@ -29,34 +29,34 @@ val call_google = Scenario(title = "Call google") {
 
 val call_a_website = Scenario(title = "Call a website") {
     When("Hello website") {
-        HttpGetTask(
+        HttpGetAction(
             target = "website",
             uri = "/",
             validations = mapOf("http 200" to "status == 200".spEL())
         )
     }
     Then("Stupid assert") {
-        SuccessTask()
+        SuccessAction()
     }
 }
 
 val should_fail = Scenario(title = "Call unknown and fail") {
     When("Hello unknown") {
-        HttpGetTask(
+        HttpGetAction(
             target = "unknown",
             uri = "/"
         )
     }
     Then("Fail") {
-        AssertTask(listOf("status == 200".spEL))
+        AssertAction(listOf("status == 200".spEL))
     }
     And("Should not be executed") {
-        SuccessTask()
+        SuccessAction()
     }
 }
 
 fun alwaysSuccessWithParam(param: String) = Scenario(title = "Always success with $param") {
     When("Just ok") {
-        SuccessTask()
+        SuccessAction()
     }
 }

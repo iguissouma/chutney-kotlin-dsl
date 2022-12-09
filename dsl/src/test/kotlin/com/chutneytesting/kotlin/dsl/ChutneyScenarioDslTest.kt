@@ -12,17 +12,17 @@ class ChutneyScenarioDslTest {
 
         val `swapi GET people record` = Scenario(title = "swapi GET people record") {
             Given("I set get people service api endpoint") {
-                ContextPutTask(entries = mapOf("uri" to "api/people/1"))
+                ContextPutAction(entries = mapOf("uri" to "api/people/1"))
             }
             When("I send GET HTTP request", RetryTimeOutStrategy("5 s", "1 s")) {
-                HttpGetTask(
+                HttpGetAction(
                     target = "swapi.dev",
                     uri = "uri".spEL(),
                     validations = mapOf("always true" to "true".elEval())
                 )
             }
             Then("I receive valid HTTP response") {
-                JsonAssertTask(document = "body".spEL(), expected = mapOf("$.name" to "Luke Skywalker"))
+                JsonAssertAction(document = "body".spEL(), expected = mapOf("$.name" to "Luke Skywalker"))
             }
         }
 
@@ -39,17 +39,17 @@ class ChutneyScenarioDslTest {
         val `swapi GET people record` = Scenario(title = "swapi GET people record") {
             Given("I set get people service api endpoint") {
                 Step("set id") {
-                    ContextPutTask(entries = mapOf("id" to "1"))
+                    ContextPutAction(entries = mapOf("id" to "1"))
                 }
                 Step("set uri") {
-                    ContextPutTask(entries = mapOf("uri" to "api/people/${"id".spEL()}"))
+                    ContextPutAction(entries = mapOf("uri" to "api/people/${"id".spEL()}"))
                 }
             }
             When("I send GET HTTP request") {
-                HttpGetTask(target = "swapi.dev", uri = "uri".spEL())
+                HttpGetAction(target = "swapi.dev", uri = "uri".spEL())
             }
             Then("I receive valid HTTP response") {
-                JsonAssertTask(document = "body".spEL(), expected = mapOf("$.name" to "Luke Skywalker"))
+                JsonAssertAction(document = "body".spEL(), expected = mapOf("$.name" to "Luke Skywalker"))
             }
         }
 
@@ -64,19 +64,19 @@ class ChutneyScenarioDslTest {
     @Test
     fun `is able to create chutney scenario using kotlin dsl with functions`() {
 
-        fun declareUri(): ChutneyStepBuilder.() -> Unit = { ContextPutTask(entries = mapOf("uri" to "api/people/1")) }
+        fun declareUri(): ChutneyStepBuilder.() -> Unit = { ContextPutAction(entries = mapOf("uri" to "api/people/1")) }
 
         val `swapi GET people record` = Scenario(title = "swapi GET people record") {
             Given("I set get people service api endpoint", declareUri())
             When("I send GET HTTP request", RetryTimeOutStrategy("5 s", "1 s")) {
-                HttpGetTask(
+                HttpGetAction(
                     target = "swapi.dev",
                     uri = "uri".spEL(),
                     validations = mapOf("always true" to "true".elEval())
                 )
             }
             Then("I receive valid HTTP response") {
-                JsonAssertTask(document = "body".spEL(), expected = mapOf("$.name" to "Luke Skywalker"))
+                JsonAssertAction(document = "body".spEL(), expected = mapOf("$.name" to "Luke Skywalker"))
             }
         }
 
@@ -90,15 +90,15 @@ class ChutneyScenarioDslTest {
     @Test
     fun `is able to create chutney scenario using kotlin dsl with functions and multiple assertions`() {
 
-        fun declareUri(): ChutneyStepBuilder.() -> Unit = { ContextPutTask(entries = mapOf("uri" to "api/people/1")) }
+        fun declareUri(): ChutneyStepBuilder.() -> Unit = { ContextPutAction(entries = mapOf("uri" to "api/people/1")) }
 
         val `swapi GET people record` = Scenario(title = "swapi GET people record") {
             Given("I set get people service api endpoint", declareUri())
             When("I send GET HTTP request") {
-                HttpGetTask(target = "swapi.dev", uri = "uri".spEL())
+                HttpGetAction(target = "swapi.dev", uri = "uri".spEL())
             }
             Then("I receive valid HTTP response") {
-                JsonAssertTask(
+                JsonAssertAction(
                     document = "body".spEL(),
                     expected = mapOf("$.name" to "Luke Skywalker", "$.species" to emptyArray<String>())
                 )
@@ -115,14 +115,14 @@ class ChutneyScenarioDslTest {
     @Test
     fun `is able to create chutney scenario using kotlin dsl with extension functions`() {
 
-        fun ChutneyStepBuilder.declareUri() = ContextPutTask(entries = mapOf("uri" to "api/people/1"))
+        fun ChutneyStepBuilder.declareUri() = ContextPutAction(entries = mapOf("uri" to "api/people/1"))
 
         val `swapi GET people record` = Scenario(title = "swapi GET people record") {
             Given("I set get people service api endpoint") {
                 declareUri()
             }
             When("I send GET HTTP request") {
-                HttpGetTask(
+                HttpGetAction(
                     target = "swapi.dev",
                     uri = "uri".spEL(),
                     validations = mapOf("always true" to "true".elEval()),
@@ -130,7 +130,7 @@ class ChutneyScenarioDslTest {
                 )
             }
             Then("I receive valid HTTP response") {
-                JsonAssertTask(document = "body".spEL(), expected = mapOf("$.name" to "Luke Skywalker"))
+                JsonAssertAction(document = "body".spEL(), expected = mapOf("$.name" to "Luke Skywalker"))
             }
         }
 
@@ -144,15 +144,15 @@ class ChutneyScenarioDslTest {
     @Test
     fun `is able to create chutney scenario using kotlin dsl with softAssertions`() {
 
-        fun declareUri(): ChutneyStepBuilder.() -> Unit = { ContextPutTask(entries = mapOf("uri" to "api/people/1")) }
+        fun declareUri(): ChutneyStepBuilder.() -> Unit = { ContextPutAction(entries = mapOf("uri" to "api/people/1")) }
 
         val `swapi GET people record` = Scenario(title = "swapi GET people record") {
             Given("I set get people service api endpoint", declareUri())
             When("I send GET HTTP request") {
-                HttpGetTask(target = "swapi.dev", uri = "uri".spEL())
+                HttpGetAction(target = "swapi.dev", uri = "uri".spEL())
             }
             Then("I receive valid HTTP response", strategy = SoftAssertStrategy()) {
-                JsonAssertTask(
+                JsonAssertAction(
                     document = "body".spEL(),
                     expected = mapOf("$.name" to "Luke Skywalker", "$.species" to emptyArray<String>())
                 )
@@ -171,7 +171,7 @@ class ChutneyScenarioDslTest {
 
         val chutneyScenario = Scenario(title = "No NULL in final") {
             When("final") {
-                FinalTask("success", "success")
+                FinalAction("success", "success")
             }
         }
 
@@ -181,18 +181,18 @@ class ChutneyScenarioDslTest {
     }
 
     @Test
-    fun `should generate json scenario with kafka tasks`() {
+    fun `should generate json scenario with kafka Actions`() {
 
-        val chutneyScenario = Scenario(title = "Kafka tasks") {
+        val chutneyScenario = Scenario(title = "Kafka actions") {
             When("nothing") {  }
             Then("Publish") {
-                KafkaBasicPublishTask(
+                KafkaBasicPublishAction(
                     target = "target", topic = "topic", payload = "payload",
                     properties = mapOf("bootstrap.servers" to "a.host:666,b.host:999")
                 )
             }
             And("Consume") {
-                KafkaBasicConsumeTask(
+                KafkaBasicConsumeAction(
                     target = "target", topic = "topic", group = "group",
                     nbMessages = 2,
                     headerSelector = "$[json/path]",
@@ -203,7 +203,7 @@ class ChutneyScenarioDslTest {
         }
 
         JSONAssert.assertEquals(
-            "dsl/kafka-tasks.chutney.json".asResourceContent(),
+            "dsl/kafka-actions.chutney.json".asResourceContent(),
             "$chutneyScenario",
             true
         )

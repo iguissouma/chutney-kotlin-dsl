@@ -3,7 +3,7 @@ package com.chutneytesting.kotlin.synchronize
 import com.chutneytesting.kotlin.HttpTestBase
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
 import com.chutneytesting.kotlin.dsl.Scenario
-import com.chutneytesting.kotlin.dsl.SuccessTask
+import com.chutneytesting.kotlin.dsl.SuccessAction
 import com.chutneytesting.kotlin.util.ChutneyServerInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -30,7 +30,7 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
 
     private val localScenario = Scenario(title = "A scenario") {
         When("Something happens") {
-            SuccessTask()
+            SuccessAction()
         }
     }
 
@@ -50,7 +50,7 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
 
         val modifiedScenario = Scenario(title = "A scenario") {
             When("Something happens with success") {
-                SuccessTask()
+                SuccessAction()
             }
         }
 
@@ -67,7 +67,7 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
 
         val modifiedScenario = Scenario(title = "A scenario") {
             When("Something happens with success") {
-                SuccessTask()
+                SuccessAction()
             }
         }
 
@@ -104,7 +104,7 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
         // Given
         var existingScenario = Scenario(id = 1, title = "A scenario") {
             When("Something happens with success") {
-                SuccessTask()
+                SuccessAction()
             }
         }
         assertScenarioSynchronization(
@@ -116,7 +116,7 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
 
         existingScenario = Scenario(id = 1, title = "An other scenario title") {
             When("Something happens with success") {
-                SuccessTask()
+                SuccessAction()
             }
         }
 
@@ -172,7 +172,7 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
         // Given
         var existingScenario = Scenario(id = 1, title = "A scenario") {
             When("Something happens with success") {
-                SuccessTask()
+                SuccessAction()
             }
         }
         val malFormattedHost = ChutneyServerInfo("unknown host", "", "")

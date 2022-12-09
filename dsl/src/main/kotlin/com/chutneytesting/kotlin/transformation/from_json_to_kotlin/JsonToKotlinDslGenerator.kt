@@ -60,7 +60,7 @@ class ChutneyScenarioDslGenerator {
 
 private fun Strategy.toDsl(): String? {
     return when (this.type) {
-        "retry-with-timeout" -> mapRetryTimeoutTask(this)
+        "retry-with-timeout" -> mapRetryTimeoutAction(this)
         else -> return null
     }
 }
@@ -69,19 +69,19 @@ private fun ChutneyStep.toDsl(): String {
     if (this.subSteps.isEmpty()) {
         val implementation = this.implementation ?: return mapTODO()
         return when (implementation.type) {
-            "context-put" -> mapContexPutTask(implementation)
-            "http-get" -> mapHttpGetTask(implementation)
-            "http-post" -> mapHttpPostTask(implementation)
-            "http-put" -> mapHttpPutTask(implementation)
-            "amqp-clean-queues" -> mapAmqpCleanQueuesTask(implementation)
-            "amqp-basic-consume" -> mapAmqpBasicConsumeTask(implementation)
-            "json-assert" -> mapJsonAssertTask(implementation)
-            "json-compare" -> mapJsonCompareTask(implementation)
-            "string-assert" -> mapStringAssertTask(implementation)
-            "sql" -> mapSqlTask(implementation)
-            "sleep" -> mapSleepTask(implementation)
-            "assert" -> mapAssertsTask(implementation)
-            "debug" -> mapDebugTask()
+            "context-put" -> mapContexPutAction(implementation)
+            "http-get" -> mapHttpGetAction(implementation)
+            "http-post" -> mapHttpPostAction(implementation)
+            "http-put" -> mapHttpPutAction(implementation)
+            "amqp-clean-queues" -> mapAmqpCleanQueuesAction(implementation)
+            "amqp-basic-consume" -> mapAmqpBasicConsumeAction(implementation)
+            "json-assert" -> mapJsonAssertAction(implementation)
+            "json-compare" -> mapJsonCompareAction(implementation)
+            "string-assert" -> mapStringAssertAction(implementation)
+            "sql" -> mapSqlAction(implementation)
+            "sleep" -> mapSleepAction(implementation)
+            "assert" -> mapAssertsAction(implementation)
+            "debug" -> mapDebugAction()
             else -> mapTODO()
         }
     } else {
@@ -101,20 +101,20 @@ private fun mapTODO(): String {
     }"""
 }
 
-private fun mapRetryTimeoutTask(strategy: Strategy): String {
+private fun mapRetryTimeoutAction(strategy: Strategy): String {
     val parameter = strategy.parameters
     val timeout = inputAsString(parameter, "timeOut")
     val retryDelay = inputAsString(parameter, "retryDelay")
     return "RetryTimeOutStrategy($timeout, $retryDelay)"
 }
 
-private fun mapDebugTask(): String {
+private fun mapDebugAction(): String {
     return """{
-       DebugTask()
+       DebugAction()
     }"""
 }
 
-private fun mapSleepTask(implementation: ChutneyStepImpl): String {
+private fun mapSleepAction(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val duration = inputAsString(inputs, "duration")
     val listOfArgs = listOf(
@@ -122,11 +122,11 @@ private fun mapSleepTask(implementation: ChutneyStepImpl): String {
     )
     val args = mapArgs(listOfArgs)
     return """{
-       SleepTask($args)
+       SleepAction($args)
     }"""
 }
 
-fun mapAssertsTask(implementation: ChutneyStepImpl): String {
+fun mapAssertsAction(implementation: ChutneyStepImpl): String {
     val input = implementation.inputs
     val asserts = inputAsMapList(input, "asserts")
     val listOfArgs = listOf(
@@ -134,12 +134,12 @@ fun mapAssertsTask(implementation: ChutneyStepImpl): String {
     )
     val args = mapArgs(listOfArgs)
     return """{
-        AssertTrueTask($args)
+        AssertTrueAction($args)
     }"""
 }
 
 
-fun mapAmqpBasicConsumeTask(implementation: ChutneyStepImpl): String {
+fun mapAmqpBasicConsumeAction(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val selector = inputAsString(inputs, "selector")
     val queueName = inputAsString(inputs, "queue-name")
@@ -157,22 +157,22 @@ fun mapAmqpBasicConsumeTask(implementation: ChutneyStepImpl): String {
     )
     val args = mapArgs(listOfArgs)
     return """{
-        AmqpBasicConsumeTask($args)
+        AmqpBasicConsumeAction($args)
     }"""
 }
 
-fun mapJsonAssertTask(implementation: ChutneyStepImpl): String {
+fun mapJsonAssertAction(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val document = inputAsString(inputs, "document")
     val expected = inputAsMap(inputs, "expected")
     val listOfArgs = listOf("document" to document, "expected" to expected)
     val args = mapArgs(listOfArgs)
     return """{
-        JsonAssertTask($args)
+        JsonAssertAction($args)
     }"""
 }
 
-fun mapJsonCompareTask(implementation: ChutneyStepImpl): String {
+fun mapJsonCompareAction(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val document1 = inputAsString(inputs, "document1")
     val document2 = inputAsString(inputs, "document2")
@@ -180,11 +180,11 @@ fun mapJsonCompareTask(implementation: ChutneyStepImpl): String {
     val listOfArgs = listOf("document1" to document1, "document2" to document2, "comparingPaths" to comparingPaths)
     val args = mapArgs(listOfArgs)
     return """{
-        JsonCompareTask($args)
+        JsonCompareAction($args)
     }"""
 }
 
-fun mapSqlTask(implementation: ChutneyStepImpl): String {
+fun mapSqlAction(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val statements = inputAsList(inputs, "statements")
     val outputs = outputsAsMap(implementation)
@@ -196,33 +196,33 @@ fun mapSqlTask(implementation: ChutneyStepImpl): String {
     )
     val args = mapArgs(listOfArgs)
     return """{
-        SqlTask($args)
+        SqlAction($args)
     }"""
 }
 
-fun mapStringAssertTask(implementation: ChutneyStepImpl): String {
+fun mapStringAssertAction(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val document = inputAsString(inputs, "document")
     val expected = inputAsString(inputs, "expected")
     val listOfArgs = listOf("document" to document, "expected" to expected)
     val args = mapArgs(listOfArgs)
     return """{
-        StringAssertTask($args)
+        StringAssertAction($args)
     }"""
 }
 
-fun mapAmqpCleanQueuesTask(implementation: ChutneyStepImpl): String {
+fun mapAmqpCleanQueuesAction(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val queueNames = inputAsString(inputs, "queueNames")
     val target = target(implementation)
     val listOfArgs = listOf("target" to target, "queueNames" to queueNames)
     val args = mapArgs(listOfArgs)
     return """{
-        AmqpCleanQueuesTask($args)
+        AmqpCleanQueuesAction($args)
     }"""
 }
 
-fun mapJmsSenderTask(implementation: ChutneyStepImpl): String {
+fun mapJmsSenderAction(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val target = target(implementation)
     val headers = inputAsString(inputs, "dateDemande")
@@ -236,11 +236,11 @@ fun mapJmsSenderTask(implementation: ChutneyStepImpl): String {
     )
     val args = mapArgs(listOfArgs)
     return """{
-        JmsSenderTask($args)
+        JmsSenderAction($args)
     }"""
 }
 
-fun mapHttpGetTask(implementation: ChutneyStepImpl): String {
+fun mapHttpGetAction(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val headers = inputAsMap(inputs, "headers")
     val outputs = outputsAsMap(implementation)
@@ -257,11 +257,11 @@ fun mapHttpGetTask(implementation: ChutneyStepImpl): String {
     )
     val args = mapArgs(listOfArgs)
     return """{
-        HttpGetTask($args)
+        HttpGetAction($args)
     }"""
 }
 
-fun mapHttpPutTask(implementation: ChutneyStepImpl): String {
+fun mapHttpPutAction(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val target = target(implementation)
     val headers = inputAsMap(inputs, "headers")
@@ -278,11 +278,11 @@ fun mapHttpPutTask(implementation: ChutneyStepImpl): String {
     )
     val args = mapArgs(listOfArgs)
     return """{
-        HttpPutTask($args)
+        HttpPutAction($args)
     }"""
 }
 
-fun mapContexPutTask(implementation: ChutneyStepImpl): String {
+fun mapContexPutAction(implementation: ChutneyStepImpl): String {
     val input = implementation.inputs
     val entries = inputAsMap(input, "entries")
     val listOfArgs = listOf(
@@ -290,7 +290,7 @@ fun mapContexPutTask(implementation: ChutneyStepImpl): String {
     )
     val args = mapArgs(listOfArgs)
     return """{
-        ContextPutTask($args)
+        ContextPutAction($args)
     }"""
 }
 
@@ -318,7 +318,7 @@ private fun inputAsList(inputs: Map<String, Any?>, key: String) =
 private fun inputAsMap(inputs: Map<String, Any?>, key: String) =
     mapOfConstructor(inputs[key] as Map<String, Any>?)
 
-fun mapHttpPostTask(implementation: ChutneyStepImpl): String {
+fun mapHttpPostAction(implementation: ChutneyStepImpl): String {
     val inputs = implementation.inputs
     val headers = inputAsMap(inputs, "headers")
     val body = if (inputs["body"] is Map<*, *>) inputAsMap(inputs, "body") else inputAsString(inputs, "body")
@@ -338,7 +338,7 @@ fun mapHttpPostTask(implementation: ChutneyStepImpl): String {
     val args = mapArgs(listOfArgs)
 
     return """{
-        HttpPostTask($args)
+        HttpPostAction($args)
     }"""
 }
 

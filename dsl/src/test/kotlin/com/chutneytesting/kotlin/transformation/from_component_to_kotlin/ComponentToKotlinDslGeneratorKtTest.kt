@@ -21,7 +21,7 @@ class ComponentToKotlinDslGeneratorKtTest {
         steps = emptyList(),
         usage = "",
         tags = listOf("TAG1"),
-        task = StepImplementation(
+        action = StepImplementation(
             type = "http-get",
             target = "A_TARGET",
             inputs = mapOf(
@@ -43,7 +43,7 @@ class ComponentToKotlinDslGeneratorKtTest {
         steps = listOf(actionStep),
         usage = "",
         tags = listOf("TAG2"),
-        task = null
+        action = null
     )
 
     @Test
@@ -70,7 +70,7 @@ class ComponentToKotlinDslGeneratorKtTest {
 **/
 public fun ChutneyStepBuilder.`First action`() {
     Step("First action") {
-        HttpGetTask(target = "A_TARGET", uri = "/my/uri/", headers = mapOf("myHeader" to "myHeaderValue"), timeout = "5s", outputs = mapOf("myOutput" to "outputValue"))
+        HttpGetAction(target = "A_TARGET", uri = "/my/uri/", headers = mapOf("myHeader" to "myHeaderValue"), timeout = "5s", outputs = mapOf("myOutput" to "outputValue"))
     }
 }
             """.trim()

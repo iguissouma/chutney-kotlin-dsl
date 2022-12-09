@@ -161,39 +161,39 @@ fun formatFunctionName(toFormat: String?): String {
 }
 
 private fun generateComponent(component: ComposableStepDto): String {
-    return when (component.task?.type) {
-        "context-put" -> mapContexPutTask(component)
-        "http-get" -> mapHttpGetTask(component)
-        "http-post" -> mapHttpPostTask(component)
-        "http-put" -> mapHttpPutTask(component)
-        "amqp-clean-queues" -> mapAmqpCleanQueuesTask(component)
-        "amqp-basic-consume" -> mapAmqpBasicConsumeTask(component)
-        "json-assert" -> mapJsonAssertTask(component)
-        "json-compare" -> mapJsonCompareTask(component)
-        "string-assert" -> mapStringAssertTask(component)
-        "sql" -> mapSqlTask(component)
-        "sleep" -> mapSleepTask(component)
-        "assert" -> mapAssertsTask(component)
-        "debug" -> mapDebugTask(component)
-        "groovy" -> mapGroovyTask(component)
-        "ssh-client" -> mapSshClientTask(component)
-        "compare" -> mapCompareTask(component)
+    return when (component.action?.type) {
+        "context-put" -> mapContexPutAction(component)
+        "http-get" -> mapHttpGetAction(component)
+        "http-post" -> mapHttpPostAction(component)
+        "http-put" -> mapHttpPutAction(component)
+        "amqp-clean-queues" -> mapAmqpCleanQueuesAction(component)
+        "amqp-basic-consume" -> mapAmqpBasicConsumeAction(component)
+        "json-assert" -> mapJsonAssertAction(component)
+        "json-compare" -> mapJsonCompareAction(component)
+        "string-assert" -> mapStringAssertAction(component)
+        "sql" -> mapSqlAction(component)
+        "sleep" -> mapSleepAction(component)
+        "assert" -> mapAssertsAction(component)
+        "debug" -> mapDebugAction(component)
+        "groovy" -> mapGroovyAction(component)
+        "ssh-client" -> mapSshClientAction(component)
+        "compare" -> mapCompareAction(component)
         else -> mapTODO(component)
     }
 }
 
 private fun mapTODO(component: ComposableStepDto): String {
     return """{
-       TODO("Not yet implemented") ${component.task?.type}
+       TODO("Not yet implemented") ${component.action?.type}
     }"""
 }
 
-private fun mapDebugTask(implementation: ComposableStepDto): String {
-    return createStep(implementation, "", "DebugTask")
+private fun mapDebugAction(implementation: ComposableStepDto): String {
+    return createStep(implementation, "", "DebugAction")
 }
 
-private fun mapCompareTask(implementation: ComposableStepDto): String {
-    val inputs = implementation.task?.inputs
+private fun mapCompareAction(implementation: ComposableStepDto): String {
+    val inputs = implementation.action?.inputs
     val actual = inputAsString(inputs, "actual")
     val expected = inputAsString(inputs, "expected")
     val mode = inputAsString(inputs, "mode")
@@ -203,27 +203,27 @@ private fun mapCompareTask(implementation: ComposableStepDto): String {
         "mode" to mode
     )
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "CompareTask")
+    return createStep(implementation, args, "CompareAction")
 }
 
-private fun mapGroovyTask(implementation: ComposableStepDto): String {
-    val inputs = implementation.task?.inputs
+private fun mapGroovyAction(implementation: ComposableStepDto): String {
+    val inputs = implementation.action?.inputs
     val script = inputAsString(inputs, "script")
     val parameters = inputAsMap(inputs, "parameters")
-    val outputs = outputsAsMap(implementation.task)
+    val outputs = outputsAsMap(implementation.action)
     val listOfArgs = listOf(
         "script" to "\"\"" + script + "\"\"",
         "parameters" to parameters,
         "outputs" to outputs
     )
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "GroovyTask")
+    return createStep(implementation, args, "GroovyAction")
 }
 
-private fun mapSshClientTask(implementation: ComposableStepDto): String {
-    val target = target(implementation.task)
-    val inputs = implementation.task?.inputs
-    val outputs = outputsAsMap(implementation.task)
+private fun mapSshClientAction(implementation: ComposableStepDto): String {
+    val target = target(implementation.action)
+    val inputs = implementation.action?.inputs
+    val outputs = outputsAsMap(implementation.action)
     var channel = SSH_CLIENT_CHANNEL.COMMAND
     try {
         channel = SSH_CLIENT_CHANNEL.valueOf(inputAsString(inputs, "channel"))
@@ -238,38 +238,38 @@ private fun mapSshClientTask(implementation: ComposableStepDto): String {
         "outputs" to outputs
     )
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "SshClientTask")
+    return createStep(implementation, args, "SshClientAction")
 }
 
-private fun mapSleepTask(implementation: ComposableStepDto): String {
-    val inputs = implementation.task?.inputs
+private fun mapSleepAction(implementation: ComposableStepDto): String {
+    val inputs = implementation.action?.inputs
     val duration = inputAsString(inputs, "duration")
     val listOfArgs = listOf(
         "duration" to duration
     )
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "SleepTask")
+    return createStep(implementation, args, "SleepAction")
 }
 
-fun mapAssertsTask(implementation: ComposableStepDto): String {
-    val input = implementation.task?.inputs
+fun mapAssertsAction(implementation: ComposableStepDto): String {
+    val input = implementation.action?.inputs
     val asserts = input?.let { inputAsList(it, "asserts") }
     val listOfArgs = listOf(
         "asserts" to asserts
     )
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "AssertTask")
+    return createStep(implementation, args, "AssertAction")
 }
 
 
-fun mapAmqpBasicConsumeTask(implementation: ComposableStepDto): String {
-    val inputs = implementation.task?.inputs
+fun mapAmqpBasicConsumeAction(implementation: ComposableStepDto): String {
+    val inputs = implementation.action?.inputs
     val selector = inputAsString(inputs, "selector")
     val queueName = inputAsString(inputs, "queue-name")
     val timeout = inputAsString(inputs, "timeout")
     val nbMessages = inputs?.get("nb-messages") as Int? ?: 1
-    val outputs = outputsAsMap(implementation.task)
-    val target = target(implementation.task)
+    val outputs = outputsAsMap(implementation.action)
+    val target = target(implementation.action)
     val listOfArgs = listOf(
         "target" to target,
         "queueName" to queueName,
@@ -279,66 +279,66 @@ fun mapAmqpBasicConsumeTask(implementation: ComposableStepDto): String {
         "outputs" to outputs
     )
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "AmqpBasicConsumeTask")
+    return createStep(implementation, args, "AmqpBasicConsumeAction")
 }
 
-fun mapJsonAssertTask(implementation: ComposableStepDto): String {
-    val inputs = implementation.task?.inputs
+fun mapJsonAssertAction(implementation: ComposableStepDto): String {
+    val inputs = implementation.action?.inputs
     val document = inputAsString(inputs, "document")
     val expected = inputAsMap(inputs, "expected")
     val listOfArgs = listOf("document" to document, "expected" to expected)
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "JsonAssertTask")
+    return createStep(implementation, args, "JsonAssertAction")
 }
 
-fun mapJsonCompareTask(implementation: ComposableStepDto): String {
-    val inputs = implementation.task?.inputs
+fun mapJsonCompareAction(implementation: ComposableStepDto): String {
+    val inputs = implementation.action?.inputs
     val document1 = inputAsString(inputs, "document1")
     val document2 = inputAsString(inputs, "document2")
     val comparingPaths = inputAsMap(inputs, "comparingPaths")
     val listOfArgs = listOf("document1" to document1, "document2" to document2, "comparingPaths" to comparingPaths)
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "JsonCompareTask")
+    return createStep(implementation, args, "JsonCompareAction")
 }
 
-fun mapSqlTask(implementation: ComposableStepDto): String {
-    val inputs = implementation.task?.inputs
+fun mapSqlAction(implementation: ComposableStepDto): String {
+    val inputs = implementation.action?.inputs
     val statements = inputs?.let { inputAsList(it, "statements") }
-    val outputs = outputsAsMap(implementation.task)
-    val target = target(implementation.task)
+    val outputs = outputsAsMap(implementation.action)
+    val target = target(implementation.action)
     val listOfArgs = listOf(
         "statements" to statements,
         "outputs" to outputs,
         "target" to target
     )
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "SqlTask")
+    return createStep(implementation, args, "SqlAction")
 }
 
-fun mapStringAssertTask(implementation: ComposableStepDto): String {
-    val inputs = implementation.task?.inputs
+fun mapStringAssertAction(implementation: ComposableStepDto): String {
+    val inputs = implementation.action?.inputs
     val document = inputAsString(inputs, "document")
     val expected = inputAsString(inputs, "expected")
     val listOfArgs = listOf("document" to document, "expected" to expected)
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "StringAssertTask")
+    return createStep(implementation, args, "StringAssertAction")
 }
 
-fun mapAmqpCleanQueuesTask(implementation: ComposableStepDto): String {
-    val inputs = implementation.task?.inputs
+fun mapAmqpCleanQueuesAction(implementation: ComposableStepDto): String {
+    val inputs = implementation.action?.inputs
     val queueNames = inputAsString(inputs, "queueNames")
-    val target = target(implementation.task)
+    val target = target(implementation.action)
     val listOfArgs = listOf("target" to target, "queueNames" to queueNames)
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "AmqpCleanQueuesTask")
+    return createStep(implementation, args, "AmqpCleanQueuesAction")
 }
 
-fun mapHttpGetTask(implementation: ComposableStepDto): String {
-    val inputs = implementation.task?.inputs
+fun mapHttpGetAction(implementation: ComposableStepDto): String {
+    val inputs = implementation.action?.inputs
     val headers = inputAsMap(inputs, "headers")
-    val outputs = outputsAsMap(implementation.task)
-    val target = target(implementation.task)
-    val uri = uri(implementation.task)
+    val outputs = outputsAsMap(implementation.action)
+    val target = target(implementation.action)
+    val uri = uri(implementation.action)
     val timeout = inputAsString(inputs, "timeout")
     val listOfArgs = listOf(
         "target" to target,
@@ -349,19 +349,19 @@ fun mapHttpGetTask(implementation: ComposableStepDto): String {
         "strategy" to null
     )
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "HttpGetTask")
+    return createStep(implementation, args, "HttpGetAction")
 }
 
-fun mapHttpPostTask(implementation: ComposableStepDto): String {
-    val inputs = implementation.task?.inputs
+fun mapHttpPostAction(implementation: ComposableStepDto): String {
+    val inputs = implementation.action?.inputs
     val headers = inputAsMap(inputs, "headers")
     val body = if (inputs?.get("body") is Map<*, *>) inputAsMap(
         inputs,
         "body"
     ) else inputAsString(inputs, "body")
-    val outputs = outputsAsMap(implementation.task)
-    val target = target(implementation.task)
-    val uri = uri(implementation.task)
+    val outputs = outputsAsMap(implementation.action)
+    val target = target(implementation.action)
+    val uri = uri(implementation.action)
     val timeout = inputAsString(inputs, "timeout")
     val listOfArgs = listOf(
         "target" to target,
@@ -373,17 +373,17 @@ fun mapHttpPostTask(implementation: ComposableStepDto): String {
         "strategy" to null
     )
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "HttpPostTask")
+    return createStep(implementation, args, "HttpPostAction")
 }
 
-fun mapHttpPutTask(implementation: ComposableStepDto): String {
-    val inputs = implementation.task?.inputs
-    val outputs = outputsAsMap(implementation.task)
+fun mapHttpPutAction(implementation: ComposableStepDto): String {
+    val inputs = implementation.action?.inputs
+    val outputs = outputsAsMap(implementation.action)
 
-    val target = implementation.task?.let { target(it) }
+    val target = implementation.action?.let { target(it) }
     val headers = inputAsMap(inputs, "headers")
     val body = inputAsMap(inputs, "body")
-    val uri = implementation.task?.let { uri(it) }
+    val uri = implementation.action?.let { uri(it) }
     val timeout = inputAsString(inputs, "timeout")
     val listOfArgs = listOf(
         "target" to target,
@@ -395,12 +395,12 @@ fun mapHttpPutTask(implementation: ComposableStepDto): String {
         "outputs" to outputs,
     )
     val args = mapArgs(listOfArgs)
-    return createStep(implementation, args, "HttpPutTask")
+    return createStep(implementation, args, "HttpPutAction")
 }
 
-fun mapContexPutTask(implementation: ComposableStepDto): String {
-    val input = implementation.task?.inputs
-    val outputs = outputsAsMap(implementation.task)
+fun mapContexPutAction(implementation: ComposableStepDto): String {
+    val input = implementation.action?.inputs
+    val outputs = outputsAsMap(implementation.action)
     val entries = inputAsMap(input, "entries")
     val listOfArgs = listOf(
         "entries" to entries,
@@ -408,7 +408,7 @@ fun mapContexPutTask(implementation: ComposableStepDto): String {
     )
     val args = mapArgs(listOfArgs)
 
-    return createStep(implementation, args, "ContextPutTask")
+    return createStep(implementation, args, "ContextPutAction")
 }
 
 fun outputsAsMap(implementation: StepImplementation?) =
