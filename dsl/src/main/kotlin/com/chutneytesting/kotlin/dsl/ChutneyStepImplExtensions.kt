@@ -1776,7 +1776,7 @@ fun ChutneyStepBuilder.KafkaBrokerStartTask(
     validations: Map<String, Any> = mapOf()
 ) {
     implementation = ChutneyStepImpl(
-        type = "kafka-broker-start-consume",
+        type = "kafka-broker-start",
         inputs = listOf(
             "port" to port,
             "topics" to topics,

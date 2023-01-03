@@ -21,7 +21,7 @@
 
         <kotlin.version>1.6.21</kotlin.version>
 
-        <chutney-kotlin-dsl.version>1.1.0-SNAPSHOT</chutney-kotlin-dsl.version>
+        <chutney-kotlin-dsl.version>1.2.0-SNAPSHOT</chutney-kotlin-dsl.version>
         <junit.version>5.8.2</junit.version>
     </properties>
 
