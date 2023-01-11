@@ -1940,7 +1940,9 @@ fun ChutneyStepBuilder.MicrometerTimerStartTask(
  * - micrometerTimerSampleDuration : duration of the timer (java.time.Duration)
  */
 fun ChutneyStepBuilder.MicrometerTimerStopTask(
-    registry: String? = null,
+    sample: String,
+    timer: String,
+    timeunit: String? = null,
     outputs: Map<String, Any> = mapOf(),
     validations: Map<String, Any> = mapOf(),
     strategy: Strategy? = null
@@ -1948,7 +1950,9 @@ fun ChutneyStepBuilder.MicrometerTimerStopTask(
     implementation = ChutneyStepImpl(
         type = "micrometer-timer-stop",
         inputs = listOf(
-            "registry" to registry,
+            "sample" to sample,
+            "timer" to timer,
+            "timeunit" to timeunit,
         ).notEmptyToMap(),
         outputs = outputs,
         validations = validations
