@@ -5,6 +5,7 @@ import com.chutneytesting.kotlin.util.ChutneyServerInfo
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
+import kotlin.io.path.Path
 
 /**
  * Synchronise scenario locally and/or remotely and returns elapsed time in milliseconds.
@@ -31,7 +32,7 @@ private fun updateJsonFile(file: File, id: Int?, scenario: ChutneyScenario) {
     if (file.name != fileNewName) {
         renameJsonFile(file, fileNewName)
     }
-    println("| AT json synchronized:: ${file.parentFile.absolutePath.plus(fileNewName)}")
+    println("| AT json synchronized:: ${Path(file.parentFile.absolutePath).resolve(fileNewName)}")
 }
 
 private fun createJsonFile(pathCreated: String, id: Int?, scenario: ChutneyScenario) {
@@ -102,7 +103,7 @@ private fun updateJsonRemoteScenario(
 ) {
     try {
         ChutneyServerServiceImpl.updateJsonScenario(serverInfo, scenario)
-        println("| remote AT json synchronized:: ${serverInfo.remoteServerUrl}/#/scenario/${scenario.id}/execution/last")
+        println("| remote AT json synchronized:: ${serverInfo.remoteServerUrl}/#/scenario/${scenario.id}/executions?open=last&active=last")
     } catch (e: Exception) {
         println("| remote AT with id: ${scenario.id} cannot be synchronized:: ${e.message}")
         throw e
@@ -115,7 +116,7 @@ private fun createRemoteScenario(
 ): Int {
     try {
         val id = ChutneyServerServiceImpl.createJsonScenario(serverInfo, scenario)
-        println("| remote AT json created:: ${serverInfo.remoteServerUrl}/#/scenario/$id/execution/last")
+        println("| remote AT json created:: ${serverInfo.remoteServerUrl}/#/scenario/$id/executions?open=last&active=last")
         return id
     } catch (e: Exception) {
         println("| remote AT cannot be created:: ${e.message}")
