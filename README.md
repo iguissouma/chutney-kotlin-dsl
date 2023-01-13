@@ -62,13 +62,13 @@ Writing the same scenario with a kotlin DSL:
 ```kotlin
 Scenario(title = "SWAPI GET people record") {
     Given("I set get people service api endpoint") {
-        ContextPutTask(entries = mapOf("uri" to "api/people/1"))
+        ContextPutAction(entries = mapOf("uri" to "api/people/1"))
     }
     When("I send GET HTTP request") {
-        HttpGetTask(target = "swapi.dev", uri = "uri".spEL())
+        HttpGetAction(target = "swapi.dev", uri = "uri".spEL())
     }
     Then("I receive valid HTTP response") {
-        JsonAssertTask(document = "body".spEL(), expected = mapOf("$.name" to "Luke Skywalker"))
+        JsonAssertAction(document = "body".spEL(), expected = mapOf("$.name" to "Luke Skywalker"))
     }
 }
 ```
@@ -153,12 +153,12 @@ So this scenario can run on environment ```envA``` and ```envB``` without modify
 ```kotlin
 val say_hi = Scenario(title = "Say hi!") {
     When("Hello world") {
-        HttpGetTask(
+        HttpGetAction(
             target = "mySystem"
         )
     }
     Then("Succeed") {
-        SuccessTask()
+        SuccessAction()
     }
 }
 ```
