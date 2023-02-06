@@ -22,3 +22,54 @@ val environment_en = ChutneyEnvironment(
         google_en
     )
 )
+
+object ChutneyEnvironmentBuilder {
+    private var name: String = "Global"
+    private var description: String = "Default environment"
+    private var targets: List<ChutneyTarget> = emptyList()
+
+    fun name(name: String): ChutneyEnvironmentBuilder {
+        this.name = name
+        return this
+    }
+
+    fun description(description: String): ChutneyEnvironmentBuilder {
+        this.description = description
+        return this
+    }
+
+    fun targets(targets: List<ChutneyTarget>): ChutneyEnvironmentBuilder {
+        this.targets = targets
+        return this
+    }
+
+    fun build(): ChutneyEnvironment {
+        return ChutneyEnvironment(name, description, targets)
+    }
+
+}
+
+object ChutneyTargetBuilder {
+    private var name: String = "target"
+    private var url: String = ""
+    private var properties: Map<String, String> = emptyMap()
+
+    fun name(name: String): ChutneyTargetBuilder {
+        this.name = name
+        return this
+    }
+
+    fun url(url: String): ChutneyTargetBuilder {
+        this.url = url
+        return this
+    }
+
+    fun properties(properties: Map<String, String>): ChutneyTargetBuilder {
+        this.properties = properties
+        return this
+    }
+
+    fun build(): ChutneyTarget {
+        return ChutneyTarget(name, url, properties)
+    }
+}

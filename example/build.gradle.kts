@@ -1,5 +1,8 @@
 dependencies {
     implementation(project(":chutney-kotlin-dsl"))
+    testImplementation("org.testcontainers:testcontainers:1.17.6")
+    testImplementation("org.testcontainers:kafka:1.17.6")
+
 }
 
 task("chutneyGradleReportSite", JavaExec::class) {
