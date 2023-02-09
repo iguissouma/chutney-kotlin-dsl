@@ -23,3 +23,45 @@ data class ChutneyTarget(
     val url: String,
     val properties: Map<String, String> = emptyMap()
 )
+
+@DslMarker
+annotation class ChutneyEnvironmentDsl
+
+fun Environment(name: String, description: String, block: ChutneyEnvironmentBuilder.() -> Unit): ChutneyEnvironment {
+    return ChutneyEnvironmentBuilder(name, description).apply(block).build()
+}
+
+@ChutneyEnvironmentDsl
+class ChutneyEnvironmentBuilder(val name: String, val description: String) {
+    private val targets = mutableListOf<ChutneyTarget>()
+
+    fun Target(block: ChutneyTargetBuilder.() -> Unit) {
+        targets.add(ChutneyTargetBuilder().apply(block).build())
+    }
+
+    fun build(): ChutneyEnvironment = ChutneyEnvironment(name, description, targets)
+
+}
+
+
+@ChutneyEnvironmentDsl
+class ChutneyTargetBuilder {
+    private var name: String = ""
+    private var url: String = ""
+    private val properties = mutableListOf<Pair<String, String>>()
+
+    fun Name(name: String) {
+        this.name = name
+    }
+
+    fun Url(url: String) {
+        this.url = url
+    }
+
+    fun Properties(vararg properties: Pair<String, String>) {
+        this.properties.addAll(properties)
+    }
+
+    fun build(): ChutneyTarget = ChutneyTarget(name, url, properties.toMap())
+
+}
