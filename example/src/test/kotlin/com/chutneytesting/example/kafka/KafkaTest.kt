@@ -1,4 +1,4 @@
-package kafka
+package com.chutneytesting.example.kafka
 
 import com.chutneytesting.example.scenario.kafka_scenario
 import com.chutneytesting.kotlin.dsl.Environment

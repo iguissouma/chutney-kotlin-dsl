@@ -27,7 +27,11 @@ data class ChutneyTarget(
 @DslMarker
 annotation class ChutneyEnvironmentDsl
 
-fun Environment(name: String, description: String, block: ChutneyEnvironmentBuilder.() -> Unit): ChutneyEnvironment {
+fun Environment(
+    name: String,
+    description: String = name,
+    block: ChutneyEnvironmentBuilder.() -> Unit
+): ChutneyEnvironment {
     return ChutneyEnvironmentBuilder(name, description).apply(block).build()
 }
 
