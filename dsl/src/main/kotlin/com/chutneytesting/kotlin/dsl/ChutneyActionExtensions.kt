@@ -268,7 +268,7 @@ fun ChutneyStepBuilder.AmqpBasicGetAction(
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
-        type = "amqp-basic-consume",
+        type = "amqp-basic-get",
         target = target,
         inputs = listOf(
             "queue-name" to queueName
