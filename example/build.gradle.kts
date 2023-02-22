@@ -5,6 +5,9 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:kafka")
     testImplementation("org.testcontainers:rabbitmq")
+    testImplementation("org.testcontainers:mockserver")
+    implementation("org.mock-server:mockserver-client-java-no-dependencies:5.15.0")
+
 
 
 }

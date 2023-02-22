@@ -669,7 +669,7 @@ fun ChutneyStepBuilder.HttpPatchAction(
     strategy: Strategy? = null
 ) {
     implementation = ChutneyStepImpl(
-        type = "http-post",
+        type = "http-patch",
         target = target,
         inputs = listOf(
             "uri" to uri,
@@ -688,6 +688,8 @@ fun ChutneyStepBuilder.HttpPatchAction(
     )
     if (strategy != null) this.strategy = strategy
 }
+
+fun statusValidation(statusCode: Int) = "status_ok" to "#status.equals($statusCode)".elEval()
 
 /**
  * Start a http server
