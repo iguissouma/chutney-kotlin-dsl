@@ -65,16 +65,16 @@ val http_scenario = Scenario(title = "Films library") {
                     statusValidation(200)
                 ),
                 outputs = mapOf(
-                    "title" to "#jsonPath(#body, '\$.title')".elEval(),
-                    "rating" to "#jsonPath(#body, '\$.rating')".elEval()
+                    "title" to "jsonPath(#body, '\$.title')".spEL(),
+                    "rating" to "jsonPath(#body, '\$.rating')".spEL()
                 )
             )
         }
         Step ("I check rating"){
             AssertAction(
                 asserts = listOf(
-                    "#title.equals('Castle in the Sky')".elEval(),
-                    "#rating.equals(\"79\")".elEval()
+                    "title.equals('Castle in the Sky')".spEL(),
+                    "rating.equals(\"79\")".spEL()
                 )
             )
         }
