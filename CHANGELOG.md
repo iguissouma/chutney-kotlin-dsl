@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.7.0](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/1.7.0)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.1.0...1.7.0)
+
+## What's Changed
+### 🚀 Implemented enhancements:
+* Add environment dsl [\#92](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/92)
+
+### 🐛 Fixed bugs:
+* Fix kafka start broker action name [\#88](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/88)
+* Add micrometer stop missing parameters [\#89](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/89)
+* Fix synchronized scenario url and json file path [\#87](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/87)
+
+### 🔧 Technical enhancements:
+* Clean module example n [\#90](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/90)
+* Add kafka scenario example [\#91](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/91)
+* Add amqp scenario example [\#93](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/93)
+* Add HTTP scenario example [\#94](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/94)
+* Add JMS scenario example [\#95](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/95)
+
+
 ## [1.1.0](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/1.1.0)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.0.3...1.1.0)

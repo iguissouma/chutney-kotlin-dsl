@@ -12,7 +12,7 @@ reckon {
 }
 
 subprojects {
-    extra["chutneyTestingVersion"] = "1.6.0"
+    extra["chutneyTestingVersion"] = "1.7.0"
 
     repositories {
         mavenCentral()

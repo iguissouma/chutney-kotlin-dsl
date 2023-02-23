@@ -83,15 +83,11 @@ We use github actions to build and releas this library.
 
 ### Update Changelog file
 
-Do it first, because changelog updates should be part of the release being made
+Do it first, because changelog updates should be part of the release being made.  
+Check page:  [Automatically generated release notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes)
 
-- Install [github-changelog-generator](https://github.com/github-changelog-generator/github-changelog-generator#installation)
-- Generate the changelog with https://github.com/github-changelog-generator/github-changelog-generator
-
-```shell
-github_changelog_generator -u chutney-testing -p chutney-kotlin-dsl --token <YOUR_TOKEN> --since-tag <previous RELEASE_VERSION>
-```
-- Copy-paste the generated content and use it to update [CHANGELOG.md](https://github.com/chutney-testing/chutney-kotlin-dsl/blob/master/CHANGELOG.md)
+Do not hesitate to update the release note generated especially the titles of pull request :)
+Use it to update [CHANGELOG.md](https://github.com/chutney-testing/chutney-kotlin-dsl/blob/master/CHANGELOG.md)
 
 ### Releasing
 
