@@ -6,7 +6,10 @@ dependencies {
     testImplementation("org.testcontainers:kafka")
     testImplementation("org.testcontainers:rabbitmq")
     testImplementation("org.testcontainers:mockserver")
-    implementation("org.mock-server:mockserver-client-java-no-dependencies:5.15.0")
+    testImplementation("org.mock-server:mockserver-client-java-no-dependencies:5.15.0")
+    testImplementation("org.testcontainers:postgresql")
+    testImplementation ("org.postgresql:postgresql:42.5.3")
+
 
 
 
