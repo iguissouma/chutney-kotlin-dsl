@@ -12,7 +12,7 @@ reckon {
 }
 
 subprojects {
-    extra["chutneyTestingVersion"] = "1.7.0"
+    extra["chutneyTestingVersion"] = "1.7.1"
 
     repositories {
         mavenCentral()
@@ -33,7 +33,7 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.jvmTarget = "17"
     }
 
     tasks.withType<Test> {
