@@ -95,7 +95,7 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
         val requestJson = mockServer.retrieveRecordedRequests(createScenarioRequest, Format.JSON)
         assertThat(requestJson).contains(localScenario.title)
         assertThat(requestJson).contains("Something happens with success")
-        assertThat(requestJson).containsIgnoringWhitespaces("GENERATED")
+        assertThat(requestJson).containsIgnoringWhitespaces("KOTLIN")
     }
 
     @Test
@@ -164,7 +164,7 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
         assertThat(requestJson).contains(existingScenario.id.toString())
         assertThat(requestJson).contains("Something happens with success")
         assertThat(requestJson).containsIgnoringWhitespaces("TEST")
-        assertThat(requestJson).containsIgnoringWhitespaces("GENERATED")
+        assertThat(requestJson).containsIgnoringWhitespaces("KOTLIN")
     }
 
     @Test
@@ -181,7 +181,6 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
             existingScenario.synchronise(
                 serverInfo = malFormattedHost,
                 path = tempDir.absolutePathString(),
-                pathCreated = tempDir.absolutePathString(),
                 updateRemote = true
             )
         }
@@ -198,7 +197,6 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
         scenario.synchronise(
             serverInfo = chutneyServerInfo,
             path = tempDir.absolutePathString(),
-            pathCreated = tempDir.absolutePathString(),
             updateRemote = updateRemote
         )
 

@@ -14,9 +14,7 @@ interface ChutneyServerService {
     fun getAllComponent(serverInfo: ChutneyServerInfo): List<ComposableStepDto>
     fun getAllScenarios(serverInfo: ChutneyServerInfo): List<LinkedHashMap<String, Any>>
     fun getComposedScenario(serverInfo: ChutneyServerInfo, scenarioId: String): ComposableTestCaseDto
-    fun updateJsonScenario(
-        serverInfo: ChutneyServerInfo, scenario: ChutneyScenario
-    )
+    fun updateJsonScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario)
 
     fun createJsonScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario): Int
     fun getEnvironments(serverInfo: ChutneyServerInfo): Set<EnvironmentDto>
@@ -38,7 +36,7 @@ object ChutneyServerServiceImpl : ChutneyServerService {
 
     override fun updateJsonScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario) {
         val remoteScenario: LinkedHashMap<String, Any> = getRemoteScenario(serverInfo, scenario.id!!)
-        val generatedTag = "GENERATED"
+        val generatedTag = "KOTLIN"
         var tags = remoteScenario["tags"] as List<String>
         if (!tags.contains(generatedTag)) {
             tags = tags.plus(generatedTag)
@@ -66,7 +64,7 @@ object ChutneyServerServiceImpl : ChutneyServerService {
     }
 
     override fun createJsonScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario): Int {
-        val generatedTag = "GENERATED"
+        val generatedTag = "KOTLIN"
         val body = """
             {
                 "content": "${StringEscapeUtils.escapeJson(scenario.toString())}",

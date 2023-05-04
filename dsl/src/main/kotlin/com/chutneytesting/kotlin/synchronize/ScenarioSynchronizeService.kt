@@ -1,11 +1,38 @@
 package com.chutneytesting.kotlin.synchronize
 
+import com.chutneytesting.kotlin.annotations.Scenario
 import com.chutneytesting.kotlin.dsl.ChutneyScenario
 import com.chutneytesting.kotlin.util.ChutneyServerInfo
+import io.github.classgraph.ClassGraph
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import kotlin.io.path.Path
+import kotlin.reflect.KFunction
+import kotlin.reflect.jvm.kotlinFunction
+
+
+/**
+ * Synchronise scenarios annotated with [@Scenario](com.chutneytesting.kotlin.annotations.Scenario.kt) locally and/or remotely and returns elapsed time in milliseconds.
+ */
+fun synchronizeScenarios(
+    packageName: String,
+    serverInfo: ChutneyServerInfo? = null,
+    updateRemote: Boolean = false,
+    path: String = "src/main/chutney/generated",
+    block: SynchronizeScenariosBuilder.() -> Unit = scenariosBuilder(packageName)
+) {
+    println("+-----------------------------------------------------------------------------------------------------------------------------------")
+    val start = System.currentTimeMillis()
+    val builder = SynchronizeScenariosBuilder()
+    builder.block()
+    builder.scenarios.forEach { it.synchronise(serverInfo = serverInfo, updateRemote = updateRemote, path = path) }
+    val duration = System.currentTimeMillis() - start
+    println("+-----------------------------------------------------------------------------------------------------------------------------------")
+    println("| ATs json synchronized, please reformat code and push to your source code repository and update remote chutney ATs server. took $duration ms")
+    println("+-----------------------------------------------------------------------------------------------------------------------------------")
+}
+
 
 /**
  * Synchronise scenario locally and/or remotely and returns elapsed time in milliseconds.
@@ -13,8 +40,7 @@ import kotlin.io.path.Path
 fun ChutneyScenario.synchronise(
     serverInfo: ChutneyServerInfo? = null,
     updateRemote: Boolean = false,
-    path: String = "src/main/resources/chutney/",
-    pathCreated: String = "$path/in_progress"
+    path: String = "src/main/chutney/generated"
 ) {
     var id = this.id
     if (updateRemote && serverInfo != null) {
@@ -23,7 +49,30 @@ fun ChutneyScenario.synchronise(
     val scenario = this
     getJsonFile(path, scenario)?.apply {
         updateJsonFile(this, id, scenario)
-    } ?: createJsonFile(pathCreated, id, scenario)
+    } ?: createJsonFile(path, id, scenario)
+}
+
+private fun scenariosBuilder(packageName: String): SynchronizeScenariosBuilder.() -> Unit = {
+    getAllAnnotatedScenarios(packageName).forEach { scenario: KFunction<*> ->
+        +scenario
+    }
+}
+
+private fun getAllAnnotatedScenarios(packageName: String): List<KFunction<*>> {
+    val annotationName = Scenario::class.java.canonicalName
+
+    return ClassGraph()
+        .enableAllInfo()
+        .acceptPackages(packageName)
+        .scan().use { scanResult ->
+            scanResult.getClassesWithMethodAnnotation(annotationName).flatMap { routeClassInfo ->
+                routeClassInfo.methodInfo.filter { function ->
+                    function.hasAnnotation(Scenario::class.java)
+                }.mapNotNull { method ->
+                    method.loadClassAndGetMethod().kotlinFunction
+                }
+            }
+        }
 }
 
 private fun updateJsonFile(file: File, id: Int?, scenario: ChutneyScenario) {
@@ -74,26 +123,6 @@ private fun renameJsonFile(
         Files.move(jsonFile.toPath(), jsonFile.toPath().resolveSibling(fileName))
     } catch (e: IOException) {
         println("| AT json file at ${jsonFile.name} cannot be renamed to: $fileName. ${e.message}")
-    }
-}
-
-/**
- * Cosmetic to create a list of scenarios
- */
-class SynchronizeScenariosBuilder {
-    var scenarios: List<ChutneyScenario> = mutableListOf()
-
-    operator fun ChutneyScenario.unaryPlus() {
-        scenarios = scenarios + this
-    }
-
-    operator fun List<ChutneyScenario>.unaryPlus() {
-        scenarios = scenarios + this
-    }
-
-    operator fun ChutneyScenario.unaryMinus() {
-        // scenarios = scenarios - this
-        // cosmetic to ignore scenario
     }
 }
 
