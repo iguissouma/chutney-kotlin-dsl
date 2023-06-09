@@ -7,26 +7,18 @@ import com.chutneytesting.kotlin.dsl.SuccessAction
 import com.chutneytesting.kotlin.util.ChutneyServerInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.io.TempDir
 import org.mockserver.model.Format
 import org.mockserver.model.HttpRequest
 import org.mockserver.model.HttpRequest.request
 import org.mockserver.model.HttpResponse.response
 import java.io.File
-import java.net.MalformedURLException
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ScenarioSynchronizeServiceTest : HttpTestBase() {
 
-    private val chutneyServerInfo = ChutneyServerInfo(
-        url,
-        "aUser",
-        "aPassword"
-    )
+    private val chutneyServerInfo = ChutneyServerInfo(url, "aUser", "aPassword")
 
     private val localScenario = Scenario(title = "A scenario") {
         When("Something happens") {
@@ -100,7 +92,6 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
 
     @Test
     fun should_update_scenario_remotely_and_locally(@TempDir tempDir: Path) {
-
         // Given
         var existingScenario = Scenario(id = 1, title = "A scenario") {
             When("Something happens with success") {
@@ -129,10 +120,7 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
             .respond(
                 response()
                     .withBody(
-                        "{" +
-                            "\"version\": 1," +
-                            "\"tags\": [\"TEST\"]" +
-                            "}"
+                        """{"version": 1,"tags": ["TEST"]}"""
                     )
             )
         mockServer
@@ -167,26 +155,6 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
         assertThat(requestJson).containsIgnoringWhitespaces("KOTLIN")
     }
 
-    @Test
-    fun should_throw_exception_when_updating_scenario_on_unknown_remote_instance(@TempDir tempDir: Path) {
-        // Given
-        var existingScenario = Scenario(id = 1, title = "A scenario") {
-            When("Something happens with success") {
-                SuccessAction()
-            }
-        }
-        val malFormattedHost = ChutneyServerInfo("unknown host", "", "")
-
-        val exception = assertThrows<MalformedURLException> {
-            existingScenario.synchronise(
-                serverInfo = malFormattedHost,
-                path = tempDir.absolutePathString(),
-                updateRemote = true
-            )
-        }
-        assertThat(exception.message).isEqualTo("no protocol: unknown host/api/scenario/v2/raw/1")
-    }
-
     private fun assertScenarioSynchronization(
         tempDir: Path,
         scenario: ChutneyScenario,
@@ -201,9 +169,9 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
         )
 
         // Then
-        var tmpDirFiles = File(tempDir.absolutePathString()).walkTopDown().filter { it.isFile }
+        val tmpDirFiles = File(tempDir.absolutePathString()).walkTopDown().filter { it.isFile }
         assertThat(tmpDirFiles.count()).isEqualTo(1)
-        var jsonFile = tmpDirFiles.first()
+        val jsonFile = tmpDirFiles.first()
         val fileName = (id?.let { "$id-" } ?: "") + scenario.title + ".chutney.json"
         assertThat(jsonFile.name).isEqualTo(fileName)
         assertThat(jsonFile.readText()).isEqualTo(scenario.toString())

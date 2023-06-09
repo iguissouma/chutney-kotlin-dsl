@@ -74,14 +74,9 @@ object ChutneyServerServiceImpl : ChutneyServerService {
             }
         """.trimIndent()
         return HttpClient.post(serverInfo, "/api/scenario/v2/raw", body)
-
     }
 
     override fun getEnvironments(serverInfo: ChutneyServerInfo): Set<EnvironmentDto> {
         return HttpClient.get(serverInfo, "/api/v2/environment")
     }
-
-    private fun escapeSql(str: String?): String? = str?.replace("'", "''")
-
 }
-

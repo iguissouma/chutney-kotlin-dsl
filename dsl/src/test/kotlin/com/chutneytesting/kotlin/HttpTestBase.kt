@@ -1,26 +1,36 @@
 package com.chutneytesting.kotlin
 
 import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.TestInstance
+import org.junitpioneer.jupiter.ClearSystemProperty
 import org.mockserver.client.MockServerClient
+import org.mockserver.configuration.Configuration
 import org.mockserver.integration.ClientAndServer
+import util.SocketUtil
 import java.util.*
 
-val random = Random()
-internal fun randomFrom(from: Int = 1024, to: Int = 65535): Int {
-    return random.nextInt(to - from) + from
-}
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ClearSystemProperty.ClearSystemProperties(
+    ClearSystemProperty(key = "http.proxyHost"),
+    ClearSystemProperty(key = "http.proxyPort"),
+    ClearSystemProperty(key = "http.proxyUser"),
+    ClearSystemProperty(key = "http.proxyPassword"),
+    ClearSystemProperty(key = "https.proxyHost"),
+    ClearSystemProperty(key = "https.proxyPort"),
+    ClearSystemProperty(key = "https.proxyUser"),
+    ClearSystemProperty(key = "https.proxyPassword")
+)
+abstract class HttpTestBase(
+    mockServerPort: Int? = SocketUtil.freePort(),
+    mockServerConfiguration: Configuration? = Configuration.configuration()
+) {
+    val mockServer: MockServerClient
+    val url: String
 
-abstract class HttpTestBase {
-    private val port = randomFrom()
-    var mockServer: MockServerClient = MockServerClient("localhost", port)
-    val url = "http://localhost:$port"
-
-
-    @BeforeAll
-    fun prepare() {
-        mockServer = ClientAndServer.startClientAndServer(port)
+    init {
+        mockServer = ClientAndServer.startClientAndServer(mockServerConfiguration, mockServerPort)
+        url = "http://localhost:${mockServer.port}"
     }
 
     @BeforeEach
@@ -32,5 +42,4 @@ abstract class HttpTestBase {
     fun tearDown() {
         mockServer.close()
     }
-
 }

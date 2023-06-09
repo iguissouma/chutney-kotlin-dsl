@@ -48,7 +48,7 @@ class ComponentToKotlinDslGeneratorKtTest {
 
     @Test
     fun generateDslForAction() {
-        val mockServerInfo = ChutneyServerInfo("", "", "")
+        val mockServerInfo = givenChutneyServerInfo()
         val sut = ComponentToKotlinDslGenerator()
 
 
@@ -79,7 +79,7 @@ public fun ChutneyStepBuilder.`First action`() {
 
     @Test
     fun generateDslForParent() {
-        val mockServerInfo = ChutneyServerInfo("", "", "")
+        val mockServerInfo = givenChutneyServerInfo()
         val sut = ComponentToKotlinDslGenerator()
 
 
@@ -113,7 +113,7 @@ public fun ChutneyStepBuilder.`Parent step`() {
 
     @Test
     fun generateDslForScenario() {
-        val mockServerInfo = ChutneyServerInfo("", "", "")
+        val mockServerInfo = givenChutneyServerInfo()
         val sut = ComponentToKotlinDslGenerator()
 
         val scenario = LinkedHashMap<String, Any>()
@@ -180,6 +180,10 @@ val `scenario title` = Scenario(title = "scenario title") {
 }
             """.trim()
         )
+    }
+
+    private fun givenChutneyServerInfo(): ChutneyServerInfo {
+        return ChutneyServerInfo("https://host.name", "", "")
     }
 }
 

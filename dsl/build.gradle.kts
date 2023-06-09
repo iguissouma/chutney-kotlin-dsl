@@ -35,6 +35,7 @@ dependencies {
     implementation("org.springframework:spring-core")
     implementation("org.apache.commons:commons-text")
     implementation("io.github.classgraph:classgraph:4.8.141")
+    implementation("org.apache.httpcomponents:httpclient")
 
     testImplementation("org.skyscreamer:jsonassert")
     testImplementation("org.springframework:spring-expression")

@@ -7,37 +7,35 @@ import com.chutneytesting.kotlin.HttpTestBase
 import com.chutneytesting.kotlin.util.ChutneyServerInfo
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.io.TempDir
 import org.mockserver.model.HttpRequest.request
 import org.mockserver.model.HttpResponse.response
 import java.nio.file.Path
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EnvironmentServiceSynchronizationTest : HttpTestBase() {
-
 
     @Test
     fun should_synchronize_local_environments_from_remote(@TempDir tempDir: Path) {
         // Given
         val environmentsFilesPath = tempDir.toAbsolutePath().toString()
-        val envsResponse = "[{\n" +
-            "    \"name\": \"CHUTNEY\",\n" +
-            "    \"description\": \"desc\",\n" +
-            "    \"targets\": [\n" +
-            "        {\n" +
-            "            \"name\": \"db\",\n" +
-            "            \"url\": \"dbUrl\",\n" +
-            "            \"properties\": [\n" +
-            "                {\n" +
-            "                    \"key\": \"driverClassName\",\n" +
-            "                    \"value\": \"oracle.jdbc.OracleDriver\"\n" +
-            "                }\n" +
-            "            ]\n" +
-            "        }\n" +
-            "    ]\n" +
-            "}\n" +
-            "]\n"
+        val envsResponse = """[{
+                        "name": "CHUTNEY",
+                        "description": "desc",
+                        "targets": [
+                            {
+                                "name": "db",
+                                "url": "dbUrl",
+                                "properties": [
+                                    {
+                                        "key": "driverClassName",
+                                        "value": "oracle.jdbc.OracleDriver"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                    ]
+                    """.trimIndent()
         mockServer
             .`when`(
                 request()

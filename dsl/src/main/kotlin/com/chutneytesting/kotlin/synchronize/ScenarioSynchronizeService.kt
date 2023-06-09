@@ -132,7 +132,7 @@ private fun updateJsonRemoteScenario(
 ) {
     try {
         ChutneyServerServiceImpl.updateJsonScenario(serverInfo, scenario)
-        println("| remote AT json synchronized:: ${serverInfo.remoteServerUrl}/#/scenario/${scenario.id}/executions?open=last&active=last")
+        println("| remote AT json synchronized:: ${serverInfo.url}/#/scenario/${scenario.id}/executions?open=last&active=last")
     } catch (e: Exception) {
         println("| remote AT with id: ${scenario.id} cannot be synchronized:: ${e.message}")
         throw e
@@ -145,7 +145,7 @@ private fun createRemoteScenario(
 ): Int {
     try {
         val id = ChutneyServerServiceImpl.createJsonScenario(serverInfo, scenario)
-        println("| remote AT json created:: ${serverInfo.remoteServerUrl}/#/scenario/$id/executions?open=last&active=last")
+        println("| remote AT json created:: ${serverInfo.url}/#/scenario/$id/executions?open=last&active=last")
         return id
     } catch (e: Exception) {
         println("| remote AT cannot be created:: ${e.message}")
