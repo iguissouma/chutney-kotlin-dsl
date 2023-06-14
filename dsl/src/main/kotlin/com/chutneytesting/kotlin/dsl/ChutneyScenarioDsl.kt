@@ -76,6 +76,13 @@ open class RetryTimeOutStrategy(timeout: String, retryDelay: String) :
     }
 }
 
+open class ForStrategy(dataset: String = "dataset".spEL, index: String = "i") :
+    Strategy(type = TYPE, parameters = mapOf("dataset" to dataset, "index" to index)) {
+    companion object {
+        const val TYPE: String = "for"
+    }
+}
+
 open class SoftAssertStrategy :
     Strategy(type = "soft-assert")
 

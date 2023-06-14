@@ -15,7 +15,6 @@ object ReportUtil {
     }
 
     private fun generateReport(step: Step): StepExecutionReport {
-        val stepContext = step.stepContext()
         return StepExecutionReportBuilder().setName(step.definition().name)
             .setDuration(step.duration().toMillis())
             .setStartDate(step.startDate())
@@ -23,9 +22,9 @@ object ReportUtil {
             .setInformation(step.informations())
             .setErrors(step.errors())
             .setSteps(step.subSteps().map { generateReport(it) }.toList())
-            .setEvaluatedInputs(stepContext.evaluatedInputs)
-            .setStepResults(stepContext.stepOutputs)
-            .setScenarioContext(stepContext.scenarioContext)
+            .setEvaluatedInputs(step.evaluatedInputs)
+            .setStepResults(step.stepOutputs)
+            .setScenarioContext(step.scenarioContext)
             .setType(step.type())
             .setTarget(step.target())
             .setStrategy(step.strategy().map { it.type }.orElse(null))

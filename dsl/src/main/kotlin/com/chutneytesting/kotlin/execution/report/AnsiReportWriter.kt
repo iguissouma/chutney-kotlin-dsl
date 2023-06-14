@@ -81,14 +81,12 @@ class AnsiReportWriter(private val withColor: Boolean = true) {
             builder.appendLine().append(it)
         }
 
-        if (step.steps.isNotEmpty() && step.type.isBlank()) {
+        if (step.steps.isNotEmpty()) {
             step.steps.forEach {
                 builder.appendLine()
                     .append(step(it, "$indent  "))
             }
-        }
-
-        if (step.type.isNotBlank()) {
+        } else {
             builder.appendLine()
                 .append("$indent  " + step.type + " " + mapAsString(step.context.evaluatedInputs))
             if (step.targetName.isNotBlank()) {

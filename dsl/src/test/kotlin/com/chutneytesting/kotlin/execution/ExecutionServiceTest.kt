@@ -1,7 +1,11 @@
 package com.chutneytesting.kotlin.execution
 
+import com.chutneytesting.engine.api.execution.StatusDto
 import com.chutneytesting.environment.domain.exception.EnvironmentNotFoundException
 import com.chutneytesting.kotlin.asResource
+import com.chutneytesting.kotlin.dsl.ForStrategy
+import com.chutneytesting.kotlin.dsl.Scenario
+import com.chutneytesting.kotlin.dsl.SuccessAction
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.Test
@@ -82,4 +86,32 @@ class ExecutionServiceTest {
             .containsEntry("privateKey", "path")
         targetPropertiesAssert.assertAll()
     }
+
+    @Test
+    fun `should execute with dataset`() {
+        val dataset = listOf(
+            mapOf(
+                "key1" to "X",
+                "key2" to "Y"
+            ),
+            mapOf(
+                "key1" to "A",
+                "key2" to "B"
+            )
+        )
+        val scenario = Scenario(title = "scenario with for") {
+            When("<i> step description - \${#key1} - \${#key2}", strategy = ForStrategy()) {
+                SuccessAction(
+                )
+            }
+        }
+        val sut = ExecutionService()
+        val report = sut.waitLastReport(sut.execute(scenario, dataset = dataset))
+
+        assertThat(report.status).isEqualTo(StatusDto.SUCCESS)
+        assertThat(report.steps[0].steps).hasSize(2)
+        assertThat(report.steps[0].steps[0].name).isEqualTo("0 step description - X - Y") // First Iteration
+        assertThat(report.steps[0].steps[1].name).isEqualTo("1 step description - A - B") // Second Iteration
+    }
+
 }

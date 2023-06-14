@@ -1,5 +1,19 @@
 # Changelog
 
+**Full Changelog**: https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.7.0...2.0.0
+
+## [2.0.0](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/2.0.0)
+
+## What's Changed
+### 🚀 Implemented enhancements:
+* Synchronize scenarios annotated with @Scenario [\#100](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/100)
+* Add proxy support for synchronization [\#102](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/102)
+* SQL scenario example [\#96](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/96)
+
+### 🔧 Technical enhancements:
+* Upgrade to java17 by [\#99](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/99)
+
+
 ## [1.7.0](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/1.7.0)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.1.0...1.7.0)

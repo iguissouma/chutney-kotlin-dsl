@@ -1,6 +1,7 @@
 package com.chutneytesting.kotlin.execution
 
 import com.chutneytesting.ExecutionConfiguration
+import com.chutneytesting.engine.api.execution.DatasetDto
 import com.chutneytesting.engine.api.execution.ExecutionRequestDto
 import com.chutneytesting.engine.api.execution.StepExecutionReportDto
 import com.chutneytesting.environment.EnvironmentConfiguration
@@ -27,22 +28,28 @@ class ExecutionService(
 
     fun execute(
         scenario: ChutneyScenario,
-        environment: ChutneyEnvironment
+        environment: ChutneyEnvironment,
+        constants: Map<String, String> = emptyMap(),
+        dataset: List<Map<String,String>> = emptyList()
     ): Long {
+        val datasetDto = DatasetDto(constants, dataset);
         return executionConfiguration.embeddedTestEngine()
             .executeAsync(
                 ExecutionRequestDto(
                     ExecutionRequestMapper.mapScenarioToExecutionRequest(scenario, environment),
-                    environment.name
+                    environment.name,
+                    datasetDto
                 )
             )
     }
 
     fun execute(
         scenario: ChutneyScenario,
-        environmentName: String? = null
+        environmentName: String? = null,
+        constants: Map<String, String> = emptyMap(),
+        dataset: List<Map<String,String>> = emptyList()
     ): Long {
-        return execute(scenario, getEnvironment(environmentName))
+        return execute(scenario, getEnvironment(environmentName), constants, dataset)
     }
 
     fun waitLastReport(executionId: Long): StepExecutionReportDto {
