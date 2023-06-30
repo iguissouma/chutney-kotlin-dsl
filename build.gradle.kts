@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.ajoberstar.reckon") version "0.13.0"
+    id("org.ajoberstar.reckon") version "0.16.1"
 
     kotlin("jvm") version "1.6.21" apply false
 }

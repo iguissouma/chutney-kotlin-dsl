@@ -14,9 +14,7 @@ import org.apache.http.auth.AuthScope
 import org.apache.http.auth.UsernamePasswordCredentials
 import org.apache.http.client.CredentialsProvider
 import org.apache.http.client.HttpClient
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.client.methods.HttpPut
+import org.apache.http.client.methods.*
 import org.apache.http.client.protocol.HttpClientContext
 import org.apache.http.entity.ContentType
 import org.apache.http.entity.StringEntity
@@ -34,17 +32,26 @@ import javax.net.ssl.X509TrustManager
 
 object HttpClient {
 
-    enum class HttpMethod { POST, GET, PUT }
+    enum class HttpMethod { POST, GET, PUT, PATCH, DELETE }
 
     inline fun <reified T> post(serverInfo: ChutneyServerInfo, query: String, body: String): T {
         return execute(serverInfo, query, HttpMethod.POST, body)
     }
+
     inline fun <reified T> get(serverInfo: ChutneyServerInfo, query: String): T {
         return execute(serverInfo, query, HttpMethod.GET, "")
     }
 
     inline fun <reified T> put(serverInfo: ChutneyServerInfo, query: String, body: String): T {
         return execute(serverInfo, query, HttpMethod.PUT, body)
+    }
+
+    inline fun <reified T> patch(serverInfo: ChutneyServerInfo, query: String, body: String): T {
+        return execute(serverInfo, query, HttpMethod.PATCH, body)
+    }
+
+    inline fun <reified T> delete(serverInfo: ChutneyServerInfo, query: String, body: String): T {
+        return execute(serverInfo, query, HttpMethod.DELETE, body)
     }
 
     inline fun <reified T> execute(
@@ -125,6 +132,12 @@ object HttpClient {
                 httpRequest.entity = StringEntity(body, ContentType.APPLICATION_JSON)
             }
 
+            HttpMethod.PATCH -> {
+                httpRequest = HttpPatch(uri)
+                httpRequest.entity = StringEntity(body, ContentType.APPLICATION_JSON)
+            }
+
+            HttpMethod.DELETE -> httpRequest = HttpDelete(uri)
             HttpMethod.GET -> httpRequest = HttpGet(uri)
         }
         return httpRequest
