@@ -1,6 +1,16 @@
 # Changelog
 
-**Full Changelog**: https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.7.0...2.0.0
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/2.0.0...2.0.1)
+
+## [2.0.1](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/2.0.1)
+
+## What's Changed
+### 🚀 Implemented enhancements:
+* feat(): add http put method on http client [\#104](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/104)
+* chore(): Add HttpClient HTTP methods delete and patch [\#105](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/105)
+
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.7.0...2.0.0)
 
 ## [2.0.0](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/2.0.0)
 
@@ -28,7 +38,7 @@
 * Fix synchronized scenario url and json file path [\#87](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/87)
 
 ### 🔧 Technical enhancements:
-* Clean module example n [\#90](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/90)
+* Clean module example [\#90](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/90)
 * Add kafka scenario example [\#91](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/91)
 * Add amqp scenario example [\#93](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/93)
 * Add HTTP scenario example [\#94](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/94)
@@ -44,8 +54,8 @@
 
 **Technical enhancements:**
 - 🔧 | Use StringEscapeUtils from commons-text [\#85](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/85)
-- 🔧 | Rename Task into Action [\#84](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/84) 
-- 🔧 | Add developer in Maven published pom [\#83](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/83) 
+- 🔧 | Rename Task into Action [\#84](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/84)
+- 🔧 | Add developer in Maven published pom [\#83](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/83)
 
 **Dependencies updated:**
 - Upgrade to Chutney 1.6.0
@@ -92,8 +102,8 @@
 
 **Merged pull requests:**
 
-- fix\(synchronize\): refactor synchronize function [\#75](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/75) 
-- Normalize and simply use of launcher and engine [\#74](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/74) 
+- fix\(synchronize\): refactor synchronize function [\#75](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/75)
+- Normalize and simply use of launcher and engine [\#74](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/74)
 
 **Breaking changes:**
 
@@ -209,9 +219,9 @@
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/0.1.11...0.1.12)
 
-# Breaking change : 
+# Breaking change :
 
-KafkaBasicConsumeTask => properties is now defaulted to null (was Map<String, String> = mapOf("auto.offset.reset" to "earliest")) 
+KafkaBasicConsumeTask => properties is now defaulted to null (was Map<String, String> = mapOf("auto.offset.reset" to "earliest"))
 SeleniumGetTask() => selector is now string, was boolean
 
 **Implemented enhancements:**
