@@ -1,10 +1,23 @@
 package com.chutneytesting.kotlin.dsl
 
+import java.util.stream.Collectors
+
 data class ChutneyEnvironment(
     val name: String,
     val description: String = "",
     val targets: List<ChutneyTarget> = emptyList()
 ) {
+
+    init {
+        val notUniqueTargets = targets
+            .groupBy { it.name }
+            .filterValues { it.size > 1 }
+            .keys
+        if (notUniqueTargets.isNotEmpty()) {
+            throw IllegalArgumentException("Targets are not unique : " + notUniqueTargets.joinToString(", "))
+        }
+    }
+
     fun findTarget(targetName: String?): ChutneyTarget? {
         return try {
             targets.first { it.name == targetName }
