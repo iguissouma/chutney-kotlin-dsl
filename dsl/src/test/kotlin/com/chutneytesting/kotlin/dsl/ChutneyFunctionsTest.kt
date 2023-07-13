@@ -143,6 +143,10 @@ class ChutneyFunctionsTest {
         assertELWrap(escapeHtml4("text"))
         assertELWrap(unescapeHtml4("text"))
         assertELWrap(escapeSql("text"))
+
+        assertELWrap(jsonMerge("obj1", "obj2"))
+        assertELWrap(jsonSet("obj1", "toto", "titi"))
+        assertELWrap(jsonSetMany("obj1", mapOf(Pair("toto", "titi"), Pair("tata", "tutu")).elMap()))
     }
 
     private fun assertELWrap(jsonPath: String) {
@@ -172,6 +176,43 @@ class ChutneyFunctionsTest {
 
         assertExpressionNotNullWhenParsed(
             jsonSerialize("ctxVar".spELVar, elEval = false)
+        )
+    }
+
+    @Test
+    fun `use jsonMerge function`() {
+        assertThrows<IllegalArgumentException> { jsonMerge("", "") }
+
+        assertExpressionNotNullWhenParsed(
+            jsonMerge("new Object()", "new Object()", elEval = false)
+        )
+
+        assertExpressionNotNullWhenParsed(
+            jsonMerge("ctxVar".spELVar, "ctxVar".spELVar, elEval = false)
+        )
+    }
+
+    @Test
+    fun `use jsonSet function`() {
+        assertThrows<IllegalArgumentException> { jsonSet("", "toto", "tutu") }
+        assertThrows<IllegalArgumentException> { jsonSet("new Object()", "", "tutu") }
+        assertThrows<IllegalArgumentException> { jsonSet("new Object()", "toto", "") }
+
+        assertExpressionNotNullWhenParsed(
+            jsonSet("new Object()", "toto", "tutu", elEval = false)
+        )
+    }
+
+    @Test
+    fun `use jsonSetMany function`() {
+        val map: HashMap<String, String> = hashMapOf("toto" to "tutu", "tata" to "titi")
+        assertThrows<IllegalArgumentException> { jsonSetMany("", map.elMap()) }
+
+        assertExpressionNotNullWhenParsed(
+            jsonSetMany("new Object()", map.elMap(), elEval = false)
+        )
+        assertExpressionNotNullWhenParsed(
+            jsonSetMany("new Object()", "{ \"toto\": \"titi\"}", elEval = false)
         )
     }
 

@@ -32,6 +32,25 @@ fun jsonSerialize(objectELExpr: String, elEval: Boolean = true): String {
     return chutneyFunction("jsonSerialize", elEval, objectELExpr)
 }
 
+fun jsonMerge(objectELExprA: String, objectELExprB: String, elEval: Boolean = true): String {
+    require(objectELExprA.isNotBlank()) { "objectELExprA cannot be empty" }
+    require(objectELExprB.isNotBlank()) { "objectELExprB cannot be empty" }
+    return chutneyFunction("jsonMerge", elEval, objectELExprA, objectELExprB)
+}
+
+fun jsonSetMany(objectELExpr: String, map: String, elEval: Boolean = true): String {
+    require(objectELExpr.isNotBlank()) { "objectELExpr cannot be empty" }
+    require(map.isNotBlank()) { "map cannot be empty" }
+    return chutneyFunction("jsonSetMany", elEval, objectELExpr, map)
+}
+
+fun jsonSet(objectELExpr: String, path: String, value: String, elEval: Boolean = true): String {
+    require(objectELExpr.isNotBlank()) { "objectELExpr cannot be empty" }
+    require(path.isNotBlank()) { "path cannot be empty" }
+    require(value.isNotBlank()) { "value cannot be empty" }
+    return chutneyFunction("jsonSet", elEval, objectELExpr, path, value)
+}
+
 private val XPATH_ROOT = "//*".elString()
 fun xpath(xmlELExpr: String, path: String = XPATH_ROOT, elEval: Boolean = true): String {
     require(xmlELExpr.isNotBlank()) { "xmlELExpr cannot be empty" }
