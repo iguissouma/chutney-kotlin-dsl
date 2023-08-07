@@ -1,8 +1,18 @@
 # Changelog
 
-[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/2.0.0...2.0.1)
+## [2.1.0](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/2.1.0)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/2.0.1...2.1.0)
+
+## What's Changed
+### 🚀 Implemented enhancements:
+* feature(chutneyFunction): add jsonMerge, jsonSet and jsonSetMany functions to match with chutney project
+### 🔧 Technical enhancements:
+* feature(chutneyEnvironment): add condition to prevent that 2 targets have the same name in a ChutneyEnvironment
 
 ## [2.0.1](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/2.0.1)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/2.0.0...2.0.1)
 
 ## What's Changed
 ### 🚀 Implemented enhancements:
@@ -10,9 +20,9 @@
 * chore(): Add HttpClient HTTP methods delete and patch [\#105](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/105)
 
 
-[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.7.0...2.0.0)
-
 ## [2.0.0](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/2.0.0)
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/1.7.0...2.0.0)
 
 ## What's Changed
 ### 🚀 Implemented enhancements:
