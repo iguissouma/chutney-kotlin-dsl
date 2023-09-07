@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.2.0](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/2.2.0)
+
+## What's Changed
+### 🚀 Implemented enhancements:
+* Add jsonMerge, jsonSet, jsonSetMany functions [\#107](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/107)
+* Allow explicit id for scenario saving [\#109](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/109)
+
+### 🔧 Technical enhancements:
+* Prevent 2 targets to have the same name in ChutneyEnvironment [\#108](https://github.com/chutney-testing/chutney-kotlin-dsl/pull/108)
+
+
+[Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/2.1.0...2.2.0)
+
 ## [2.1.0](https://github.com/chutney-testing/chutney-kotlin-dsl/tree/2.1.0)
 
 [Full Changelog](https://github.com/chutney-testing/chutney-kotlin-dsl/compare/2.0.1...2.1.0)
