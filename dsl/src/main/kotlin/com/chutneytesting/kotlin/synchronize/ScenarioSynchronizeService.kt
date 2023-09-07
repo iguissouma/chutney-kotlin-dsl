@@ -105,13 +105,14 @@ private fun getJsonFile(path: String, scenario: ChutneyScenario): File? {
 }
 
 private fun createOrUpdateRemoteScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario): Int {
-    var id = scenario.id
-    if (id != null) {
-        updateJsonRemoteScenario(serverInfo = serverInfo, scenario)
-    } else {
-        id = createRemoteScenario(serverInfo = serverInfo, scenario)
+    try {
+        val id = ChutneyServerServiceImpl.createOrUpdateJsonScenario(serverInfo, scenario)
+        println("| remote AT json synchronized:: ${serverInfo.url}/#/scenario/${scenario.id}/executions?open=last&active=last")
+        return id;
+    } catch (e: Exception) {
+        println("| remote AT with id: ${scenario.id} cannot be synchronized:: ${e.message}")
+        throw e
     }
-    return id
 }
 
 
@@ -124,34 +125,6 @@ private fun renameJsonFile(
     } catch (e: IOException) {
         println("| AT json file at ${jsonFile.name} cannot be renamed to: $fileName. ${e.message}")
     }
-}
-
-private fun updateJsonRemoteScenario(
-    serverInfo: ChutneyServerInfo,
-    scenario: ChutneyScenario
-) {
-    try {
-        ChutneyServerServiceImpl.updateJsonScenario(serverInfo, scenario)
-        println("| remote AT json synchronized:: ${serverInfo.url}/#/scenario/${scenario.id}/executions?open=last&active=last")
-    } catch (e: Exception) {
-        println("| remote AT with id: ${scenario.id} cannot be synchronized:: ${e.message}")
-        throw e
-    }
-}
-
-private fun createRemoteScenario(
-    serverInfo: ChutneyServerInfo,
-    scenario: ChutneyScenario
-): Int {
-    try {
-        val id = ChutneyServerServiceImpl.createJsonScenario(serverInfo, scenario)
-        println("| remote AT json created:: ${serverInfo.url}/#/scenario/$id/executions?open=last&active=last")
-        return id
-    } catch (e: Exception) {
-        println("| remote AT cannot be created:: ${e.message}")
-        throw e
-    }
-
 }
 
 private fun getChutneyScenarioIdFromFileName(fileName: String): Int? {

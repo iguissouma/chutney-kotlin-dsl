@@ -7,6 +7,7 @@ import com.chutneytesting.kotlin.transformation.from_component_to_kotlin.Composa
 import com.chutneytesting.kotlin.transformation.from_component_to_kotlin.ComposableTestCaseDto
 import com.chutneytesting.kotlin.util.ChutneyServerInfo
 import com.chutneytesting.kotlin.util.HttpClient
+import com.chutneytesting.kotlin.util.HttpClientException
 import org.apache.commons.text.StringEscapeUtils
 
 
@@ -14,9 +15,7 @@ interface ChutneyServerService {
     fun getAllComponent(serverInfo: ChutneyServerInfo): List<ComposableStepDto>
     fun getAllScenarios(serverInfo: ChutneyServerInfo): List<LinkedHashMap<String, Any>>
     fun getComposedScenario(serverInfo: ChutneyServerInfo, scenarioId: String): ComposableTestCaseDto
-    fun updateJsonScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario)
-
-    fun createJsonScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario): Int
+    fun createOrUpdateJsonScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario): Int
     fun getEnvironments(serverInfo: ChutneyServerInfo): Set<EnvironmentDto>
 }
 
@@ -34,8 +33,28 @@ object ChutneyServerServiceImpl : ChutneyServerService {
         return HttpClient.get(serverInfo, "/api/scenario/component-edition/$scenarioId")
     }
 
-    override fun updateJsonScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario) {
-        val remoteScenario: LinkedHashMap<String, Any> = getRemoteScenario(serverInfo, scenario.id!!)
+    override fun createOrUpdateJsonScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario): Int {
+        val remoteScenario: LinkedHashMap<String, Any>? = getRemoteScenarioById(serverInfo, scenario)
+        return if (remoteScenario == null) {
+            createJsonScenario(serverInfo, scenario)
+        } else {
+            updateJsonScenario(serverInfo, scenario, remoteScenario)
+        }
+    }
+
+    private fun getRemoteScenarioById(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario) : LinkedHashMap<String, Any>? {
+        if (scenario.id == null) {
+            return null;
+        }
+        return try {
+            getRemoteScenario(serverInfo, scenario.id)
+        } catch (exception: HttpClientException) {
+            println("| could not find scenario with id : ${scenario.id}")
+            null;
+        }
+    }
+
+    fun updateJsonScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario, remoteScenario: LinkedHashMap<String, Any>): Int {
         val generatedTag = "KOTLIN"
         var tags = remoteScenario["tags"] as List<String>
         if (!tags.contains(generatedTag)) {
@@ -43,7 +62,7 @@ object ChutneyServerServiceImpl : ChutneyServerService {
         }
         val body = """
             {
-                "id": ${scenario.id} ,
+                "id": "${scenario.id}" ,
                 "content":"${StringEscapeUtils.escapeJson(scenario.toString())}",
                 "title": "${scenario.title}",
                 "description":"${scenario.description}" ,
@@ -51,7 +70,7 @@ object ChutneyServerServiceImpl : ChutneyServerService {
                 "version": ${remoteScenario["version"]}
             }
         """.trimIndent()
-        HttpClient.post<Any>(serverInfo, "/api/scenario/v2/raw", body)
+        return HttpClient.post<Int>(serverInfo, "/api/scenario/v2/raw", body)
     }
 
     private fun getRemoteScenario(
@@ -63,17 +82,25 @@ object ChutneyServerServiceImpl : ChutneyServerService {
         )
     }
 
-    override fun createJsonScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario): Int {
+    private fun createJsonScenario(serverInfo: ChutneyServerInfo, scenario: ChutneyScenario): Int {
         val generatedTag = "KOTLIN"
         val body = """
             {
+                ${getJsonLineIdForCreateScenarioBody(scenario)}
                 "content": "${StringEscapeUtils.escapeJson(scenario.toString())}",
                 "title": "${scenario.title}",
                 "description": "${scenario.description}",
                 "tags": ["$generatedTag"]
             }
         """.trimIndent()
-        return HttpClient.post(serverInfo, "/api/scenario/v2/raw", body)
+        return HttpClient.post<Int>(serverInfo, "/api/scenario/v2/raw", body)
+    }
+
+    private fun getJsonLineIdForCreateScenarioBody(scenario: ChutneyScenario): String {
+        if (scenario.id != null) {
+            return """"id": "${scenario.id}","""
+        }
+        return "";
     }
 
     override fun getEnvironments(serverInfo: ChutneyServerInfo): Set<EnvironmentDto> {

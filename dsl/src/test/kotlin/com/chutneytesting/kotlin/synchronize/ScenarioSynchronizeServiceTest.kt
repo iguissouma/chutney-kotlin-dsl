@@ -5,13 +5,17 @@ import com.chutneytesting.kotlin.dsl.ChutneyScenario
 import com.chutneytesting.kotlin.dsl.Scenario
 import com.chutneytesting.kotlin.dsl.SuccessAction
 import com.chutneytesting.kotlin.util.ChutneyServerInfo
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import org.mockserver.model.Format
 import org.mockserver.model.HttpRequest
 import org.mockserver.model.HttpRequest.request
+import org.mockserver.model.HttpResponse
 import org.mockserver.model.HttpResponse.response
+import org.mockserver.model.JsonBody
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
@@ -131,7 +135,7 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
             )
             .respond(
                 response()
-                    .withBody("{}")
+                    .withBody("1")
             )
 
         // When & Then
@@ -153,6 +157,47 @@ class ScenarioSynchronizeServiceTest : HttpTestBase() {
         assertThat(requestJson).contains("Something happens with success")
         assertThat(requestJson).containsIgnoringWhitespaces("TEST")
         assertThat(requestJson).containsIgnoringWhitespaces("KOTLIN")
+    }
+
+    @Test
+    fun should_create_scenario_with_explicit_id() {
+
+        // Given
+        val scenario = ChutneyScenario(123, "title", "description")
+        val expectedBodyRequest  = mapOf("content" to "{" + System.lineSeparator() + "  \"title\": \"title\"," + System.lineSeparator() + "  \"description\": \"description\"" + System.lineSeparator() + "}" + System.lineSeparator(),
+                "id" to "123",
+                "title" to "title",
+                "description" to "description",
+                "tags" to listOf("KOTLIN"))
+        val expectedRequest = HttpRequest.request().withPath("/api/scenario/v2/raw").withBody(JsonBody(JSONObject(expectedBodyRequest ).toString()))
+
+        mockServer
+                .`when`(expectedRequest)
+                .respond(
+                        HttpResponse.response()
+                                .withBody("123")
+                )
+
+        mockServer
+                .`when`(
+                        HttpRequest.request()
+                                .withPath("/api/scenario/v2/raw/123")
+                )
+                .respond(
+                        HttpResponse.notFoundResponse()
+                )
+        val chutneyServerInfo = ChutneyServerInfo(
+                url,
+                "aUser",
+                "aPassword"
+        )
+
+        // When
+        ChutneyServerServiceImpl.createOrUpdateJsonScenario(chutneyServerInfo, scenario)
+
+        // Then
+        Assertions.assertThat(mockServer.retrieveRecordedRequests(expectedRequest).size).isEqualTo(1)
+
     }
 
     private fun assertScenarioSynchronization(
